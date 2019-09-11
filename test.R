@@ -2,8 +2,9 @@
 
 # versao de teste por Sara Mortara, baseado no tutorial do pacote httr em https://datascienceplus.com/accessing-web-data-json-in-r-using-httr/
 
-#### loading function to make simple url request #### 
-source("R/spLink_url.R")
+#### loading function to make simple url request ####
+devtools::load_all()
+#source("R/spLink_url.R")
 
 #### Example 1 #####
 # same as in http://api.splink.org.br/records/ScientificName/Eugenia platyphylla/Chaetocalyx acutifolia/scope/plants
@@ -12,13 +13,13 @@ sp1 <- "Eugenia platyphylla"
 sp2 <- "Chaetocalyx acutifolia"
 
 ex01 <- spLink_url(filename = "ex01",
-                     scientificname =  c(sp1, sp2), 
+                     scientificname =  c(sp1, sp2),
                      Scope="plants")
 #Warning: 1 parsing failure.
 #row             col               expected actual         file
 #4558 collectornumber no trailing characters  ,1087 literal data
 
-# faz a busca 
+# faz a busca
 head(ex01$data)
 dim(ex01$data)
 str(ex01$data)
@@ -36,14 +37,14 @@ c(sp1, sp2)%in%ex01.sp
 
 ex02 <- spLink_url(filename = "ex02",
                    collectioncode = "uec",
-                   scientificname = c("Rauvolfia sellowii", "Cantinoa althaeifolia"), 
+                   scientificname = c("Rauvolfia sellowii", "Cantinoa althaeifolia"),
                    Images="Yes")
 
 # de novo especies nao estao no output
 c("Rauvolfia sellowii", "Cantinoa althaeifolia")%in%ex02$data$scientificname
 
 ex02$url
-# faz a busca 
+# faz a busca
 head(ex02$data)
 dim(ex02$data)
 str(ex02$data)
@@ -55,27 +56,28 @@ unique(ex02$data$collectioncode)
 # testando CoordinatesQuality
 
 ex03 <- spLink_url(filename = "ex03",
-                   scientificname = "Tillandsia stricta", 
-                   CoordinatesQuality = "Good")
+                   scientificname = "Tillandsia stricta",
+                   Coordinates = "Yes",
+                   coordinatesQuality = "Good")
 
 # de novo especies nao estao no output
 "Tillandsia stricta"%in%ex03$data$scientificname
 
 ex03$url
-# faz a busca 
-dim(ex03$data)
+# faz a busca
+dim(ex03$data) # 928
 head(ex03$data)
 
 # outra selecao de qualidade de coordenadas
 ex03b <- spLink_url(filename = "ex03b",
-                   scientificname = "Tillandsia stricta", 
-                   CoordinatesQuality = "Bad")
+                   scientificname = "Tillandsia stricta")
+                   # CoordinatesQuality = "Bad")
 
-# de novo especies nao estao no output
+# especies estao no output
 "Tillandsia stricta"%in%ex03b$data$scientificname
 
 ex03b$url
-# faz a busca 
+# faz a busca
 dim(ex03b$data)
 head(ex03b$data)
 

@@ -1,0 +1,19 @@
+Package: rspeciesLink
+Type: Package
+Title: Downloads Occurrence Data from speciesLink API
+Version: 0.1.0
+Author: Sara R Mortara
+Maintainer: Sara R Mortara <saramortara@gmail.com>
+Description: This package assesses speciesLink API version beta 0.1 and
+    returns a csv file with the records.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Imports:
+    httr,
+    readr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

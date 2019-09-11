@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+results/
+test.R
+

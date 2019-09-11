@@ -1,40 +1,45 @@
 #' Gets occurrence data from speciesLink
-#' 
+#'
 #' This function access version beta 0.1 of speciesLink API and returns occurrence data from species.
-#' 
+#'
 #' @param dir Path to directory where the file will be saved. Default is to create a "results/" directory
-#' @param filename Name of the output file 
+#' @param filename Name of the output file
 #' @param scientificname Genus and epithet separated by space
 #' @param collectioncode Any collection available at speciesLink. Example: ALCB, E, INPA, MOBOT_BR
 #' @param County Any municipality name. No ASCII characters allowed
-#' @param Coordinates Specify if records should have coordinates. Default is to "Yes" but it also accepts "No", "Original", "Automatic", "Blocked" or "no check" 
-#' @param CoordinatesQuality Any character in "Good" or "Bad" to select specific type of coordinates 
+#' @param Coordinates Specify if records should have coordinates. Default is "no check" but it also accepts "Yes", No", "Original", "Automatic", "Blocked" or "no check"
+#' @param coordinatesQuality Any character in "Good" or "Bad" to select specific type of coordinates
 # @param Format Output format of file. Default is to "TAB, but it also accepts "JSON", "XML", or "CSV"
 # @param Separator Column separator for CSV format. Default is "comma" but is can also be "semicolon"
-#' @param MaxRecords Numeric. Maximum number of records to be required 
+#' @param MaxRecords Numeric. Maximum number of records to be required
 #' @param Model If file should be prepared in "DwC" or "modelling" format
-#' @param Scope Group to be required. If NULL searches all groups. Any in "plants", "animals", "microrganisms" or "fossils" 
-#' @param Synonyms If species names should be checked for synonyms in a specific dictionary. Set to "species2000" for search in Catálogo da Vida species2000, "flora2020" for Flora do Brasil 2020, "MycoBank" for MycoBank, "AlgaeBase" for AlgaeBase, "DSMZ" for  DSMZ Prokaryotic Nomenclature Up-to-Date, "Moure" for Catálogo de Abelhas Moure or "no synonyms".   
+#' @param Scope Group to be required. If NULL searches all groups. Any in "plants", "animals", "microrganisms" or "fossils"
+#' @param Synonyms If species names should be checked for synonyms in a specific dictionary. Set to "species2000" for search in Catálogo da Vida species2000, "flora2020" for Flora do Brasil 2020, "MycoBank" for MycoBank, "AlgaeBase" for AlgaeBase, "DSMZ" for  DSMZ Prokaryotic Nomenclature Up-to-Date, "Moure" for Catálogo de Abelhas Moure or "no synonyms".
 #' @param Images If select only records with images. Default is NULL. It accepts: "Yes", "Live", "Polen", "Wood"
-#' @return Writes a csv file at the specified directory
-#' author Sara Mortara
+#' @return A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result
+#' @author Sara Mortara
 #' @examples
 #'
-#' @import httr
+#'ex01 <- spLink_url(filename = "ex01",
+#'scientificname =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
+#'Scope="plants")
+#'
 #' @importFrom httr GET
 #' @importFrom httr content
 #' @importFrom readr read_tsv
+#' @importFrom readr locale
+#' @importFrom utils write.table
 #' @export
 spLink_url <-function(dir = "results/",
                       filename = "output",
-                      scientificname=NULL, 
-                      collectioncode=NULL, 
-                      County=NULL, 
-                      Coordinates=NULL, #		Yes | No | Original | Automatic | Blocked	
-                      CoordinatesQuality=NULL,	#Good | Bad 
+                      scientificname=NULL,
+                      collectioncode=NULL,
+                      County=NULL,
+                      Coordinates=NULL, #		Yes | No | Original | Automatic | Blocked
+                      coordinatesQuality=NULL,	#Good | Bad
                       #Format="TAB", #	so far it is only working w/ TAB -	JSON | XML | CSV | TAB
                       #Separator="comma", #		comma | semicolon	Valid only for Format = CSV
-                      MaxRecords=NULL, #		n > 0	 all records 
+                      MaxRecords=NULL, #		n > 0	 all records
                       Model=NULL, # DwC | modelling
                       Scope=NULL, #			plants, animals, microrganisms,fossils
                       Synonyms="no synomyms", #species2000 | flora2020 | MycoBank | AlgaeBase | DSMZ | Moure no synonyms
@@ -44,7 +49,7 @@ spLink_url <-function(dir = "results/",
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
   url_query <-  function(vector, name){
     char <- paste(paste0(vector, "/"), collapse="")
-    url <- paste0(name, "/", char) 
+    url <- paste0(name, "/", char)
     return(url)
   }
   # Collection code
@@ -56,7 +61,7 @@ spLink_url <-function(dir = "results/",
       my_url <- paste0(my_url, cc)
     }
   }
-  # Species name 
+  # Species name
   if (is.null(scientificname)) {my_url}
     else  {if (is.character(scientificname)){
       scientificname <- gsub(" ", "%20", scientificname)
@@ -78,18 +83,18 @@ spLink_url <-function(dir = "results/",
   # Coordinates
   if (is.null(Coordinates)) {
     my_url
-  } else { 
+  } else {
     if (Coordinates%in%c("Yes", "No", "Original", "Automatic", "Blocked")) {
       xy <- url_query(Coordinates, "Coordinates")
       my_url <- paste0(my_url, xy)
     }
   }
   # Coordinates quality
-  if(is.null(CoordinatesQuality)) {
+  if(is.null(coordinatesQuality)) {
     my_url
   } else {
-    if(CoordinatesQuality%in%c("Good", "Bad")){
-      cq <- url_query(CoordinatesQuality, "CoordinatesQuality")
+    if(coordinatesQuality%in%c("Good", "Bad")){
+      cq <- url_query(coordinatesQuality, "coordinatesQuality")
       my_url <- paste0(my_url, cq)
     }
   }
@@ -162,7 +167,7 @@ spLink_url <-function(dir = "results/",
   rr <- httr::content(r, as="parse") # text content
   message("Converting content to an R object.")
   # so far requesting only tab format
-  rrr <- readr::read_tsv(rr, locale = locale(encoding = "UTF-8"))
+  rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
   write.table(rrr, paste0(dir, filename, ".csv"), sep=",", row.names = FALSE, col.names = TRUE)
   return(list(data=rrr, url=my_url))
   }
