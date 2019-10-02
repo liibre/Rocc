@@ -19,7 +19,7 @@ This package downloads information from the [speciesLink API](http://api.splink.
 
 ## Example 1: basic search
 
-Search for records of *Eugenia platyphylla* and *Chaetocalyx acutifolia* in speciesLink API. Same as: [http://api.splink.org.br/records/ScientificName/Eugenia platyphylla/Chaetocalyx acutifolia/scope/plants](http://api.splink.org.br/records/ScientificName/Eugenia platyphylla/Chaetocalyx acutifolia/scope/plants)
+Search for records of *Eugenia platyphylla* and *Chaetocalyx acutifolia* in speciesLink API. Same as: [http://api.splink.org.br/records/ScientificName/Eugenia%20platyphylla/Chaetocalyx%20acutifolia/scope/plants](http://api.splink.org.br/records/ScientificName/Eugenia%20platyphylla/Chaetocalyx%20acutifolia/scope/plants)
 
 ```{r}
 sp1 <- "Eugenia platyphylla"
