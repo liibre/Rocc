@@ -42,11 +42,11 @@ rspeciesLink <-function(dir="results/",
                         CoordinatesQuality=NULL,	#Good | Bad
                         Scope=NULL, #			plants, animals, microrganisms,fossils
                         Synonyms="no synomyms", #species2000 | flora2020 | MycoBank | AlgaeBase | DSMZ | Moure no synonyms
-                        Typus=NULL,
+                        Typus=FALSE,
                         Images=NULL,
-                        MaxRecords=NULL, #		n > 0	 all records
-                        Model=NULL # DwC | modelling
-                        ) { # Yes | No | Live | Polen | Wood
+                        RedList=FALSE,
+                        MaxRecords=NULL #		n > 0	 all records
+) { # Yes | No | Live | Polen | Wood
   # speciesLink url
   my_url <- "http://api.splink.org.br/records/"
   # creting dir
@@ -154,7 +154,7 @@ rspeciesLink <-function(dir="results/",
   if(Typus==FALSE) {
     my_url
   } else {
-    my_url <- paste0(my_url, "Typus/Yes")
+    my_url <- paste0(my_url, "Typus/Yes/")
     }
   # Images # "Yes", "Live", "Polen", "Wood"
   if(is.null(Images)) {
@@ -164,6 +164,12 @@ rspeciesLink <-function(dir="results/",
       im <- url_query(Images, "Images")
       my_url <- paste0(my_url, im)
     }
+  }
+  # RedList
+  if(RedList==FALSE) {
+    my_url
+  } else {
+    my_url <- paste0(my_url, "RedList/Yes/")
   }
   # MaxRecords
   if(is.null(MaxRecords)) {

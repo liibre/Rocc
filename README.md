@@ -1,34 +1,31 @@
-# Get data from speciesLink
+# Downloading speciesLink data from R
 
-Very preliminar functions to get occurrence data from [speciesLink API](http://api.splink.org.br) version beta 0.1. Courtesy of Sidnei de Souza :) 
+Installing and loading the package:
 
-Function is at R/rspeciesLink.R
-
-Code to test the function bellow.
-
-Output csv files are at results/
-
-Installing and loading the package
+`devtools::install_github("saramortara/rspeciesLink")`
 
 ```{r setup}
-#devtools::install_github("saramortara/rspeciesLink")
-devtools::load_all()
+library(rspeciesLink)
+#devtools::load_all() # for development
 ```
 
-This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `httr` and `readr` packages GET the url and save the output as a csv file. Request via POST is under development.   
+This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `jsonlite` package GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from [CRIA](http://www.cria.org.br/) (Centro de Referência em Informação Ambiental) :)
+
+
+See `?rspeciesLink` for all search options. 
 
 ## Example 1: basic search
 
 Search for records of *Eugenia platyphylla* and *Chaetocalyx acutifolia* in speciesLink API. Same as: [http://api.splink.org.br/records/ScientificName/Eugenia%20platyphylla/Chaetocalyx%20acutifolia/scope/plants](http://api.splink.org.br/records/ScientificName/Eugenia%20platyphylla/Chaetocalyx%20acutifolia/scope/plants)
 
-```{r}
+```{r sp}
 sp1 <- "Eugenia platyphylla"
 sp2 <- "Chaetocalyx acutifolia"
 ```
 
 Setting scope `"plants"`. 
 
-```{r}
+```{r ex01}
 ex01 <- rspeciesLink(filename = "ex01",
                    scientificname =  c(sp1, sp2),
                    Scope="plants")
@@ -36,7 +33,7 @@ ex01 <- rspeciesLink(filename = "ex01",
 
 Checking search output. 
 
-```{r}
+```{r ex01-check01}
 head(ex01$data)
 dim(ex01$data)
 str(ex01$data)
@@ -44,7 +41,7 @@ str(ex01$data)
 
 Checking if required species are in the output. 
 
-```{r}
+```{r ex01-check02}
 # especies requisitadas estao no banco
 ## lista de especies da busca
 ex01.sp <- unique(ex01$data$scientificname)
@@ -54,11 +51,11 @@ c(sp1, sp2)%in%ex01.sp
 
 Checking colnames in data output.
 
-```{r eval=FALSE}
+```{r ex01-check03, eval=FALSE}
 names(ex01$data)
 ```
 
-```{r echo=FALSE}
+```{r colnames, echo=FALSE}
 knitr::kable(data.frame(columns=sort(names(ex01$data))))
 ```
 
@@ -68,24 +65,23 @@ Search for *Rauvolfia selowii* and *Cantinoa althaeifolia*. Now using `collectio
 
 Same as: [http://api.splink.org.br/records/CollectionCode/uec/scientificname/Rauvolfia%20sellowii/Cantinoa%20althaeifolia/Images/yes](http://api.splink.org.br/records/CollectionCode/uec/scientificname/Rauvolfia%20sellowii/Cantinoa%20althaeifolia/Images/yes)
 
-
-```{r}
+```{r ex02}
 ex02 <- rspeciesLink(filename = "ex02",
-                   CollectionCode = "uec",
+                   collectioncode = "uec",
                    scientificname = c("Rauvolfia sellowii", "Cantinoa althaeifolia"),
                    Images="Yes")
 ```
 
 Checking again if species are in the search. 
 
-```{r}
+```{r ex02-check01}
 # de novo especies nao estao no output
 c("Rauvolfia sellowii", "Cantinoa althaeifolia")%in%ex02$data$scientificname
 ```
 
 Checking url used in the search. 
 
-```{r}
+```{r ex02-check02}
 ex02$url
 # faz a busca
 head(ex02$data)
@@ -95,7 +91,7 @@ str(ex02$data)
 
 Is data only from UEC collection?
 
-```{r}
+```{r ex02-check03}
 # checando o campo collectioncode
 unique(ex02$data$collectioncode)
 ```
@@ -104,22 +100,22 @@ unique(ex02$data$collectioncode)
 
 For species *Tillandsia stricta*. 
 
-```{r}
+```{r ex03}
 ex03 <- rspeciesLink(filename = "ex03",
                    scientificname = "Tillandsia stricta",
                    Coordinates = "Yes",
-                   coordinatesQuality = "Good")
+                   CoordinatesQuality = "Good")
 ```
 
 Checking if species is in the output.
 
-```{r}
+```{r ex03-check01}
 "Tillandsia stricta"%in%ex03$data$scientificname
 ```
 
 Checking url and output.
 
-```{r}
+```{r ex03-check02}
 ex03$url
 # faz a busca
 dim(ex03$data) # 1623
@@ -128,7 +124,7 @@ head(ex03$data)
 
 Now with another selection of coordinate quality. 
 
-```{r}
+```{r ex03b}
 # outra selecao de qualidade de coordenadas
 ex03b <- rspeciesLink(filename = "ex03b",
                    scientificname = "Tillandsia stricta")
@@ -137,12 +133,29 @@ ex03b <- rspeciesLink(filename = "ex03b",
 
 Checking url and output.
 
-```{r}
+```{r ex03b-check01}
 ex03b$url
 # faz a busca
 dim(ex03b$data) # 1762
 head(ex03b$data)
 ```
+
+## Example 4: Only plant species in IUCN Red List in a particular geographic area
+
+This example searches for 100 herbarium plants collected in Mariana county (Minas Gerais state, Brazil) that are in the IUCN Red List. It also checks for synonyms on [Flora do Brasil 2020](http://floradobrasil.jbrj.gov.br/reflora/listaBrasil/PrincipalUC/PrincipalUC.do;jsessionid=4887DC37EAB2ECF4A6754924CFD60AFB#CondicaoTaxonCP), the official plant list for taxonomic nomenclature.  
+
+```{r ex04}
+ex04 <- rspeciesLink(filename = "ex04",
+                     Scope="plants", 
+                     basisofrecord = "PreservedSpecimen",
+                     county="Mariana", 
+                     stateprovince = c("Minas Gerais", "MG"),
+                     country=c("Brazil", "Brasil"),
+                     Synonyms = "flora2020",
+                     RedList=TRUE,
+                     MaxRecords = 100)
+```
+
 
 ## General check 
 
@@ -150,14 +163,14 @@ head(ex03b$data)
 
 Listing files on list. 
 
-```{r}
-list.files("results/", pattern = '.csv')
+```{r check-resu}
+resu <- list.files("results", pattern = '.csv', full.names=TRUE)
 ```
 
+All outputs are readable.
 
-```{r}
-a <- readr::read_csv("results/ex02.csv")
-head(a)
+```{r read-resu}
+all.resu <- lapply(resu, read.csv)
 ```
 
 

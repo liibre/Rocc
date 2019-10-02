@@ -8,8 +8,8 @@ rspeciesLink(dir = "results/", filename = "output",
   basisofrecord = NULL, scientificname = NULL, collectioncode = NULL,
   country = NULL, stateprovince = NULL, county = NULL,
   Coordinates = NULL, CoordinatesQuality = NULL, Scope = NULL,
-  Synonyms = "no synomyms", Typus = NULL, Images = NULL,
-  MaxRecords = NULL, Model = NULL)
+  Synonyms = "no synomyms", Typus = FALSE, Images = NULL,
+  RedList = FALSE, MaxRecords = NULL)
 }
 \arguments{
 \item{dir}{Path to directory where the file will be saved. Default is to create a "results/" directory}
@@ -41,9 +41,9 @@ rspeciesLink(dir = "results/", filename = "output",
 
 \item{Images}{If select only records with images. Default is NULL. It accepts: "Yes", "Live", "Polen", "Wood"}
 
-\item{MaxRecords}{Numeric. Maximum number of records to be required}
-
 \item{RedList}{Logic. If TRUE only species in the IUCN Red List are returned}
+
+\item{MaxRecords}{Numeric. Maximum number of records to be required}
 }
 \value{
 A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result
