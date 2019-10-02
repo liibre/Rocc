@@ -2,7 +2,7 @@
 
 Very preliminar functions to get occurrence data from [speciesLink API](http://api.splink.org.br) version beta 0.1. Courtesy of Sidnei de Souza :) 
 
-Function is at R/spLink_url.R
+Function is at R/rspeciesLink.R
 
 Code to test the function bellow.
 
@@ -29,7 +29,7 @@ sp2 <- "Chaetocalyx acutifolia"
 Setting scope `"plants"`. 
 
 ```{r}
-ex01 <- spLink_url(filename = "ex01",
+ex01 <- rspeciesLink(filename = "ex01",
                    scientificname =  c(sp1, sp2),
                    Scope="plants")
 ```
@@ -70,7 +70,7 @@ Same as: [http://api.splink.org.br/records/CollectionCode/uec/scientificname/Rau
 
 
 ```{r}
-ex02 <- spLink_url(filename = "ex02",
+ex02 <- rspeciesLink(filename = "ex02",
                    CollectionCode = "uec",
                    scientificname = c("Rauvolfia sellowii", "Cantinoa althaeifolia"),
                    Images="Yes")
@@ -105,7 +105,7 @@ unique(ex02$data$collectioncode)
 For species *Tillandsia stricta*. 
 
 ```{r}
-ex03 <- spLink_url(filename = "ex03",
+ex03 <- rspeciesLink(filename = "ex03",
                    scientificname = "Tillandsia stricta",
                    Coordinates = "Yes",
                    coordinatesQuality = "Good")
@@ -130,7 +130,7 @@ Now with another selection of coordinate quality.
 
 ```{r}
 # outra selecao de qualidade de coordenadas
-ex03b <- spLink_url(filename = "ex03b",
+ex03b <- rspeciesLink(filename = "ex03b",
                    scientificname = "Tillandsia stricta")
                    #coordinatesQuality = "Bad")
 ```
