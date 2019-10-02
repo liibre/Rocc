@@ -1,6 +1,6 @@
 #' Gets occurrence data from speciesLink
 #'
-#' This function access version beta 0.1 of speciesLink API and returns occurrence data from species.
+#' This function access version beta 0.1 of speciesLink API and returns occurrence data of species.
 #'
 #' @param dir Path to directory where the file will be saved. Default is to create a "results/" directory
 #' @param filename Name of the output file
@@ -10,7 +10,7 @@
 #' @param collectioncode Any collection available at speciesLink. Example: ALCB, E, INPA, MOBOT_BR.  Accepts a vector of names
 #' @param country Any country name. No ASCII characters allowed. Accepts a vector of names
 #' @param county Any municipality name. No ASCII characters allowed. Accepts a vector of names
-#' @param stateprovince Any state or provincy. No ASCII characters allowed. Accepts a vector of names
+#' @param stateprovince Any state or province. No ASCII characters allowed. Accepts a vector of names
 #' @param Coordinates Specify if records should have coordinates. Default is "no check" but it also accepts "Yes", No", "Original", "Automatic", "Blocked" or "no check"
 #' @param CoordinatesQuality Any character in "Good" or "Bad" to select specific type of coordinates
 #' @param Scope Group to be required. If NULL searches all groups. Any in "plants", "animals", "microrganisms" or "fossils"
@@ -19,7 +19,7 @@
 #' @param Images If select only records with images. Default is NULL. It accepts: "Yes", "Live", "Polen", "Wood"
 #' @param RedList Logic. If TRUE only species in the IUCN Red List are returned
 #' @param MaxRecords Numeric. Maximum number of records to be required
-#' @return A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result
+#' @return A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 #' @author Sara Mortara
 #' @examples
 #'

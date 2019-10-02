@@ -46,10 +46,10 @@ rspeciesLink(dir = "results/", filename = "output",
 \item{MaxRecords}{Numeric. Maximum number of records to be required}
 }
 \value{
-A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result
+A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 }
 \description{
-This function access version beta 0.1 of speciesLink API and returns occurrence data from species.
+This function access version beta 0.1 of speciesLink API and returns occurrence data of species.
 }
 \examples{
 

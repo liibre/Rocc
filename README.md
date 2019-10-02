@@ -159,7 +159,7 @@ ex04 <- rspeciesLink(filename = "ex04",
 
 ## General check 
 
-### Checking if files were writen on disk
+### Checking if files were written on disk
 
 Listing files on list. 
 
