@@ -1,5 +1,8 @@
 #### Testing search from speciesLink API ####
 
+# library(httr)
+# library(readr)
+
 # versao de teste por Sara Mortara, baseado no tutorial do pacote httr em https://datascienceplus.com/accessing-web-data-json-in-r-using-httr/
 
 #### loading function to make simple url request ####
@@ -13,8 +16,8 @@ sp1 <- "Eugenia platyphylla"
 sp2 <- "Chaetocalyx acutifolia"
 
 ex01 <- spLink_url(filename = "ex01",
-                     scientificname =  c(sp1, sp2),
-                     Scope="plants")
+                   scientificname =  c(sp1, sp2),
+                   Scope="plants")
 #Warning: 1 parsing failure.
 #row             col               expected actual         file
 #4558 collectornumber no trailing characters  ,1087 literal data
@@ -65,19 +68,25 @@ ex03 <- spLink_url(filename = "ex03",
 
 ex03$url
 # faz a busca
-dim(ex03$data) # 928
+dim(ex03$data) # 1623
 head(ex03$data)
 
 # outra selecao de qualidade de coordenadas
 ex03b <- spLink_url(filename = "ex03b",
                    scientificname = "Tillandsia stricta")
-                   # CoordinatesQuality = "Bad")
+                   #coordinatesQuality = "Bad")
 
 # especies estao no output
 "Tillandsia stricta"%in%ex03b$data$scientificname
 
 ex03b$url
 # faz a busca
-dim(ex03b$data)
+dim(ex03b$data) # 1762
 head(ex03b$data)
 
+# checking if files were writen on disk
+
+a <- read.csv("results/ex03b.csv", #comment.char="#",
+              fill=FALSE)
+
+head(a)

@@ -4,17 +4,24 @@
 #'
 #' @param dir Path to directory where the file will be saved. Default is to create a "results/" directory
 #' @param filename Name of the output file
+#' @param basisofrecord Character. Any in 'PreservedSpecimen', 'LivingSpecimen', 'FossilSpecimen',
+#' 'HumanObservation', 'MachineObservation' or 'MaterialSample'. Default is 'PreservedSpecimen' for museum and herbarium search.
 #' @param scientificname Genus and epithet separated by space
 #' @param collectioncode Any collection available at speciesLink. Example: ALCB, E, INPA, MOBOT_BR
-#' @param County Any municipality name. No ASCII characters allowed
-#' @param Coordinates Specify if records should have coordinates. Default is "no check" but it also accepts "Yes", No", "Original", "Automatic", "Blocked" or "no check"
-#' @param coordinatesQuality Any character in "Good" or "Bad" to select specific type of coordinates
-# @param Format Output format of file. Default is to "TAB, but it also accepts "JSON", "XML", or "CSV"
-# @param Separator Column separator for CSV format. Default is "comma" but is can also be "semicolon"
-#' @param MaxRecords Numeric. Maximum number of records to be required
-#' @param Model If file should be prepared in "DwC" or "modelling" format
+#' @param country Any country name. No ASCII characters allowed
+#' @param county Any municipality name. No ASCII characters allowed
+#' @param stateprovince
+#' @param typestatus
 #' @param Scope Group to be required. If NULL searches all groups. Any in "plants", "animals", "microrganisms" or "fossils"
 #' @param Synonyms If species names should be checked for synonyms in a specific dictionary. Set to "species2000" for search in Catálogo da Vida species2000, "flora2020" for Flora do Brasil 2020, "MycoBank" for MycoBank, "AlgaeBase" for AlgaeBase, "DSMZ" for  DSMZ Prokaryotic Nomenclature Up-to-Date, "Moure" for Catálogo de Abelhas Moure or "no synonyms".
+#' @param Typus Logic. If TRUE select only typus
+#' @param Coordinates Specify if records should have coordinates. Default is "no check" but it also accepts "Yes", No", "Original", "Automatic", "Blocked" or "no check"
+#' @param CoordinatesQuality Any character in "Good" or "Bad" to select specific type of coordinates
+# @param Format Output format of file. Default is to "TAB, but it also accepts "JSON", "XML", or "CSV"
+# @param Separator Column separator for CSV format. Default is "comma" but is can also be "semicolon"
+#' @param RedList
+#' @param MaxRecords Numeric. Maximum number of records to be required
+#' @param Model If file should be prepared in DarwinCore(DwC) or "modelling" format. Default is DwC
 #' @param Images If select only records with images. Default is NULL. It accepts: "Yes", "Live", "Polen", "Wood"
 #' @return A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result
 #' @author Sara Mortara
@@ -34,7 +41,7 @@ spLink_url <-function(dir = "results/",
                       filename = "output",
                       scientificname=NULL,
                       collectioncode=NULL,
-                      County=NULL,
+                      county=NULL,
                       Coordinates=NULL, #		Yes | No | Original | Automatic | Blocked
                       coordinatesQuality=NULL,	#Good | Bad
                       #Format="TAB", #	so far it is only working w/ TAB -	JSON | XML | CSV | TAB
@@ -70,13 +77,13 @@ spLink_url <-function(dir = "results/",
     }
       else stop("scientificname must be a character")
     }
-  # County
-  if (is.null(County)) {
+  # county
+  if (is.null(county)) {
     my_url
   } else {
-    if (is.character(County)){
-      County <- gsub(" ", "%20", County)
-      co <- url_query(County, "County")
+    if (is.character(county)){
+      county <- gsub(" ", "%20", county)
+      co <- url_query(county, "county")
       my_url <- paste0(my_url, co)
     }
   }
@@ -90,11 +97,11 @@ spLink_url <-function(dir = "results/",
     }
   }
   # Coordinates quality
-  if(is.null(coordinatesQuality)) {
+  if(is.null(CoordinatesQuality)) {
     my_url
   } else {
-    if(coordinatesQuality%in%c("Good", "Bad")){
-      cq <- url_query(coordinatesQuality, "coordinatesQuality")
+    if(CoordinatesQuality%in%c("Good", "Bad")){
+      cq <- url_query(CoordinatesQuality, "CoordinatesQuality")
       my_url <- paste0(my_url, cq)
     }
   }
