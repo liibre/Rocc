@@ -25,7 +25,7 @@ rspeciesLink(dir = "results/", filename = "output",
 
 \item{country}{Any country name. No ASCII characters allowed. Accepts a vector of names}
 
-\item{stateprovince}{Any state or provincy. No ASCII characters allowed. Accepts a vector of names}
+\item{stateprovince}{Any state or province. No ASCII characters allowed. Accepts a vector of names}
 
 \item{county}{Any municipality name. No ASCII characters allowed. Accepts a vector of names}
 

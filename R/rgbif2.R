@@ -1,6 +1,6 @@
 #' Gets occurrence data from GBIF
 #'
-#' This function uses the rgbif package to get returns occurrence data of species.
+#' This function uses the rgbif package to get occurrence data of a species.
 #'
 #' @param dir Path to directory where the file will be saved. Default is to create a "results/" directory
 #' @param filename Name of the output file
@@ -15,31 +15,33 @@
 #' @param ... any arguments from occ_search in rgbif package
 #' @return A data.frame with the search result. Also saves the output on disk.
 #' @author Sara Mortara
-#' @examples
+# @examples
 #'
 #' @importFrom rgbif name_backbone
 #' @importFrom rgbif occ_search
 #' @importFrom utils write.table
-#'
 #' @export
-rgbif2 <- function(scientificname) {
+rgbif2 <- function(dir="results/",
+                   filename="output",
+                   scientificname,
+                   ...
+) {
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
   key <- rgbif::name_backbone(name = scientificname)$speciesKey
   if (!is.null(key)) {
+    message("Making request to GBIF...")
     gbif_data <- rgbif::occ_search(
       hasCoordinate = TRUE,
       hasGeospatialIssue = F,
       taxonKey = key,
       return = "data", ...
     )
-    gbif_data <- subset(gbif_data, !is.na(decimalLongitude) & !is.na(decimalLatitude))
-    #occur.data <- data.frame(gbif_data$name, gbif_data$decimalLongitude, gbif_data$decimalLatitude)
-    #colnames(occur.data) <- c("name", "lon", "lat")
+    gbif_data <- gbif_data[!is.na(gbif_data$decimalLongitude) & !is.na(gbif_data$decimalLatitude),]
+    fullname <- paste0(dir, filename, ".csv")
+    message(paste0("Writing ", fullname, " on disk."))
+    write.table(gbif_data, fullname, sep=",", row.names = FALSE, col.names = TRUE)
     return(gbif_data)
   } else {
-    showModal(modalDialog(
-      title = "No results!",
-      paste0("Please insert a valid species scientific name."),
-      easyClose = TRUE
-  ))
-}
+    message(paste0("Please insert a valid species scientific name."))
+  }
 }
