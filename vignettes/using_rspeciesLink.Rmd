@@ -24,10 +24,15 @@ library(rspeciesLink)
 #devtools::load_all() # for development
 ```
 
-This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `jsonlite` package GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from [CRIA](http://www.cria.org.br/) (Centro de Referência em Informação Ambiental) :)
+This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `jsonlite` package to GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from [CRIA](http://www.cria.org.br/) (Centro de Referência em Informação Ambiental) :)
 
 
-See `?rspeciesLink` for all search options. 
+See `?rspeciesLink` for all search options. Bellow function's arguments. 
+
+```{r args}
+args(rspeciesLink)
+```
+
 
 ## Example 1: basic search
 
@@ -57,10 +62,10 @@ str(ex01$data)
 Checking if required species are in the output. 
 
 ```{r ex01-check02}
-# especies requisitadas estao no banco
-## lista de especies da busca
+# are required species in the output
+## list species in the output
 ex01.sp <- unique(ex01$data$scientificname)
-## checando se as sp requisitadas estão no banco --> TRUE :)
+## check if species are in the output - yes!
 c(sp1, sp2)%in%ex01.sp
 ```
 
@@ -90,7 +95,7 @@ ex02 <- rspeciesLink(filename = "ex02",
 Checking again if species are in the search. 
 
 ```{r ex02-check01}
-# de novo especies nao estao no output
+# again species are in the output
 c("Rauvolfia sellowii", "Cantinoa althaeifolia")%in%ex02$data$scientificname
 ```
 
@@ -98,7 +103,7 @@ Checking url used in the search.
 
 ```{r ex02-check02}
 ex02$url
-# faz a busca
+# check output
 head(ex02$data)
 dim(ex02$data)
 str(ex02$data)
@@ -107,7 +112,7 @@ str(ex02$data)
 Is data only from UEC collection?
 
 ```{r ex02-check03}
-# checando o campo collectioncode
+# check fiel collectioncode
 unique(ex02$data$collectioncode)
 ```
 
@@ -132,7 +137,7 @@ Checking url and output.
 
 ```{r ex03-check02}
 ex03$url
-# faz a busca
+# output check
 dim(ex03$data) # 1623
 head(ex03$data)
 ```
@@ -140,7 +145,7 @@ head(ex03$data)
 Now with another selection of coordinate quality. 
 
 ```{r ex03b}
-# outra selecao de qualidade de coordenadas
+# another selection of coordinates quality
 ex03b <- rspeciesLink(filename = "ex03b",
                    scientificname = "Tillandsia stricta")
                    #coordinatesQuality = "Bad")
@@ -150,7 +155,7 @@ Checking url and output.
 
 ```{r ex03b-check01}
 ex03b$url
-# faz a busca
+# check output
 dim(ex03b$data) # 1762
 head(ex03b$data)
 ```
@@ -166,11 +171,12 @@ ex04 <- rspeciesLink(filename = "ex04",
                      county="Mariana", 
                      stateprovince = c("Minas Gerais", "MG"),
                      country=c("Brazil", "Brasil"),
-                     Synonyms = "flora2020",
+                     #Synonyms = "flora2020",
                      RedList=TRUE,
                      MaxRecords = 100)
 ```
 
+**ALERT**: With `Synonyms = 'flora2020'` output is empty.
 
 ## General check 
 
