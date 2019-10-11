@@ -23,7 +23,11 @@ devtools::load_all() # for development
 ```
 
 ```{r ex-01}
+my_url <- 'https://model-r.jbrj.gov.br/modelr-web/execjabot.php?especie=prepusa%20montana'
+
+
 j_01 <- rjabot(filename = "jabot-01", 
                scientificName = "Prepusa montana") 
 ```
+
 

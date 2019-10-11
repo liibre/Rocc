@@ -89,13 +89,10 @@ rjabot <-function(dir="results/",
     }
   }
   # making request
-  # message("Making request to jabot...")
-  #r <- httr::GET(my_url)
-  #message("Extracting content ...")
-  #rr <- httr::content(r, as="parse") # text content
+  message("Making request to jabot...")
   # requesting JSON format
-  #rrr <- jsonlite::fromJSON(my_url)$result
-  #rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
+  #rrr <- readLines(jsonlite::fromJSON(my_url)) #$result
+  rrr <- jsonlite::stream_in(url(my_url))
   # fullname <- paste0(dir, filename, ".csv")
   # message(paste0("Writing ", fullname, " on disk."))
   # write.table(

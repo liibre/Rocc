@@ -204,7 +204,7 @@ rspeciesLink <-function(dir="results/",
   #message("Extracting content ...")
   #rr <- httr::content(r, as="parse") # text content
   # requesting JSON format
-  rrr <- jsonlite::fromJSON(my_url)$result
+
   #rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
   fullname <- paste0(dir, filename, ".csv")
   message(paste0("Writing ", fullname, " on disk."))
