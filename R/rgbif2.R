@@ -21,9 +21,9 @@
 #' @importFrom rgbif occ_search
 #' @importFrom utils write.table
 #' @export
-rgbif2 <- function(dir="results/",
-                   filename="output",
-                   scientificname,
+rgbif2 <- function(dir = "results/",
+                   filename = "output",
+                   scientificName,
                    ...
 ) {
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)

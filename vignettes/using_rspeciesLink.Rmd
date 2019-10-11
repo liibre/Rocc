@@ -8,11 +8,9 @@ vignette: >
 ---
 
 ```{r options, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval = TRUE
-)
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      eval = TRUE)
 ```
 
 Installing and loading the package:
@@ -20,8 +18,8 @@ Installing and loading the package:
 `devtools::install_github("saramortara/rspeciesLink")`
 
 ```{r setup}
-library(rspeciesLink)
-#devtools::load_all() # for development
+#library(rspeciesLink)
+devtools::load_all() # for development
 ```
 
 This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `jsonlite` package to GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from [CRIA](http://www.cria.org.br/) (Centro de Referência em Informação Ambiental) :)
@@ -47,8 +45,8 @@ Setting scope `"plants"`.
 
 ```{r ex01}
 ex01 <- rspeciesLink(filename = "ex01",
-                   scientificname =  c(sp1, sp2),
-                   Scope="plants")
+                     scientificName =  c(sp1, sp2),
+                     Scope = "plants")
 ```
 
 Checking search output. 
@@ -64,9 +62,9 @@ Checking if required species are in the output.
 ```{r ex01-check02}
 # are required species in the output
 ## list species in the output
-ex01.sp <- unique(ex01$data$scientificname)
+ex01.sp <- unique(ex01$data$scientificName)
 ## check if species are in the output - yes!
-c(sp1, sp2)%in%ex01.sp
+c(sp1, sp2) %in% ex01.sp
 ```
 
 Checking colnames in data output.
@@ -76,7 +74,7 @@ names(ex01$data)
 ```
 
 ```{r colnames, echo=FALSE}
-knitr::kable(data.frame(columns=sort(names(ex01$data))))
+knitr::kable(data.frame(columns = sort(names(ex01$data))))
 ```
 
 ## Example 2: specifying collection of origin and specimens with image
@@ -87,16 +85,17 @@ Same as: [http://api.splink.org.br/records/CollectionCode/uec/scientificname/Rau
 
 ```{r ex02}
 ex02 <- rspeciesLink(filename = "ex02",
-                   collectioncode = "uec",
-                   scientificname = c("Rauvolfia sellowii", "Cantinoa althaeifolia"),
-                   Images="Yes")
+                     collectionCode = "uec",
+                     scientificName = c("Rauvolfia sellowii", 
+                                        "Cantinoa althaeifolia"),
+                     Images = "Yes")
 ```
 
 Checking again if species are in the search. 
 
 ```{r ex02-check01}
 # again species are in the output
-c("Rauvolfia sellowii", "Cantinoa althaeifolia")%in%ex02$data$scientificname
+c("Rauvolfia sellowii", "Cantinoa althaeifolia") %in% ex02$data$scientificName
 ```
 
 Checking url used in the search. 
@@ -113,7 +112,7 @@ Is data only from UEC collection?
 
 ```{r ex02-check03}
 # check fiel collectioncode
-unique(ex02$data$collectioncode)
+unique(ex02$data$collectionCode)
 ```
 
 ## Example 3: testing coordinates quality selection
@@ -122,15 +121,15 @@ For species *Tillandsia stricta*.
 
 ```{r ex03}
 ex03 <- rspeciesLink(filename = "ex03",
-                   scientificname = "Tillandsia stricta",
-                   Coordinates = "Yes",
-                   CoordinatesQuality = "Good")
+                     scientificName = "Tillandsia stricta",
+                     Coordinates = "Yes",
+                     CoordinatesQuality = "Good")
 ```
 
 Checking if species is in the output.
 
 ```{r ex03-check01}
-"Tillandsia stricta"%in%ex03$data$scientificname
+"Tillandsia stricta"%in%ex03$data$scientificName
 ```
 
 Checking url and output.
@@ -147,7 +146,7 @@ Now with another selection of coordinate quality.
 ```{r ex03b}
 # another selection of coordinates quality
 ex03b <- rspeciesLink(filename = "ex03b",
-                   scientificname = "Tillandsia stricta")
+                      scientificName = "Tillandsia stricta")
                    #coordinatesQuality = "Bad")
 ```
 
@@ -162,21 +161,56 @@ head(ex03b$data)
 
 ## Example 4: Only plant species in IUCN Red List in a particular geographic area
 
-This example searches for 100 herbarium plants collected in Mariana county (Minas Gerais state, Brazil) that are in the IUCN Red List. It also checks for synonyms on [Flora do Brasil 2020](http://floradobrasil.jbrj.gov.br/reflora/listaBrasil/PrincipalUC/PrincipalUC.do;jsessionid=4887DC37EAB2ECF4A6754924CFD60AFB#CondicaoTaxonCP), the official plant list for taxonomic nomenclature.  
+This example searches for 100 herbarium plants collected in Mariana county (Minas Gerais state, Brazil) that are in the IUCN Red List. 
 
 ```{r ex04}
 ex04 <- rspeciesLink(filename = "ex04",
                      Scope="plants", 
-                     basisofrecord = "PreservedSpecimen",
+                     basisOfRecord = "PreservedSpecimen",
                      county="Mariana", 
-                     stateprovince = c("Minas Gerais", "MG"),
+                     stateProvince = c("Minas Gerais", "MG"),
                      country=c("Brazil", "Brasil"),
-                     #Synonyms = "flora2020",
                      RedList=TRUE,
                      MaxRecords = 100)
 ```
 
-**ALERT**: With `Synonyms = 'flora2020'` output is empty.
+```{r ex04-check01}
+dim(ex04$data)
+```
+
+
+## Example 5: 
+
+Checks for synonyms on [Flora do Brasil 2020](http://floradobrasil.jbrj.gov.br/reflora/listaBrasil/PrincipalUC/PrincipalUC.do;jsessionid=4887DC37EAB2ECF4A6754924CFD60AFB#CondicaoTaxonCP), the official plant list for taxonomic nomenclature.  
+
+```{r ex05}
+ex05 <- rspeciesLink(filename = "ex05",
+                     scientificName = "Tillandsia stricta", 
+                     Synonyms = "flora2020")
+```
+
+There is a limit of nine species for requiring to check for synonyms.  If the lenght of species name vector is > 9, function stops.
+
+```{r ninesp}
+tensp <- c(
+  "Tillandsia stricta", "Rauvolfia sellowii", "Cantinoa althaeifolia",
+  "Eugenia platyphylla","Chaetocalyx acutifolia", "Asplenium serra", 
+  "Asplenium truncorum", "Prepusa montana", "Ocotea catharinensis",
+  "Asplenium triquetrum"
+            )
+```
+
+Function stops if argument `Synonyms` is used with more than nine species. If 
+
+```{r ex05b, eval = FALSE}
+ex05 <- rspeciesLink(filename = "ex05",
+                     scientificName = tensp, 
+                     Synonyms = "flora2020")
+```
+
+Returns error:
+
+`Function does not support synonym check of more than nine species`
 
 ## General check 
 
@@ -185,7 +219,7 @@ ex04 <- rspeciesLink(filename = "ex04",
 Listing files on list. 
 
 ```{r check-resu}
-resu <- list.files("results", pattern = '.csv', full.names=TRUE)
+resu <- list.files("results", pattern = '.csv', full.names = TRUE)
 ```
 
 All outputs are readable.

@@ -4,22 +4,22 @@
 \alias{rgbif2}
 \title{Gets occurrence data from GBIF}
 \usage{
-rgbif2(scientificname, ...)
+rgbif2(dir = "results/", filename = "output", scientificName, ...)
 }
 \arguments{
-\item{scientificname}{Genus and epithet separated by space}
-
-\item{...}{any arguments from occ_search in rgbif package}
-
 \item{dir}{Path to directory where the file will be saved. Default is to create a "results/" directory}
 
 \item{filename}{Name of the output file}
+
+\item{...}{any arguments from occ_search in rgbif package}
+
+\item{scientificname}{Genus and epithet separated by space}
 }
 \value{
 A data.frame with the search result. Also saves the output on disk.
 }
 \description{
-This function uses the rgbif package to get returns occurrence data of species.
+This function uses the rgbif package to get occurrence data of a species.
 }
 \author{
 Sara Mortara

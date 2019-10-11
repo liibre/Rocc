@@ -5,8 +5,8 @@
 \title{Gets occurrence data from speciesLink}
 \usage{
 rspeciesLink(dir = "results/", filename = "output",
-  basisofrecord = NULL, scientificname = NULL, collectioncode = NULL,
-  country = NULL, stateprovince = NULL, county = NULL,
+  basisOfRecord = NULL, scientificName = NULL, collectionCode = NULL,
+  country = NULL, stateProvince = NULL, county = NULL,
   Coordinates = NULL, CoordinatesQuality = NULL, Scope = NULL,
   Synonyms = "no synomyms", Typus = FALSE, Images = NULL,
   RedList = FALSE, MaxRecords = NULL)
@@ -16,16 +16,16 @@ rspeciesLink(dir = "results/", filename = "output",
 
 \item{filename}{Name of the output file}
 
-\item{basisofrecord}{Character. Any in 'PreservedSpecimen', 'LivingSpecimen', 'FossilSpecimen',
+\item{basisOfRecord}{Character. Any in 'PreservedSpecimen', 'LivingSpecimen', 'FossilSpecimen',
 'HumanObservation', 'MachineObservation' or 'MaterialSample'. Default is 'PreservedSpecimen' for museum and herbarium search}
 
-\item{scientificname}{Genus and epithet separated by space. More than one should be concatenated in a vector}
+\item{scientificName}{Genus and epithet separated by space. More than one should be concatenated in a vector}
 
-\item{collectioncode}{Any collection available at speciesLink. Example: ALCB, E, INPA, MOBOT_BR.  Accepts a vector of names}
+\item{collectionCode}{Any collection available at speciesLink. Example: ALCB, E, INPA, MOBOT_BR.  Accepts a vector of names}
 
 \item{country}{Any country name. No ASCII characters allowed. Accepts a vector of names}
 
-\item{stateprovince}{Any state or province. No ASCII characters allowed. Accepts a vector of names}
+\item{stateProvince}{Any state or province. No ASCII characters allowed. Accepts a vector of names}
 
 \item{county}{Any municipality name. No ASCII characters allowed. Accepts a vector of names}
 
@@ -46,7 +46,7 @@ rspeciesLink(dir = "results/", filename = "output",
 \item{MaxRecords}{Numeric. Maximum number of records to be required}
 }
 \value{
-A list of two elemnts. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
+A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 }
 \description{
 This function access version beta 0.1 of speciesLink API and returns occurrence data of species.
@@ -54,7 +54,7 @@ This function access version beta 0.1 of speciesLink API and returns occurrence 
 \examples{
 
 ex01 <- rspeciesLink(filename = "ex01",
-scientificname =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
+scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
 Scope="plants")
 
 }

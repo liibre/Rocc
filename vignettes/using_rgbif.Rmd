@@ -1,0 +1,29 @@
+---
+title: "Downloading Jabot data from R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r options, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      eval = TRUE)
+```
+
+Installing and loading the package:
+
+`devtools::install_github("saramortara/rspeciesLink")`
+
+```{r setup}
+#library(rspeciesLink)
+devtools::load_all() # for development
+```
+
+```{r ex-01}
+j_01 <- rjabot(filename = "jabot-01", 
+               scientificName = "Prepusa montana") 
+```
+
