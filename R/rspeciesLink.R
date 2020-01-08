@@ -1,6 +1,7 @@
 #' Gets occurrence data from speciesLink
 #'
-#' This function access version beta 0.1 of speciesLink API and returns occurrence data of species.
+#' This function access version beta 0.1 of speciesLink API and returns
+#' occurrence data of species.
 #'
 #' @param dir Path to directory where the file will be saved. Default is to create a "results/" directory
 #' @param filename Name of the output file
@@ -14,38 +15,39 @@
 #' @param Coordinates Specify if records should have coordinates. Default is "no check" but it also accepts "Yes", No", "Original", "Automatic", "Blocked" or "no check"
 #' @param CoordinatesQuality Any character in "Good" or "Bad" to select specific type of coordinates
 #' @param Scope Group to be required. If NULL searches all groups. Any in "plants", "animals", "microrganisms" or "fossils"
-#' @param Synonyms If species names should be checked for synonyms in a specific dictionary. Set to "species2000" for search in Catálogo da Vida species2000, "flora2020" for Flora do Brasil 2020, "MycoBank" for MycoBank, "AlgaeBase" for AlgaeBase, "DSMZ" for  DSMZ Prokaryotic Nomenclature Up-to-Date, "Moure" for Catálogo de Abelhas Moure or "no synonyms". It does not support more than nine species to check (length of scientificName vector must be < 10)
+# @param Synonyms If species names should be checked for synonyms in a specific dictionary. Set to "species2000" for search in Catálogo da Vida species2000, "flora2020" for Flora do Brasil 2020, "MycoBank" for MycoBank, "AlgaeBase" for AlgaeBase, "DSMZ" for  DSMZ Prokaryotic Nomenclature Up-to-Date, "Moure" for Catálogo de Abelhas Moure or "no synonyms". It does not support more than nine species to check (length of scientificName vector must be < 10)
 #' @param Typus Logic. If TRUE select only typus
 #' @param Images If select only records with images. Default is NULL. It accepts: "Yes", "Live", "Polen", "Wood"
 #' @param RedList Logic. If TRUE only species in the IUCN Red List are returned
 #' @param MaxRecords Numeric. Maximum number of records to be required
 #' @return A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 #' @author Sara Mortara
+#'
 #' @examples
 #'
 #'ex01 <- rspeciesLink(filename = "ex01",
-#'scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
-#'Scope="plants")
+#'                     scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
+#'                     Scope = "plants")
 #'
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils write.table
 #' @export
-rspeciesLink <-function(dir="results/",
-                        filename="output",
-                        basisOfRecord=NULL,
-                        scientificName=NULL,
-                        collectionCode=NULL,
-                        country=NULL,
-                        stateProvince=NULL,
-                        county=NULL,
-                        Coordinates=NULL, #		Yes | No | Original | Automatic | Blocked
-                        CoordinatesQuality=NULL,	#Good | Bad
-                        Scope=NULL, #			plants, animals, microrganisms,fossils
-                        Synonyms="no synomyms", #species2000 | flora2020 | MycoBank | AlgaeBase | DSMZ | Moure no synonyms
-                        Typus=FALSE,
-                        Images=NULL,
-                        RedList=FALSE,
-                        MaxRecords=NULL #		n > 0	 all records
+rspeciesLink <- function(dir = "results/",
+                         filename = "output",
+                         basisOfRecord = NULL,
+                         scientificName = NULL,
+                         collectionCode = NULL,
+                         country = NULL,
+                         stateProvince = NULL,
+                         county = NULL,
+                         Coordinates = NULL, #		Yes | No | Original | Automatic | Blocked
+                         CoordinatesQuality = NULL,	#Good | Bad
+                         Scope = NULL, #			plants, animals, microrganisms,fossils
+                         #Synonyms="no synomyms", #species2000 | flora2020 | MycoBank | AlgaeBase | DSMZ | Moure no synonyms
+                         Typus = FALSE,
+                         Images = NULL,
+                         RedList = FALSE,
+                         MaxRecords = NULL #		n > 0	 all records
 ) { # Yes | No | Live | Polen | Wood
   # speciesLink url
   my_url <- "http://api.splink.org.br/records/"
@@ -154,21 +156,21 @@ rspeciesLink <-function(dir="results/",
     }
   }
   # Synonyms
-  if (length(scientificName) > 9) {
-    stop("Function does not support synonym check of more than nine species")
-  } else {
-  if (is.null(Synonyms)) {
-    my_url
-  } else {
-    if (Synonyms %in% c("species2000", "flora2020",
-                        "MycoBank", "AlgaeBase", "DSMZ")) {
-      sy <- url_query(Synonyms, "Synonyms")
-      my_url <- paste0(my_url, sy)
-    }
-  }
-  }
+  # if (length(scientificName) > 9) {
+  #   stop("Function does not support synonym check of more than nine species")
+  # } else {
+  # if (is.null(Synonyms)) {
+  #   my_url
+  # } else {
+  #   if (Synonyms %in% c("species2000", "flora2020",
+  #                       "MycoBank", "AlgaeBase", "DSMZ")) {
+  #     sy <- url_query(Synonyms, "Synonyms")
+  #     my_url <- paste0(my_url, sy)
+  #   }
+  # }
+  # }
   # Typus
-  if(Typus == FALSE) {
+  if (Typus == FALSE) {
     my_url
   } else {
     my_url <- paste0(my_url, "Typus/Yes/")
@@ -204,7 +206,7 @@ rspeciesLink <-function(dir="results/",
   #message("Extracting content ...")
   #rr <- httr::content(r, as="parse") # text content
   # requesting JSON format
-
+  rrr <- jsonlite::fromJSON(my_url)$result
   #rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
   fullname <- paste0(dir, filename, ".csv")
   message(paste0("Writing ", fullname, " on disk."))
@@ -216,8 +218,8 @@ rspeciesLink <-function(dir="results/",
     col.names = TRUE
   )
   # if output is empty, return message
-  if(is.null(dim(rrr))) {
-  message("Outuput is empty. Check your request.")
+  if (is.null(dim(rrr))) {
+  message("Output is empty. Check your request.")
   }
   return(list(data = rrr, url = my_url))
   }

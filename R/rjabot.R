@@ -7,33 +7,31 @@
 #' @param collectionCode any herbarium in the Jabot system (http://jabot.jbrj.gov.br/v3/herbarios.php)
 #'#' @return A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 #' @author Sara Mortara
+#'
 #' @examples
 #'
 #'ex_jabot <- rjabot(filename = "ex-jabot",
-#'scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"))
+#'                   scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"))
 #'
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils write.table
-#' @export
 #'
-#' @importFrom jsonlite fromJSON
-#' @importFrom utils write.table
 #' @export
-rjabot <-function(dir="results/",
-                  filename="output",
-                  scientificName=NULL,
-                  collectionCode=NULL,
-                  stateProvince=NULL,
-                  county=NULL
+rjabot <- function(dir = "results/",
+                   filename = "output",
+                   scientificName = NULL,
+                   collectionCode = NULL,
+                   stateProvince = NULL,
+                   county = NULL
 ) {
   # jabot url
-  my_url <- "https://model-r.jbrj.gov.br/modelr-web/execjabot.php"
+  my_url <- "https://model-r.jbrj.gov.br/modelr-web/execjabot.php?"
   # creting dir
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
   # helper function
   url_query <-  function(vector, name) {
     char <- paste(paste0(vector), collapse = ",")
-    url <- paste0("&", name, "=", char)
+    url <- paste0(name, "=", char)
     return(url)
   }
   # Species name
@@ -44,7 +42,7 @@ rjabot <-function(dir="results/",
     if (is.character(scientificName)) {
       scientificName <- tolower(gsub(" ", "%20", scientificName))
       sp <- url_query(scientificName, "especie")
-      my_url <- paste0(my_url, sp)
+      my_url <- paste0(my_url, '&', sp)
     }
     else
       stop("scientificName must be a character")
@@ -55,7 +53,7 @@ rjabot <-function(dir="results/",
   } else {
     if (is.character(collectionCode)) {
       cc <- url_query(collectionCode, "herbario")
-      my_url <- paste0(my_url, cc)
+      my_url <- paste0(my_url, '&', cc)
     }
   }
   # country
@@ -75,7 +73,7 @@ rjabot <-function(dir="results/",
     if (is.character(stateProvince)) {
       stateProvince <- gsub(" ", "%20", stateProvince)
       st <- url_query(stateProvince, "stateProvince")
-      my_url <- paste0(my_url, st)
+      my_url <- paste0(my_url, '&', st)
     }
   }
   # county
@@ -85,27 +83,27 @@ rjabot <-function(dir="results/",
     if (is.character(county)) {
       county <- gsub(" ", "%20", county)
       co <- url_query(county, "county")
-      my_url <- paste0(my_url, co)
+      my_url <- paste0(my_url, '&', co)
     }
   }
   # making request
   message("Making request to jabot...")
   # requesting JSON format
-  #rrr <- readLines(jsonlite::fromJSON(my_url)) #$result
   rrr <- jsonlite::stream_in(url(my_url))
-  # fullname <- paste0(dir, filename, ".csv")
-  # message(paste0("Writing ", fullname, " on disk."))
-  # write.table(
-  #   rrr,
-  #   fullname,
-  #   sep = ",",
-  #   row.names = FALSE,
-  #   col.names = TRUE
-  # )
-  # # # if output is empty, return message
-  # if(is.null(dim(rrr))) {
-  #   message("Outuput is empty. Check your request.")
-  # }
-  #return(list(data = rrr, url = my_url))
-  return(my_url)
+  fullname <- paste0(dir, filename, ".csv")
+  message(paste0("Writing ", fullname, " on disk."))
+  # renaming col names in data.frame
+  names(rrr) <-
+  write.table(
+    rrr,
+    fullname,
+    sep = ",",
+    row.names = FALSE,
+    col.names = TRUE
+  )
+  # # if output is empty, return message
+  if (is.null(dim(rrr))) {
+    message("Output is empty. Check your request.")
+  }
+  return(list(data = rrr, url = my_url))
 }
