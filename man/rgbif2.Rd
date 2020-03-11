@@ -11,15 +11,20 @@ rgbif2(dir = "results/", filename = "output", scientificName, ...)
 
 \item{filename}{Name of the output file}
 
-\item{...}{any arguments from occ_search in rgbif package}
+\item{scientificName}{Genus and epithet separated by space}
 
-\item{scientificname}{Genus and epithet separated by space}
+\item{...}{any arguments from occ_search in rgbif package}
 }
 \value{
 A data.frame with the search result. Also saves the output on disk.
 }
 \description{
 This function uses the rgbif package to get occurrence data of a species.
+}
+\examples{
+
+ex_rgbif <- rgbif2(filename = "ex-gbif",
+                   scientificName =  c("Asplenium truncorum"))
 }
 \author{
 Sara Mortara

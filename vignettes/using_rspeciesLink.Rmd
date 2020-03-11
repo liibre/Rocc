@@ -2,7 +2,7 @@
 title: "Downloading speciesLink data from R"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{speciesLink}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,10 +15,10 @@ knitr::opts_chunk$set(collapse = TRUE,
 
 Installing and loading the package:
 
-`devtools::install_github("saramortara/rspeciesLink")`
+`devtools::install_github("saramortara/rocc")`
 
 ```{r setup}
-#library(rspeciesLink)
+#library(rocc)
 devtools::load_all() # for development
 ```
 

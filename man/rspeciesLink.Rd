@@ -35,7 +35,7 @@ rspeciesLink(dir = "results/", filename = "output",
 
 \item{Scope}{Group to be required. If NULL searches all groups. Any in "plants", "animals", "microrganisms" or "fossils"}
 
-\item{Synonyms}{If species names should be checked for synonyms in a specific dictionary. Set to "species2000" for search in Catálogo da Vida species2000, "flora2020" for Flora do Brasil 2020, "MycoBank" for MycoBank, "AlgaeBase" for AlgaeBase, "DSMZ" for  DSMZ Prokaryotic Nomenclature Up-to-Date, "Moure" for Catálogo de Abelhas Moure or "no synonyms"}
+\item{Synonyms}{If species names should be checked for synonyms in a specific dictionary. Set to "species2000" for search in Catálogo da Vida species2000, "flora2020" for Flora do Brasil 2020, "MycoBank" for MycoBank, "AlgaeBase" for AlgaeBase, "DSMZ" for  DSMZ Prokaryotic Nomenclature Up-to-Date, "Moure" for Catálogo de Abelhas Moure or "no synonyms". It does not support more than nine species to check (length of scientificName vector must be < 10)}
 
 \item{Typus}{Logic. If TRUE select only typus}
 
@@ -49,13 +49,14 @@ rspeciesLink(dir = "results/", filename = "output",
 A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 }
 \description{
-This function access version beta 0.1 of speciesLink API and returns occurrence data of species.
+This function access version beta 0.1 of speciesLink API and returns
+occurrence data of species.
 }
 \examples{
 
 ex01 <- rspeciesLink(filename = "ex01",
-scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
-Scope="plants")
+                    scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
+                    Scope = "plants")
 
 }
 \author{
