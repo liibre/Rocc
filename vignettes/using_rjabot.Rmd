@@ -15,11 +15,11 @@ knitr::opts_chunk$set(collapse = TRUE,
 
 Installing and loading the package:
 
-`devtools::install_github("saramortara/rspeciesLink")`
+`devtools::install_github("saramortara/rocc")`
 
 ```{r setup}
-#library(rspeciesLink)
-devtools::load_all() # for development
+library(rocc)
+#devtools::load_all() # for development
 ```
 
 ```{r ex-01}

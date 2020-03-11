@@ -1,10 +1,10 @@
-Package: rspeciesLink
+Package: rocc
 Type: Package
 Title: Downloads Occurrence Data from speciesLink API
 Version: 0.1.0
 Author: Sara R Mortara
 Maintainer: Sara R Mortara <saramortara@gmail.com>
-Description: This package assesses speciesLink API version beta 0.1 and
+Description: This package assesses databases such as speciesLink (API version beta 0.1), jabot and GBIF and
     returns a csv file with the records.
 License: GPL (>= 3)
 Encoding: UTF-8
