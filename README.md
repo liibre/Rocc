@@ -1,20 +1,28 @@
-# Downloading speciesLink data from R
+# Downloading occurrence data from R
+
+Currently available:
+
+- [speciesLink](http://www.splink.org.br/)
+- [jabot](http://jabot.jbrj.gov.br/v3/consulta.php)
+- [GBIF](https://www.gbif.org/) (using the package **rgbif**)
 
 Installing and loading the package:
 
-`devtools::install_github("saramortara/rspeciesLink")`
+`devtools::install_github("saramortara/rocc")`
 
 ```{r setup}
-library(rspeciesLink)
+library(rocc)
 #devtools::load_all() # for development
 ```
+
+## speciesLink
 
 This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `jsonlite` package GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from [CRIA](http://www.cria.org.br/) (Centro de Referência em Informação Ambiental) :)
 
 
 See `?rspeciesLink` for all search options. 
 
-## Example 1: basic search
+### Example 1: basic search
 
 Search for records of *Eugenia platyphylla* and *Chaetocalyx acutifolia* in speciesLink API. Same as: [http://api.splink.org.br/records/ScientificName/Eugenia%20platyphylla/Chaetocalyx%20acutifolia/scope/plants](http://api.splink.org.br/records/ScientificName/Eugenia%20platyphylla/Chaetocalyx%20acutifolia/scope/plants)
 
@@ -59,7 +67,7 @@ names(ex01$data)
 knitr::kable(data.frame(columns=sort(names(ex01$data))))
 ```
 
-## Example 2: specifying collection of origin and specimens with image
+### Example 2: specifying collection of origin and specimens with image
 
 Search for *Rauvolfia selowii* and *Cantinoa althaeifolia*. Now using `collectioncode` and `Images` arguments.
 
@@ -96,7 +104,7 @@ Is data only from UEC collection?
 unique(ex02$data$collectioncode)
 ```
 
-## Example 3: testing coordinates quality selection
+### Example 3: testing coordinates quality selection
 
 For species *Tillandsia stricta*. 
 
@@ -140,7 +148,7 @@ dim(ex03b$data) # 1762
 head(ex03b$data)
 ```
 
-## Example 4: Only plant species in IUCN Red List in a particular geographic area
+### Example 4: Only plant species in IUCN Red List in a particular geographic area
 
 This example searches for 100 herbarium plants collected in Mariana county (Minas Gerais state, Brazil) that are in the IUCN Red List. It also checks for synonyms on [Flora do Brasil 2020](http://floradobrasil.jbrj.gov.br/reflora/listaBrasil/PrincipalUC/PrincipalUC.do;jsessionid=4887DC37EAB2ECF4A6754924CFD60AFB#CondicaoTaxonCP), the official plant list for taxonomic nomenclature.  
 
@@ -157,9 +165,9 @@ ex04 <- rspeciesLink(filename = "ex04",
 ```
 
 
-## General check 
+### General check 
 
-### Checking if files were written on disk
+#### Checking if files were written on disk
 
 Listing files on list. 
 
