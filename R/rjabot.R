@@ -1,11 +1,11 @@
 #' Gets occurrence data from jabot
 #'
-#' This function gets occurrence data in the Jabot database (http://jabot.jbrj.gov.br/v3/consulta.php).
+#' This function gets occurrence data in the Jabot database (http://jabot.jbrj.gov.br/v3/consulta.php). Providing a scientific name for a species is mandatory.
 #'
 #' @inheritParams rspeciesLink
 #'
-#' @param collectionCode any herbarium in the Jabot system (http://jabot.jbrj.gov.br/v3/herbarios.php)
-#'#' @return A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
+# @param collectionCode any herbarium in the Jabot system (http://jabot.jbrj.gov.br/v3/herbarios.php)
+#' @return A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 #' @author Sara Mortara
 #'
 #' @examples
@@ -19,10 +19,12 @@
 #' @export
 rjabot <- function(dir = "results/",
                    filename = "output",
-                   scientificName = NULL,
-                   collectionCode = NULL,
-                   stateProvince = NULL,
-                   county = NULL
+                   scientificName = NULL
+                   #collectionCode = NULL,
+                   #stateProvince = NULL,
+                   #county = NULL,
+                   #genus = NULL,
+                   #family = NULL
 ) {
   # jabot url
   my_url <- "https://model-r.jbrj.gov.br/modelr-web/execjabot.php?"
@@ -48,15 +50,15 @@ rjabot <- function(dir = "results/",
       stop("scientificName must be a character")
   }
   # Collection code
-  if (is.null(collectionCode)) {
-    my_url
-  } else {
-    if (is.character(collectionCode)) {
-      cc <- url_query(collectionCode, "herbario")
-      my_url <- paste0(my_url, '&', cc)
-    }
-  }
-  # country
+  # if (is.null(collectionCode)) {
+  #   my_url
+  # } else {
+  #   if (is.character(collectionCode)) {
+  #     cc <- url_query(collectionCode, "herbario")
+  #     my_url <- paste0(my_url, '&', cc)
+  #   }
+  # }
+  # county
   # if (is.null(country)) {
   #   my_url
   # } else {
@@ -67,25 +69,45 @@ rjabot <- function(dir = "results/",
   #   }
   # }
   # stateProvince
-  if (is.null(stateProvince)) {
-    my_url
-  } else {
-    if (is.character(stateProvince)) {
-      stateProvince <- gsub(" ", "%20", stateProvince)
-      st <- url_query(stateProvince, "stateProvince")
-      my_url <- paste0(my_url, '&', st)
-    }
-  }
+  # if (is.null(stateProvince)) {
+  #   my_url
+  # } else {
+  #   if (is.character(stateProvince)) {
+  #     stateProvince <- gsub(" ", "%20", stateProvince)
+  #     st <- url_query(stateProvince, "stateProvince")
+  #     my_url <- paste0(my_url, '&', st)
+  #   }
+  # }
   # county
-  if (is.null(county)) {
-    my_url
-  } else {
-    if (is.character(county)) {
-      county <- gsub(" ", "%20", county)
-      co <- url_query(county, "county")
-      my_url <- paste0(my_url, '&', co)
-    }
-  }
+  # if (is.null(county)) {
+  #   my_url
+  # } else {
+  #   if (is.character(county)) {
+  #     county <- gsub(" ", "%20", county)
+  #     co <- url_query(county, "county")
+  #     my_url <- paste0(my_url, '&', co)
+  #   }
+  # }
+  # genus
+  # if (is.null(genus)) {
+  #   my_url
+  # } else {
+  #   if (is.character(genus)) {
+  #     #genus <- toTitleCase(genus)
+  #     ge <- url_query(genus, "genus")
+  #     my_url <- paste0(my_url, '&', ge)
+  #   }
+  # }
+  # family
+  # if (is.null(family)) {
+  #   my_url
+  # } else {
+  #   if (is.character(family)) {
+  #     #family <- gsub(" ", "%20", family)
+  #     ge <- url_query(family, "genus")
+  #     my_url <- paste0(my_url, '&', ge)
+  #   }
+  # }
   # making request
   message("Making request to jabot...")
   # requesting JSON format
@@ -93,14 +115,11 @@ rjabot <- function(dir = "results/",
   fullname <- paste0(dir, filename, ".csv")
   message(paste0("Writing ", fullname, " on disk."))
   # renaming col names in data.frame
-  names(rrr) <-
-  write.table(
-    rrr,
+  names(rrr) <- write.table(rrr,
     fullname,
     sep = ",",
     row.names = FALSE,
-    col.names = TRUE
-  )
+    col.names = TRUE)
   # # if output is empty, return message
   if (is.null(dim(rrr))) {
     message("Output is empty. Check your request.")

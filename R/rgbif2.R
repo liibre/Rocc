@@ -37,11 +37,12 @@ rgbif2 <- function(dir = "results/",
     message("Making request to GBIF...")
     gbif_data <- rgbif::occ_search(
       hasCoordinate = TRUE,
-      hasGeospatialIssue = F,
+      hasGeospatialIssue = FALSE,
       taxonKey = key,
       return = "data", ...
     )
-    gbif_data <- gbif_data[!is.na(gbif_data$decimalLongitude) & !is.na(gbif_data$decimalLatitude),]
+    gbif_data <- gbif_data[!is.na(gbif_data$decimalLongitude)
+                           & !is.na(gbif_data$decimalLatitude), ]
     fullname <- paste0(dir, filename, ".csv")
     message(paste0("Writing ", fullname, " on disk."))
     write.table(gbif_data,

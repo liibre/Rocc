@@ -1,0 +1,66 @@
+---
+title: "Downloading Jabot ang GBIF data from R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{jabot}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r options, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+                      comment = "#>",
+                      eval = TRUE)
+```
+
+Installing and loading the package:
+
+`devtools::install_github("saramortara/rocc")`
+
+This package also downloads records from from [GBIF](https://www.gbif.org/) and [jabot](http://jabot.jbrj.gov.br/v3/consulta.php) collections. The function `rjabot()`  makes a request to the database stored in the portal [model-r](https://model-r.jbrj.gov.br/modelr-web/). It generates the desired url and uses functions from `jsonlite` package to GET the url and save the output as a csv file. In this case, search can only be done by a species scientific name. The function `rgbif2()` encapulates funtions from **rgbif** package to receive a species scientific name and return the output as a .csv file written on disk. 
+
+```{r setup}
+#library(rocc)
+devtools::load_all() # for development
+```
+
+# Using the funtion **rjabot**
+
+## Search by species scientific name
+
+```{r ex-01}
+j01 <- rjabot(filename = "jabot-01", 
+               scientificName = "Prepusa montana") 
+```
+
+```{r ex-other, eval = FALSE, echo = FALSE}
+## Example 02: search by species name and province
+j02 <- rjabot(filename = "jabot-02", 
+              scientificName = "Prepusa Montana",
+              stateProvince = "Minas Gerais")
+## Example 03: search by species name and collection
+
+j03 <- rjabot(filename = "jabot-03", 
+              scientificName = "Prepusa Montana",
+              stateProvince = "RB")
+
+dim(j01$data)
+dim(j02$data)
+dim(j03$data)
+# all examples provide the same output :facepalm:
+```
+
+
+# Using the funtion **rgbif2**
+
+```{r}
+g01 <- rgbif2(filename = "gbif-01",
+              scientificName = "Aspidosperma limae")
+
+dim(g01)
+
+g02 <- rgbif2(filename = "gbif-02", 
+              scientificName = "Aspidosperma melanocalyx")
+dim(g02)
+```
+
