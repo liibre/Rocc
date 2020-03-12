@@ -17,7 +17,7 @@ library(rocc)
 
 See examples in `vignettes` folder. 
 
-**TODO:**
+## TODO
 
 - [x] `rspeciesLink()`
 - [x] `rjabot()`
@@ -29,7 +29,7 @@ See examples in `vignettes` folder.
   - multiple keys
 - [ ] create function to generate all synomys for a scientific name
 
-**Notes:**
+## Notes
 
 - `rgbif` has its own [backbone taxonomy](https://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c)
 - `rgbif` backbone != `flora`
