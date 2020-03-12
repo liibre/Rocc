@@ -28,6 +28,9 @@ See examples in `vignettes` folder.
   - NULL key
   - multiple keys
 - [ ] create function to generate all synomys for a scientific name
+  - Function will receive a species scientific name
+  - Function will use other existing and stable functions
+  - Function will return accepted name, synonyms, ref database for each synonym
 
 ## Notes
 

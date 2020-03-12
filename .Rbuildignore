@@ -1,5 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 results/
+data/
 test.R
+# prototype of a function
+checktaxa.R
 
