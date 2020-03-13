@@ -155,10 +155,10 @@ rspeciesLink <- function(dir = "results/",
       my_url <- paste0(my_url, sc)
     }
   }
-#  Synonyms
- # if (length(scientificName) > 9) {
-#    stop("Function does not support synonym check of more than nine species")
-#  } else {
+  #  Synonyms
+  # if (length(scientificName) > 9) {
+  #    stop("Function does not support synonym check of more than nine species")
+  #  } else {
   if (is.null(Synonyms)) {
     my_url
   } else {
@@ -168,8 +168,8 @@ rspeciesLink <- function(dir = "results/",
       my_url <- paste0(my_url, sy)
     }
   }
-#  }
-#  Typus
+  #  }
+  #  Typus
   if (Typus == FALSE) {
     my_url
   } else {
@@ -210,16 +210,15 @@ rspeciesLink <- function(dir = "results/",
   #rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
   fullname <- paste0(dir, filename, ".csv")
   message(paste0("Writing ", fullname, " on disk."))
-  write.table(
-    rrr,
-    fullname,
-    sep = ",",
-    row.names = FALSE,
-    col.names = TRUE
+  write.table(rrr,
+              fullname,
+              sep = ",",
+              row.names = FALSE,
+              col.names = TRUE
   )
   # if output is empty, return message
   if (is.null(dim(rrr))) {
-  message("Output is empty. Check your request.")
+    message("Output is empty. Check your request.")
   }
   return(list(data = rrr, url = my_url))
-  }
+}

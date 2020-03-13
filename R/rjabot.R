@@ -116,10 +116,10 @@ rjabot <- function(dir = "results/",
   message(paste0("Writing ", fullname, " on disk."))
   # renaming col names in data.frame
   names(rrr) <- write.table(rrr,
-    fullname,
-    sep = ",",
-    row.names = FALSE,
-    col.names = TRUE)
+                            fullname,
+                            sep = ",",
+                            row.names = FALSE,
+                            col.names = TRUE)
   # # if output is empty, return message
   if (is.null(dim(rrr))) {
     message("Output is empty. Check your request.")
