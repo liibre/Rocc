@@ -13,6 +13,7 @@ RoxygenNote: 6.1.1
 Imports:
     devtools,
     jsonlite,
+    stringr,
     rgbif
 Suggests: 
     knitr,

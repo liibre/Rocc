@@ -6,19 +6,22 @@
 #' @author Sara Mortara
 #'
 #' @examples
+#' check_status("Lindsaea lancea var. falcata")
+#' check_status(c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum"))
 #'
 #' @importFrom stringr str_detect
 #' @export
 #'
 check_status <- function(scientificName = NULL){
-  aff <- stringr::str_detect(scientificName, " aff.")
-  cf <- stringr::str_detect(scientificName, " cf.")
-  subsp <- stringr::str_detect(scientificName, " subsp.")
-  var <- stringr::str_detect(scientificName, " var.")
+  aff <- stringr::str_detect(scientificName, " aff |  Aff | aff.| Aff.")
+  cf <- stringr::str_detect(scientificName, " cf | Cf | cf. | Cf.")
+  subsp <- stringr::str_detect(scientificName, " subsp |  Subsp | subsp.| Subsp.")
+  var <- stringr::str_detect(scientificName, " var |  Var | var.| Var.")
   check <- data.frame(scientificName = scientificName)
   check$status <- NA
   check$status[aff] <- "affinis"
   check$status[cf] <- "conferre"
   check$status[subsp] <- "subspecies"
   check$status[var] <- "variety"
+  return(check)
 }
