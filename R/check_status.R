@@ -13,25 +13,30 @@
 #' @importFrom stringr str_replace
 #' @importFrom stringr str_split
 #' @importFrom stringr str_trim
+#'
 #' @export
 #'
 check_status <- function(scientificName = NULL){
+  # definings possible string options
   aff_string <- " aff |  Aff | aff.| Aff."
   cf_string <- " cf | Cf | cf. | Cf."
   subsp_string <-  "subsp |  Subsp | subsp.| Subsp."
   var_string <- " var |  Var | var.| Var."
   aff_cf <- paste(aff_string, cf_string, sep = "|")
   subsp_var <- paste(subsp_string, var_string, sep = "|")
+  # detecting status
   aff <- stringr::str_detect(scientificName, aff_string)
   cf <- stringr::str_detect(scientificName, cf_string)
   subsp <- stringr::str_detect(scientificName, subsp_string)
   var <- stringr::str_detect(scientificName, var_string)
   check <- data.frame(scientificName = scientificName)
+  # defining status
   check$scientificName_status <- NA
   check$scientificName_status[aff] <- "affinis"
   check$scientificName_status[cf] <- "conferre"
   check$scientificName_status[subsp] <- "subspecies"
   check$scientificName_status[var] <- "variety"
+  # accessory functions
   clean_uncertain <- function(x)  {
     x_new <- stringr::str_trim(stringr::str_replace(x, aff_cf, ""))
     return(x_new)
@@ -41,6 +46,7 @@ check_status <- function(scientificName = NULL){
                                                function(x) x[1])))
     return(x_new)
   }
+  # providing cleaned name
  check$scientificName_new <- ifelse(check$scientificName_status
                                      %in% c("affinis", "conferre"),
                                      clean_uncertain(check$scientificName),
