@@ -214,8 +214,7 @@ rspeciesLink <- function(dir = "results/",
               fullname,
               sep = ",",
               row.names = FALSE,
-              col.names = TRUE
-  )
+              col.names = TRUE)
   # if output is empty, return message
   if (is.null(dim(rrr))) {
     message("Output is empty. Check your request.")
