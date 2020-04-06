@@ -9,8 +9,24 @@ check_status(scientificName = NULL)
 \arguments{
 \item{scientificName}{species name in a raw format}
 }
+\value{
+Data frame with `scientificName` as in the original input, `scientificName_status` with the flags in original data and `scientificName_new` with a suggestion for a more correct species name. The column `scientificName_status` accepts:
+\describe{
+\item{`possibly_ok`: }{scientific name following the expected pattern Genus epithet}
+\item{`not_Genus_epithet_format`: }{scientific name not following the expected pattern Genus epithet}
+\item{`variety`: }{species scientific name with variety}
+\item{`subspecies`: }{species scientific name with subspecies}
+\item{`conferre`: }{open nomenclature cf. in species scientific name}
+\item{`affinis`: }{open nomenclature aff. in species scientific name}
+\item{`name_w_authors`: }{species scientific name has authors}
+\item{`not_name_has_digits`: }{species scientific name has digits, not a valid name}
+}
+}
 \description{
-This function identifies aff., cf. and subsp. var. in species names. It creates a new column with the original string and the new suggested name.
+This function identifies aff., cf. and subsp. var. in species names. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet).
+}
+\details{
+Flags returned by column
 }
 \examples{
 check_status("Lindsaea lancea var. falcata")

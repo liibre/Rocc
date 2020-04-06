@@ -9,9 +9,10 @@ Description: This package assesses databases such as speciesLink (API version be
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Imports:
     devtools,
+    flora,
     jsonlite,
     stringr,
     rgbif
