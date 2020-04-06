@@ -12,14 +12,16 @@ check_status(scientificName = NULL)
 \value{
 Data frame with `scientificName` as in the original input, `scientificName_status` with the flags in original data and `scientificName_new` with a suggestion for a more correct species name. The column `scientificName_status` accepts:
 \describe{
-\item{`possibly_ok`: }{scientific name following the expected pattern Genus epithet}
-\item{`not_Genus_epithet_format`: }{scientific name not following the expected pattern Genus epithet}
-\item{`variety`: }{species scientific name with variety}
-\item{`subspecies`: }{species scientific name with subspecies}
-\item{`conferre`: }{open nomenclature cf. in species scientific name}
-\item{`affinis`: }{open nomenclature aff. in species scientific name}
-\item{`name_w_authors`: }{species scientific name has authors}
-\item{`not_name_has_digits`: }{species scientific name has digits, not a valid name}
+\item{\code{possibly_ok}}{scientific name following the expected pattern Genus epithet}
+\item{\code{not_Genus_epithet_format}}{scientific name not following the expected pattern Genus epithet}
+\item{\code{variety}}{species scientific name with variety}
+\item{\code{subspecies}}{species scientific name with subspecies}
+\item{\code{conferre}}{open nomenclature cf. in species scientific name}
+\item{\code{affinis}}{open nomenclature aff. in species scientific name}
+\item{\code{name_w_authors}}{species scientific name has authors}
+\item{\code{not_name_has_digits}}{species scientific name has digits, not a valid name}
+\item{\code{indet}}{species identified only at genus level}
+\item{\code{family_as_genus}}{species family as genus, not a valid name}
 }
 }
 \description{

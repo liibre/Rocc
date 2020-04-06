@@ -5,14 +5,16 @@
 #' @return
 #' Data frame with `scientificName` as in the original input, `scientificName_status` with the flags in original data and `scientificName_new` with a suggestion for a more correct species name. The column `scientificName_status` accepts:
 #'\describe{
-#'\item{`possibly_ok`: }{scientific name following the expected pattern Genus epithet}
-#'\item{`not_Genus_epithet_format`: }{scientific name not following the expected pattern Genus epithet}
-#'\item{`variety`: }{species scientific name with variety}
-#'\item{`subspecies`: }{species scientific name with subspecies}
-#'\item{`conferre`: }{open nomenclature cf. in species scientific name}
-#'\item{`affinis`: }{open nomenclature aff. in species scientific name}
-#'\item{`name_w_authors`: }{species scientific name has authors}
-#'\item{`not_name_has_digits`: }{species scientific name has digits, not a valid name}
+#'\item{\code{possibly_ok}}{scientific name following the expected pattern Genus epithet}
+#'\item{\code{not_Genus_epithet_format}}{scientific name not following the expected pattern Genus epithet}
+#'\item{\code{variety}}{species scientific name with variety}
+#'\item{\code{subspecies}}{species scientific name with subspecies}
+#'\item{\code{conferre}}{open nomenclature cf. in species scientific name}
+#'\item{\code{affinis}}{open nomenclature aff. in species scientific name}
+#'\item{\code{name_w_authors}}{species scientific name has authors}
+#'\item{\code{not_name_has_digits}}{species scientific name has digits, not a valid name}
+#'\item{\code{indet}}{species identified only at genus level}
+#'\item{\code{family_as_genus}}{species family as genus, not a valid name}
 #'}
 #'
 #' @details
@@ -67,7 +69,7 @@ check_status <- function(scientificName = NULL){
                                      clean_sub(check$scientificName))
   ## other types of basic cleaning
   # recognizig authors
-  no_authors <- lapply(check$scientificName_new, remove.authors)
+  no_authors <- sapply(check$scientificName_new, remove.authors)
   id_authors <- check$scientificName_new != no_authors
   check$scientificName_status[id_authors] <- "name_w_authors"
   check$scientificName_new[id_authors] <- no_authors[id_authors]
@@ -79,13 +81,28 @@ check_status <- function(scientificName = NULL){
                          length) > 2
   check$scientificName_status[id_not_gensp] <- "not_Genus_epithet_format"
   # matching case
-  low <- tolower(check$scientificName_new)
+  fix_case <- function(x){
+    low <- tolower(x)
+    fix <- paste(toupper(substring(x, 1, 1)),
+                 substring(x, 2), sep = "", collapse = " ")
+    return(fix)
+  }
   ## fix case
-  case <- paste(toupper(substring(low, 1, 1)),
-                substring(low, 2), sep = "", collapse = " ")
-  id_case <- check$check$scientificName_new != case
+  case <- sapply(check$scientificName_new, fix_case)
+  id_case <- check$scientificName_new != case
   check$scientificName_status[id_case] <- "name_w_wrong_case"
   check$scientificName_new[id_case] <- case[id_case]
+  # sp. or genus only
+  no_sp <- sapply(stringr::str_split(check$scientificName_new, " "),
+                  length) < 2
+  indet <- stringr::str_detect(check$scientificName, "sp. | sp")
+  check$scientificName_status[no_sp | indet] <- "indet"
+  # aceae in first string
+  gen <- sapply(stringr::str_split(check$scientificName_new, " "),
+                function(x) x[1])
+  id_gen <- endsWith(gen, "aceae")
+  check$scientificName_status[id_gen] <- "family_as_genus"
+  # possibly ok
   check$scientificName_status[is.na(check$scientificName_status)] <- "possibly_ok"
   return(check)
 }
