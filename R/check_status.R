@@ -26,6 +26,7 @@
 #' @examples
 #' check_status("Lindsaea lancea var. falcata")
 #' check_status(c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum"))
+#' check_status("Asplenium sp.")
 #'
 #' @importFrom stringr str_detect str_replace str_split str_trim
 #' @importFrom flora remove.authors
@@ -33,19 +34,18 @@
 #' @export
 #'
 check_status <- function(scientificName = NULL){
-  # definings possible string options
-  aff_string <- " aff |  Aff | aff.| Aff."
-  cf_string <- " cf | Cf | cf. | Cf."
-  subsp_string <-  "subsp |  Subsp | subsp.| Subsp."
-  var_string <- " var |  Var | var.| Var."
+  aff_string <- "[[:space:]]aff.[[:space:]]|[[:space:]]aff[[:space:]]"
+  cf_string <- "[[:space:]]cf.[[:space:]]|[[:space:]]cf[[:space:]]"
+  subsp_string <-  "[[:space:]]subsp.[[:space:]]|[[:space:]]subsp[[:space:]]"
+  var_string <- "[[:space:]]var.[[:space:]]|[[:space:]]var[[:space:]]"
   aff_cf <- paste(aff_string, cf_string, sep = "|")
   subsp_var <- paste(subsp_string, var_string, sep = "|")
   # detecting status
-  aff <- stringr::str_detect(scientificName, aff_string)
-  cf <- stringr::str_detect(scientificName, cf_string)
-  subsp <- stringr::str_detect(scientificName, subsp_string)
-  var <- stringr::str_detect(scientificName, var_string)
-  check <- data.frame(scientificName = scientificName)
+  aff <- stringr::str_detect(scientificName, stringr::regex(aff_string, ignore_case = TRUE))
+  cf <- stringr::str_detect(scientificName, stringr::regex(cf_string, ignore_case = TRUE))
+  subsp <- stringr::str_detect(scientificName, stringr::regex(subsp_string, ignore_case = TRUE))
+  var <- stringr::str_detect(scientificName, stringr::regex(var_string, ignore_case = TRUE))
+  check <- data.frame(scientificName = as.character(scientificName))
   # defining status
   check$scientificName_status <- NA
   check$scientificName_status[aff] <- "affinis"
@@ -54,23 +54,32 @@ check_status <- function(scientificName = NULL){
   check$scientificName_status[var] <- "variety"
   # accessory functions
   clean_uncertain <- function(x)  {
-    x_new <- stringr::str_trim(stringr::str_replace(x, aff_cf, ""))
+    x_new <- stringr::str_replace(x, stringr::regex(aff_cf, ignore_case = TRUE), " ")
     return(x_new)
   }
   clean_sub <- function(x){
-    x_new <- stringr::str_trim(unlist(lapply(stringr::str_split(x, subsp_var),
-                                             function(x) x[1])))
+    x_new <- unlist(lapply(stringr::str_split(x, stringr::regex(subsp_var, ignore_case = TRUE)),
+                           function(x) x[1]))
     return(x_new)
   }
   # providing cleaned name
-  check$scientificName_new <- ifelse(check$scientificName_status
-                                     %in% c("affinis", "conferre"),
-                                     clean_uncertain(check$scientificName),
-                                     clean_sub(check$scientificName))
-  ## other types of basic cleaning
+  check$scientificName_new <- NA
+  ## affinis e conferre
+  check$scientificName_new[check$scientificName_status
+                           %in% c("affinis", "conferre")] <- clean_uncertain(check$scientificName[check$scientificName_status
+                                                                                                  %in% c("affinis", "conferre")])
+  check$scientificName_new[check$scientificName_status
+                           %in% c("subspecies", "variety")] <- clean_sub(check$scientificName[check$scientificName_status
+                                                                                              %in% c("subspecies", "variety")])
+  # other types of basic cleaning
+  ## first filling scientificName_new for all
+  check$scientificName_new <- ifelse(is.na(check$scientificName_new),
+                                     as.character(check$scientificName),
+                                     check$scientificName_new)
   # recognizig authors
-  no_authors <- sapply(check$scientificName_new, remove.authors)
-  id_authors <- check$scientificName_new != no_authors
+  no_authors <- sapply(check$scientificName, flora::remove.authors)
+  id_authors <- is.na(check$scientificName_status) & check$scientificName_new != no_authors &
+    sapply(strsplit(as.character(check$scientificName), " "), length) > 2
   check$scientificName_status[id_authors] <- "name_w_authors"
   check$scientificName_new[id_authors] <- no_authors[id_authors]
   # recognizig digits
@@ -80,22 +89,17 @@ check_status <- function(scientificName = NULL){
   id_not_gensp <- sapply(stringr::str_split(check$scientificName_new, " "),
                          length) > 2
   check$scientificName_status[id_not_gensp] <- "not_Genus_epithet_format"
-  # matching case
-  fix_case <- function(x){
-    low <- tolower(x)
-    fix <- paste(toupper(substring(x, 1, 1)),
-                 substring(x, 2), sep = "", collapse = " ")
-    return(fix)
-  }
-  ## fix case
-  case <- sapply(check$scientificName_new, fix_case)
+  # case
+  case <- sapply(check$scientificName_new, flora::fixCase)
   id_case <- check$scientificName_new != case
   check$scientificName_status[id_case] <- "name_w_wrong_case"
   check$scientificName_new[id_case] <- case[id_case]
   # sp. or genus only
   no_sp <- sapply(stringr::str_split(check$scientificName_new, " "),
                   length) < 2
-  indet <- stringr::str_detect(check$scientificName, "sp. | sp")
+  indet <- stringr::str_detect(check$scientificName,
+                               stringr::regex("[[:space:]]sp.$|[[:space:]]sp$|[[:space:]]sp.",
+                                     ignore_case = TRUE))
   check$scientificName_status[no_sp | indet] <- "indet"
   # aceae in first string
   gen <- sapply(stringr::str_split(check$scientificName_new, " "),

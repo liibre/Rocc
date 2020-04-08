@@ -33,6 +33,7 @@ Flags returned by column
 \examples{
 check_status("Lindsaea lancea var. falcata")
 check_status(c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum"))
+check_status("Asplenium sp.")
 
 }
 \author{
