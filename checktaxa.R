@@ -7,6 +7,7 @@
 # Function will use other existing and stable functions
 # Function will return accepted name, synonyms, ref database for each synonym
 
+devtools::document()
 devtools::check()
 
 # loading packages

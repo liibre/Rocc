@@ -29,7 +29,8 @@
 #' check_status("Asplenium sp.")
 #'
 #' @importFrom stringr str_detect str_replace str_split str_trim
-#' @importFrom flora remove.authors
+#' @importFrom flora remove.authors fixCase
+#' @importFrom stringi stri_enc_mark
 #'
 #' @export
 #'
@@ -108,5 +109,9 @@ check_status <- function(scientificName = NULL){
   check$scientificName_status[id_gen] <- "family_as_genus"
   # possibly ok
   check$scientificName_status[is.na(check$scientificName_status)] <- "possibly_ok"
+  # non-ascii
+  string_type <- stringi::stri_enc_mark(check$scientificName_new)
+  check$scientificName_status[check$scientificName_status == "possibly_ok"
+                              & string_type != "ASCII"] <- "name_w_non_ascii"
   return(check)
 }
