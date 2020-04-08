@@ -35,10 +35,10 @@
 #' @export
 #'
 check_status <- function(scientificName = NULL){
-  aff_string <- "[[:space:]]aff.[[:space:]]|[[:space:]]aff[[:space:]]"
-  cf_string <- "[[:space:]]cf.[[:space:]]|[[:space:]]cf[[:space:]]"
-  subsp_string <-  "[[:space:]]subsp.[[:space:]]|[[:space:]]subsp[[:space:]]"
-  var_string <- "[[:space:]]var.[[:space:]]|[[:space:]]var[[:space:]]"
+  aff_string <- "[[:space:]]aff\\.[[:space:]]|[[:space:]]aff[[:space:]]"
+  cf_string <- "[[:space:]]cf\\.[[:space:]]|[[:space:]]cf[[:space:]]"
+  subsp_string <-  "[[:space:]]subsp\\.[[:space:]]|[[:space:]]subsp[[:space:]]"
+  var_string <- "[[:space:]]var\\.[[:space:]]|[[:space:]]var[[:space:]]"
   aff_cf <- paste(aff_string, cf_string, sep = "|")
   subsp_var <- paste(subsp_string, var_string, sep = "|")
   # detecting status
@@ -99,7 +99,7 @@ check_status <- function(scientificName = NULL){
   no_sp <- sapply(stringr::str_split(check$scientificName_new, " "),
                   length) < 2
   indet <- stringr::str_detect(check$scientificName,
-                               stringr::regex("[[:space:]]sp.$|[[:space:]]sp$|[[:space:]]sp.",
+                               stringr::regex("[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.",
                                      ignore_case = TRUE))
   check$scientificName_status[no_sp | indet] <- "indet"
   # aceae in first string
