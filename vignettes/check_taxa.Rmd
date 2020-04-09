@@ -9,7 +9,38 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+devtools::load_all()
 ```
 
-## Taxonomic checking
+## String check
+
+The function `check_status` makes preliminary check in a scientific name, catching most common errors in species names such as:
+
+- `not_Genus_epithet_format`: scientific name not following the expected pattern genus and epithet separated by space
+- `variety`: species scientific name with variety
+- `subspecies`: species scientific name with subspecies
+- `conferre`: open nomenclature cf. in species scientific name
+- `affinis`: open nomenclature aff. in species scientific name
+- `name_w_authors`: species scientific name has authors
+- `not_name_has_digits`: species scientific name has digits, not a valid name
+- `indet`: species identified only at genus level
+- `family_as_genus`: species family as genus, not a valid name
+- `non_ascii`: species name has non ASCII characters, not a valid name
+
+
+```{r}
+species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum", 
+             "Aspidosperma discolor", "Aspidosperma Discolor", 
+             "Aspidosperma discolor A.DC.", "Aspidosperma cf. discolor", 
+             "Aspidosperma CF. discolor", "Aspidosperma aff. discolor",
+             "Aspidosperma Aff. discolor", "Aspidosperma sp. discolor", 
+             "Aspidosperma cf.discolor", "Aspidosperma dicolor", 
+             "Apocynaceae Aspidosperma", "Aspidosperma cf. discolor A.DC.", 
+             "Aspidosperma aff. discolor A.DC.", "Aspidosperma discolor A. & DC.", 
+             "Asplenium sp. nov.", "Asplenium sp 2", 
+             "Asplenium sp. nov. truncorum", "Asplenium truncorum 2", 
+             "cf. Piper dilatatum", "Piper dilatatum sp. nov.")
+
+check_status(species)
+```
 
