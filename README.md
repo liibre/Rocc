@@ -12,7 +12,6 @@ Installing and loading the package:
 
 ```{r setup}
 library(rocc)
-#devtools::load_all() # for development
 ```
 
 See examples in `vignettes` folder. 
@@ -22,6 +21,7 @@ See examples in `vignettes` folder.
 - [x] `rspeciesLink()`
 - [x] `rjabot()`
 - [x] `rgbif2()`
+- [X] `check_status()`
 - [ ] check inconsistencies in `name_backbone()` e `occ_search()`
   - taxonomy backbone
 - [ ] check inconsistencies in `rgbif2()`
