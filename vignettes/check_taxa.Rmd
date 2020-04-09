@@ -27,8 +27,13 @@ The function `check_status` makes preliminary check in a scientific name, catchi
 - `family_as_genus`: species family as genus, not a valid name
 - `non_ascii`: species name has non ASCII characters, not a valid name
 
+```{r eval = FALSE}
+library(rocc)
+```
 
-```{r}
+
+
+```{r check}
 species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum", 
              "Aspidosperma discolor", "Aspidosperma Discolor", 
              "Aspidosperma discolor A.DC.", "Aspidosperma cf. discolor", 
@@ -37,10 +42,12 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Aspidosperma cf.discolor", "Aspidosperma dicolor", 
              "Apocynaceae Aspidosperma", "Aspidosperma cf. discolor A.DC.", 
              "Aspidosperma aff. discolor A.DC.", "Aspidosperma discolor A. & DC.", 
-             "Asplenium sp. nov.", "Asplenium sp 2", 
+             "Asplenium sp.", "Asplenium sp 2", 
              "Asplenium sp. nov. truncorum", "Asplenium truncorum 2", 
-             "cf. Piper dilatatum", "Piper dilatatum sp. nov.")
+             "cf. Piper dilatatum", "Piper dilatatum sp. nov.", 
+             "aff. Piper dilatatum")
 
 check_status(species)
 ```
+
 
