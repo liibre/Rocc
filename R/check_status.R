@@ -1,9 +1,12 @@
-#' Identifies open nomenclature in species scientific name and classification under species level
+#' Check in the scientific name string
 #'
-#' This function identifies aff., cf. and subsp. var. in species names. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet).
+#' Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc).
 #'
 #' @return
-#' Data frame with `scientificName` as in the original input, `scientificName_status` with the flags in original data and `scientificName_new` with a suggestion for a more correct species name. The column `scientificName_status` accepts:
+#' Data frame with `scientificName` as in the original input, `scientificName_status` with the flags in original data and `scientificName_new` with a suggestion for a more correct species name. See Details for a description of flags in the column `scientificName_status`.
+#'
+#' @details
+#' Possible flags returned in `scientificName_status`:
 #'\describe{
 #'\item{\code{possibly_ok}}{scientific name following the expected pattern Genus epithet}
 #'\item{\code{not_Genus_epithet_format}}{scientific name not following the expected pattern Genus epithet}
@@ -15,11 +18,9 @@
 #'\item{\code{not_name_has_digits}}{species scientific name has digits, not a valid name}
 #'\item{\code{indet}}{species identified only at genus level}
 #'\item{\code{family_as_genus}}{species family as genus, not a valid name}
+#'\item{\code{species_nova}}{species name contains an indication of a new species, possibly not yet a valid name}
 #'\item{\code{non_ascii}}{species name has non ASCII characters, not a valid name}
 #'}
-#'
-#' @details
-#' Flags returned by column
 #'
 #' @param scientificName species name in a raw format
 #' @author Sara Mortara
