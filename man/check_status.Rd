@@ -22,6 +22,7 @@ Data frame with `scientificName` as in the original input, `scientificName_statu
 \item{\code{not_name_has_digits}}{species scientific name has digits, not a valid name}
 \item{\code{indet}}{species identified only at genus level}
 \item{\code{family_as_genus}}{species family as genus, not a valid name}
+\item{\code{non_ascii}}{species name has non ASCII characters, not a valid name}
 }
 }
 \description{

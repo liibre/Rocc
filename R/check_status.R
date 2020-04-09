@@ -15,6 +15,7 @@
 #'\item{\code{not_name_has_digits}}{species scientific name has digits, not a valid name}
 #'\item{\code{indet}}{species identified only at genus level}
 #'\item{\code{family_as_genus}}{species family as genus, not a valid name}
+#'\item{\code{non_ascii}}{species name has non ASCII characters, not a valid name}
 #'}
 #'
 #' @details
@@ -35,10 +36,12 @@
 #' @export
 #'
 check_status <- function(scientificName = NULL){
-  aff_string <- "[[:space:]]aff\\.[[:space:]]|[[:space:]]aff[[:space:]]"
-  cf_string <- "[[:space:]]cf\\.[[:space:]]|[[:space:]]cf[[:space:]]"
-  subsp_string <-  "[[:space:]]subsp\\.[[:space:]]|[[:space:]]subsp[[:space:]]"
-  var_string <- "[[:space:]]var\\.[[:space:]]|[[:space:]]var[[:space:]]"
+
+  #1. Open nomenclature and infraspecies class ####
+  aff_string <- "^aff\\.|^aff[[:space:]]|[[:space:]]aff\\.|[[:space:]]aff[[:space:]]"
+  cf_string <- "^cf\\.|^cf[[:space:]]|[[:space:]]cf\\.|[[:space:]]cf[[:space:]]"
+  subsp_string <-  "[[:space:]]ssp\\.|[[:space:]]subsp\\.|[[:space:]]subsp[[:space:]]|[[:space:]]ssp[[:space:]]"
+  var_string <- "[[:space:]]var\\.|[[:space:]]var[[:space:]]"
   aff_cf <- paste(aff_string, cf_string, sep = "|")
   subsp_var <- paste(subsp_string, var_string, sep = "|")
   # detecting status
@@ -56,6 +59,7 @@ check_status <- function(scientificName = NULL){
   # accessory functions
   clean_uncertain <- function(x)  {
     x_new <- stringr::str_replace(x, stringr::regex(aff_cf, ignore_case = TRUE), " ")
+    x_new <- flora::trim(x_new)
     return(x_new)
   }
   clean_sub <- function(x){
@@ -77,41 +81,70 @@ check_status <- function(scientificName = NULL){
   check$scientificName_new <- ifelse(is.na(check$scientificName_new),
                                      as.character(check$scientificName),
                                      check$scientificName_new)
-  # recognizig authors
-  no_authors <- sapply(check$scientificName, flora::remove.authors)
-  id_authors <- is.na(check$scientificName_status) & check$scientificName_new != no_authors &
-    sapply(strsplit(as.character(check$scientificName), " "), length) > 2
-  check$scientificName_status[id_authors] <- "name_w_authors"
-  check$scientificName_new[id_authors] <- no_authors[id_authors]
-  # recognizig digits
-  id_digits <- stringr::str_detect(check$scientificName, '\\d')
-  check$scientificName_status[id_digits] <- "not_name_has_digits"
-  # names not matching Genus + species pattern
-  id_not_gensp <- sapply(stringr::str_split(check$scientificName_new, " "),
-                         length) > 2
-  check$scientificName_status[id_not_gensp] <- "not_Genus_epithet_format"
-  # case
-  case <- sapply(check$scientificName_new, flora::fixCase)
-  id_case <- check$scientificName_new != case
-  check$scientificName_status[id_case] <- "name_w_wrong_case"
-  check$scientificName_new[id_case] <- case[id_case]
-  # sp. or genus only
+
+  # definindo prevalencia
+  prev <- c("affinis", "conferre", "subspecies", "variety", "indet")
+
+  #2. sp. or genus only ####
+  indet_regex <- "[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.|[[:space:]]indet\\.|[[:space:]]ind\\.|\\ssp\\s"
   no_sp <- sapply(stringr::str_split(check$scientificName_new, " "),
                   length) < 2
   indet <- stringr::str_detect(check$scientificName,
-                               stringr::regex("[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.",
-                                     ignore_case = TRUE))
+                               stringr::regex(indet_regex,
+                                              ignore_case = TRUE))
   check$scientificName_status[no_sp | indet] <- "indet"
-  # aceae in first string
+
+  #3. recognizig authors ####
+  no_authors <- sapply(check$scientificName_new, flora::remove.authors)
+  # aqui aff cf subsp var e indet prevalescem
+  id_authors <- is.na(check$scientificName_status) & check$scientificName_new != no_authors &
+    sapply(strsplit(as.character(check$scientificName), " "), length) > 2 &
+    !check$scientificName_status %in% prev
+  check$scientificName_status[id_authors] <- "name_w_authors"
+  check$scientificName_new[id_authors] <- no_authors[id_authors]
+
+  #4. recognizig digits ####
+  id_digits <- stringr::str_detect(check$scientificName, '\\d') &
+    !check$scientificName_status %in% prev
+  check$scientificName_status[id_digits] <- "not_name_has_digits"
+
+  #5. sp. nov.####
+  #sp. nov., spec. nov., sp. n., nov. sp., nov. spec. or n. sp.
+  spnov_regex <- "\\ssp\\.\\snov\\.|\\sspec\\.\\snov\\.|\\ssp\\.\\sn\\.|\\snov\\.\\ssp\\.
+  |\\snov\\.\\sspec\\.|\\sn\\.\\sp\\."
+  spnov <- stringr::str_detect(check$scientificName,
+                               stringr::regex(spnov_regex,
+                                              ignore_case = TRUE))
+  check$scientificName_status[spnov] <- "species_nova"
+
+  #6. names not matching Genus + species pattern
+  # de novo incluir prevalencia
+  id_not_gensp <- sapply(stringr::str_split(check$scientificName_new, " "),
+                         length) > 2 &
+    !check$scientificName_status %in% c(prev, "species_nova")
+  check$scientificName_status[id_not_gensp] <- "not_Genus_epithet_format"
+
+  #7. case ####
+  case <- sapply(check$scientificName_new, flora::fixCase)
+  # aff cf subsp var e indet prevalescem
+  id_case <- check$scientificName_new != case &
+    !check$scientificName_status %in% prev
+  check$scientificName_status[id_case] <- "name_w_wrong_case"
+  check$scientificName_new[id_case] <- case[id_case]
+
+  #6. aceae in first string ####
   gen <- sapply(stringr::str_split(check$scientificName_new, " "),
                 function(x) x[1])
   id_gen <- endsWith(gen, "aceae")
   check$scientificName_status[id_gen] <- "family_as_genus"
-  # possibly ok
+
+  #8. possibly ok ####
   check$scientificName_status[is.na(check$scientificName_status)] <- "possibly_ok"
-  # non-ascii
+
+  #9. non-ascii ####
   string_type <- stringi::stri_enc_mark(check$scientificName_new)
   check$scientificName_status[check$scientificName_status == "possibly_ok"
                               & string_type != "ASCII"] <- "name_w_non_ascii"
+
   return(check)
 }
