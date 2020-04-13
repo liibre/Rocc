@@ -4,13 +4,15 @@
 \alias{check_taxon}
 \title{Function to check species scientific name in Brazilian Flora 2020 database}
 \usage{
-check_taxon(scientificName)
+check_taxon(scientificName, get_synonyms = TRUE)
 }
 \arguments{
-\item{scientificName}{a species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species.}
+\item{scientificName}{Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species.}
+
+\item{get_synonyms}{Logical. If `get_synonyms = TRUE` (default) returns a second element containing information of all synonyms a species has.}
 }
 \value{
-A list with one or two elements. If a species has synonyms the second element of the list contains the names and additional information of synonyms.
+A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a NULL element if the species has no synonyms.
 }
 \description{
 Function to check species scientific name in Brazilian Flora 2020 database

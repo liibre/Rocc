@@ -1,9 +1,10 @@
 #' Function to check species scientific name in Brazilian Flora 2020 database
 #'
-#' @param scientificName a species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species.
+#' @param scientificName Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species.
+#' @param get_synonyms Logical. If `get_synonyms = TRUE` (default) returns a second element containing information of all synonyms a species has.
 #'
 #' @return
-#' A list with one or two elements. If a species has synonyms the second element of the list contains the names and additional information of synonyms.
+#' A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a NULL element if the species has no synonyms.
 #'
 #' @importFrom flora trim suggest.names
 #'
@@ -17,7 +18,8 @@
 #' lapply(c("Darbergia nigra", "Aspidosperma discolor"),
 #'        check_taxon)
 #'
-check_taxon <- function(scientificName) {
+check_taxon <- function(scientificName,
+                        get_synonyms = TRUE) {
 
   # limpeza de espacos
   trim_sp <- flora::trim(scientificName)
@@ -38,23 +40,49 @@ check_taxon <- function(scientificName) {
   # tem na flora?
   success <- res$success
 
-  # output completo
-  out <- res$result[, names(res$result) != "SINONIMO"]
-
-  #sinonimo
-  synonym <- res$result$SINONIMO[[1]]
+  # output taxon ####
+  cols_remove <- c("SINONIMO", "NOME ACEITO",
+                   "higherclassification", "source",
+                   "references")
+  out <- res$result[, !names(res$result) %in% cols_remove]
+  # output synonym
+  synonyms <- res$result$SINONIMO[[1]]
 
   # acrescentando coluna em out com sinonimo
-  out$synonym <- ifelse(!is.null(synonym),
+  out$synonyms <- ifelse(!is.null(synonyms$taxonid),
                         TRUE,
                         FALSE)
-  # acrescentando coluna com nome original
-  out$scientificName_original <- scientificName
-  if (success) {
+
+  # acrescentando coluna com nome original da busca
+  out$scientificName_search <- scientificName
+
+  # output sinonimo ####
+
+  # criando coluna com o basinômio em synonyms
+  if (!is.null(synonyms$taxonid)) {
+    syn_remove <- c("higherclassification",
+                    "source",
+                    "references")
+    synonyms <- synonyms[, !names(synonyms) %in% syn_remove]
+    synonyms_base <- out[out$taxonomicstatus == "NOME_ACEITO"
+                         & is.na(out$infraspecificepithet),
+                         c('taxonid', 'scientificname')]
+    names(synonyms_base) <- c("taxonid_base", "scientificname_base")
+    # juntando a info do basinomio com o output de synonyms
+    synonyms <- cbind(synonyms, synonyms_base)
+  }
+  if (get_synonyms) {
     res <- list(taxon = out,
-                synonym = synonym)
+                synonyms = synonyms)
   } else {
-    res <- list(taxon = "species scientific name not found in Brazilian Flora 2020")
+    res <- list(taxon = out)
+  }
+  # gerando o output
+  if (success) {
+    res <- res
+  } else {
+    message("species scientific name not found in Brazilian Flora 2020")
+    res <- NULL
   }
   return(res)
 }

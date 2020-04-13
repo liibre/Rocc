@@ -1,5 +1,5 @@
 ---
-title: "Previous taxonomic check"
+title: "Building an workflow of taxonomic check"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{check}
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 devtools::load_all()
 ```
 
-## String check
+## 1. String check
 
 The function `check_status` makes preliminary check in a scientific name, catching most common errors in species names such as:
 
@@ -47,7 +47,7 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "aff. Piper dilatatum", "Miconia albicans (Sw.) Triana", 
              "Miconia albicans (Sw.) TRIana")
 
-df <- check_status(species)
+df <- check_string(species)
 ```
 
 Now getting only possible correct and unique names. 
@@ -63,7 +63,7 @@ df_ok <- df[df$scientificName_status %in% ok, ]
 species_new <- unique(df_ok$scientificName_new)
 ```
 
-## Taxonomic check
+## 2. Taxonomic check
 
 Checking taxonomic status of species name. 
 
@@ -73,14 +73,14 @@ list_taxa <- lapply(species_new, check_taxon)
 
 ### Output??!?!!
 
-Still deciding the output. The columns `synonym` and `scientificName_original` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
+Still deciding the output. The columns `synonym` and `scientificName_search` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
 
 #### *Lindsaea lancea*
 
 ```{r lindsaea}
 # L. lancea
 list_taxa[[1]]$taxon
-list_taxa[[1]]$synonym
+list_taxa[[1]]$synonyms
 
 ```
 
@@ -89,6 +89,6 @@ list_taxa[[1]]$synonym
 ```{r aspidosperma}
 # para A. discolor
 list_taxa[[2]]$taxon
-list_taxa[[2]]$synonym
+list_taxa[[2]]$synonyms
 ```
 
