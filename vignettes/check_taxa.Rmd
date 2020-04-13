@@ -32,8 +32,7 @@ library(rocc)
 ```
 
 
-
-```{r check}
+```{r check_status}
 species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum", 
              "Aspidosperma discolor", "Aspidosperma Discolor", 
              "Aspidosperma discolor A.DC.", "Aspidosperma cf. discolor", 
@@ -45,9 +44,51 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Asplenium sp.", "Asplenium sp 2", 
              "Asplenium sp. nov. truncorum", "Asplenium truncorum 2", 
              "cf. Piper dilatatum", "Piper dilatatum sp. nov.", 
-             "aff. Piper dilatatum")
+             "aff. Piper dilatatum", "Miconia albicans (Sw.) Triana", 
+             "Miconia albicans (Sw.) TRIana")
 
-check_status(species)
+df <- check_status(species)
 ```
 
+Now getting only possible correct and unique names. 
+
+```{r species_ok}
+ok <- c("variety", 
+        "possibly_ok", 
+        "name_w_wrong_case",
+        "name_w_authors")
+
+df_ok <- df[df$scientificName_status %in% ok, ]
+
+species_new <- unique(df_ok$scientificName_new)
+```
+
+## Taxonomic check
+
+Checking taxonomic status of species name. 
+
+```{r check_taxon}
+list_taxa <- lapply(species_new, check_taxon)
+```
+
+### Output??!?!!
+
+Still deciding the output. The columns `synonym` and `scientificName_original` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
+
+#### *Lindsaea lancea*
+
+```{r lindsaea}
+# L. lancea
+list_taxa[[1]]$taxon
+list_taxa[[1]]$synonym
+
+```
+
+#### *Aspidosperma discolor*
+
+```{r aspidosperma}
+# para A. discolor
+list_taxa[[2]]$taxon
+list_taxa[[2]]$synonym
+```
 
