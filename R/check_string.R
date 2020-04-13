@@ -26,9 +26,9 @@
 #' @author Sara Mortara
 #'
 #' @examples
-#' check_status("Lindsaea lancea var. falcata")
-#' check_status(c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum"))
-#' check_status("Asplenium sp.")
+#' check_string("Lindsaea lancea var. falcata")
+#' check_string(c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum"))
+#' check_string("Asplenium sp.")
 #'
 #' @importFrom stringr str_detect str_replace str_split str_trim
 #' @importFrom flora remove.authors fixCase
@@ -36,7 +36,7 @@
 #'
 #' @export
 #'
-check_status <- function(scientificName = NULL){
+check_string <- function(scientificName = NULL){
 
   #1. Open nomenclature and infraspecies class ####
   aff_string <- "^aff\\.|^aff[[:space:]]|[[:space:]]aff\\.|[[:space:]]aff[[:space:]]"
