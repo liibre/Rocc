@@ -48,6 +48,8 @@ check_taxon <- function(scientificName) {
   out$synonym <- ifelse(!is.null(synonym),
                         TRUE,
                         FALSE)
+  # acrescentando coluna com nome original
+  out$scientificName_original <- scientificName
   if (success) {
     res <- list(taxon = out,
                 synonym = synonym)
