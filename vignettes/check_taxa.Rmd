@@ -45,10 +45,16 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Asplenium sp. nov. truncorum", "Asplenium truncorum 2", 
              "cf. Piper dilatatum", "Piper dilatatum sp. nov.", 
              "aff. Piper dilatatum", "Miconia albicans (Sw.) Triana", 
-             "Miconia albicans (Sw.) TRIana")
+             "Miconia albicans (Sw.) TRIana", "Bowlesia incana f. crassifolia", 
+             "Gleicheniales")
 
 df <- check_string(species)
 ```
+
+```{r}
+df
+```
+
 
 Now getting only possible correct and unique names. 
 
