@@ -53,7 +53,7 @@ dim(pb)
 ```
 
 ```{r}
-length(unique(intersect(caatinga$id, pb$id)))
+length(intersect(caatinga$id, pb$id))
 ```
 
 ```{r}
@@ -68,8 +68,8 @@ dim(pb_and_caatinga)
 pb_and_caatinga_and_not_endemic <- search_flora(domain = "Caatinga",
                                                 state = "PB",
                                                 endemism = FALSE)
-head(pb_and_caatinga)
-dim(pb_and_caatinga)
+head(pb_and_caatinga_and_not_endemic)
+dim(pb_and_caatinga_and_not_endemic)
 ```
 
 ```{r}
@@ -80,20 +80,4 @@ head(pb_and_caatinga_and_endemic)
 dim(pb_and_caatinga_and_endemic)
 ```
 
-
-```{r}
-PE_and_caatinga_and_end <- search_flora(domain = "Caatinga",
-                            state = "PE",
-                            endemism = TRUE)
-head(PE_and_caatinga_and_end)
-dim(PE_and_caatinga_and_end)
-```
-
-```{r}
-PE_and_caatinga_and_end <- search_flora(domain = "Caatinga",
-                            state = "PE",
-                            endemism = TRUE)
-head(PE_and_caatinga_and_end)
-dim(PE_and_caatinga_and_end)
-```
 
