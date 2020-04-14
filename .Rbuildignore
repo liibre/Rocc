@@ -6,3 +6,5 @@ test.R
 # prototype of a function
 checktaxa.R
 
+R/names_flora.R
+vignette/using_rspeciesLink.Rmd

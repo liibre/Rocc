@@ -1,6 +1,6 @@
 Package: rocc
 Type: Package
-Title: Downloads Occurrence Data from speciesLink API
+Title: Workflows for Downloading Occurrence Data from speciesLink, FB2020, and JABOT API
 Version: 0.1.0
 Author: Sara R Mortara
 Maintainer: Sara R Mortara <saramortara@gmail.com>
@@ -12,6 +12,7 @@ LazyData: true
 RoxygenNote: 7.1.0
 Imports:
     devtools,
+    finch,
     flora,
     jsonlite,
     stringi,
