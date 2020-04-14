@@ -21,7 +21,7 @@ See examples in `vignettes` folder.
 - [x] `rspeciesLink()`
 - [x] `rjabot()`
 - [x] `rgbif2()`
-- [X] `check_string()`
+- [x] `check_string()`
 - [x] `search_flora()`
 - [x] `names_flora()`
 - [ ] check inconsistencies in `name_backbone()` e `occ_search()` from **rgbif**
