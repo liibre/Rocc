@@ -21,16 +21,16 @@ See examples in `vignettes` folder.
 - [x] `rspeciesLink()`
 - [x] `rjabot()`
 - [x] `rgbif2()`
-- [X] `check_status()`
-- [ ] check inconsistencies in `name_backbone()` e `occ_search()`
+- [x] `check_string()`
+- [x] `search_flora()`
+- [x] `names_flora()`
+- [ ] check inconsistencies in `name_backbone()` e `occ_search()` from **rgbif**
   - taxonomy backbone
 - [ ] check inconsistencies in `rgbif2()`
   - NULL key
   - multiple keys
-- [ ] create function to generate all synomys for a scientific name
-  - Function will receive a species scientific name
-  - Function will use other existing and stable functions
-  - Function will return accepted name, synonyms, ref database for each synonym
+- [ ] function to bind different search results
+- [ ] create function to generate all synomys for a scientific name based on Brazilian Flora 2020
 
 ## Notes
 
