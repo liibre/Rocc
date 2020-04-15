@@ -36,7 +36,6 @@ check_taxon <- function(scientificName,
 
   # fazendo a busca
   res <- search_flora(suggest_sp)
-
   # tem na flora?
   success <- res$success
 
@@ -47,17 +46,14 @@ check_taxon <- function(scientificName,
   out <- res$result[, !names(res$result) %in% cols_remove]
   # output synonym
   synonyms <- res$result$SINONIMO[[1]]
-
   # acrescentando coluna em out com sinonimo
   out$synonyms <- ifelse(!is.null(synonyms$taxonid),
                         TRUE,
                         FALSE)
-
   # acrescentando coluna com nome original da busca
   out$scientificName_search <- scientificName
 
   # output sinonimo ####
-
   # criando coluna com o basinômio em synonyms
   if (!is.null(synonyms$taxonid)) {
     syn_remove <- c("higherclassification",
@@ -71,13 +67,13 @@ check_taxon <- function(scientificName,
     # juntando a info do basinomio com o output de synonyms
     synonyms <- cbind(synonyms, synonyms_base)
   }
+  # gerando o output
   if (get_synonyms) {
     res <- list(taxon = out,
                 synonyms = synonyms)
   } else {
     res <- list(taxon = out)
   }
-  # gerando o output
   if (success) {
     res <- res
   } else {
