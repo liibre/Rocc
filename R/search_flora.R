@@ -25,17 +25,19 @@
 search_flora <- function(domain = NULL,
                          states = NULL,
                          endemism = NULL) {
-
+biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal")
   pag <- "http://ipt.jbrj.gov.br/jbrj/archive.do?r=lista_especies_flora_brasil"
   ipt_flora <- finch::dwca_read(input = pag, read = TRUE, encoding = "UTF-8")
   distribution <- ipt_flora$data$distribution.txt
 
   if (!is.null(domain)) {
+    if (domain %in% biomas) {
     regex_domain <- paste(domain, collapse = "|")
     domain_df <- distribution[
       stringr::str_detect(string = distribution$occurrenceRemarks,
                           pattern = stringr::regex(regex_domain)),]
     id_d <- unique(domain_df$id)
+    }
   }
 
   if (!is.null(states)) {
@@ -54,9 +56,13 @@ search_flora <- function(domain = NULL,
                           pattern = stringr::regex(endemism_regex))                          ,]
     id_end <- unique(endemism_df$id)
   }
-  if (!is.null(domain)) ids <- id_d
+  if (!is.null(domain)) {
+    if (domain %in% biomas) {
+      ids <- id_d
+    }
+  }
   if (!is.null(states))  ids <- id_e
-  #if subsetting both by state and domain
+  # if subsetting both by state and domain
   if (!is.null(domain) & !is.null(states)) {
     ids <- intersect(id_d, id_e)
   }
@@ -66,10 +72,17 @@ search_flora <- function(domain = NULL,
 
   # get names
   taxon <- ipt_flora$data$taxon.txt
+  taxon <- subset(taxon, taxon$taxonRank %in% c("ESPECIE",
+                                                "VARIEDADE",
+                                                "SUB_ESPECIE",
+                                                "FORMA"))
   regex_ids <- paste(ids, collapse = "|")
   ids_df <-
     taxon[stringr::str_detect(string = taxon$id,
                               pattern = regex_ids),
-          c("id", "scientificName")]
+          c("id", "scientificName", "scientificNameAuthorship",
+            "genus", "specificEpithet")]
+  ids_df$names_wo_author <- paste(ids_df$genus, ids_df$specificEpithet)
+  ids_df <- ids_df[, c("id", "scientificName", "names_wo_author")]
   return(ids_df)
 }
