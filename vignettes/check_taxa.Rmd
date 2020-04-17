@@ -50,7 +50,7 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Miconia albicans (Sw.) TRIana", "Bowlesia incana f. crassifolia", 
              "Gleicheniales",  "incertae sedis", "Chamissoa acuminata Mart. var. acuminata", 
              "Entrophospora R.N. Ames & R.W. Schneid. 1979", "Schinopsis brasiliensis var. glabra Engl.", 
-             "Peronospora hyoscyami f. sp. tabacina Skalický")
+             "Peronospora hyoscyami f. sp. tabacina Skalický", "Bla bla Fulano f.")
 
 df <- check_string(species)
 ```

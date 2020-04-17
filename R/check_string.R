@@ -118,6 +118,8 @@ check_string <- function(scientificName = NULL){
   id_authors <- is.na(check$scientificName_status) & check$scientificName_new != no_authors &
     sapply(strsplit(as.character(check$scientificName), " "), length) > 2 &
     !check$scientificName_status %in% prev
+  # removing f. in the end of author name
+  no_authors <- trim(gsub("f\\.$", "", no_authors))
   check$scientificName_status[id_authors] <- "name_w_authors"
   check$scientificName_new[id_authors] <- no_authors[id_authors]
 
