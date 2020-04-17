@@ -171,7 +171,7 @@ check_string <- function(scientificName = NULL){
   check$scientificName_status[id_ord] <- "order_as_genus"
 
   #10. hybrid ####
-  hybrid <- str_detect(check$scientificName_new, "×")
+  hybrid <- str_detect(check$scientificName_new, "\u00D7")
   check$scientificName_status[hybrid] <- "hybrid_species"
 
   # 11 abreviated genus ####
