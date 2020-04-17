@@ -26,6 +26,8 @@ The function `check_status` makes preliminary check in a scientific name, catchi
 - `indet`: species identified only at genus level
 - `family_as_genus`: species family as genus, not a valid name
 - `non_ascii`: species name has non ASCII characters, not a valid name
+- `hybrid`: x
+- `parasite`: f. sp. 
 
 ```{r eval = FALSE}
 library(rocc)
@@ -46,7 +48,9 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "cf. Piper dilatatum", "Piper dilatatum sp. nov.", 
              "aff. Piper dilatatum", "Miconia albicans (Sw.) Triana", 
              "Miconia albicans (Sw.) TRIana", "Bowlesia incana f. crassifolia", 
-             "Gleicheniales")
+             "Gleicheniales",  "incertae sedis", "Chamissoa acuminata Mart. var. acuminata", 
+             "Entrophospora R.N. Ames & R.W. Schneid. 1979", "Schinopsis brasiliensis var. glabra Engl.", 
+             "Peronospora hyoscyami f. sp. tabacina Skalický")
 
 df <- check_string(species)
 ```
