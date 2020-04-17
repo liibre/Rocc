@@ -32,6 +32,7 @@ Possible flags returned in `scientificName_status`:
 \item{\code{order_as_genus}}{order as genus, not a valid name}
 \item{\code{species_nova}}{species name contains an indication of a new species, possibly not yet a valid name}
 \item{\code{non_ascii}}{species name has non ASCII characters, not a valid name}
+#'\item{\code{hybrid_species}}{hybrid species}
 }
 }
 \examples{

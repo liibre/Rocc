@@ -51,7 +51,11 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Gleicheniales",  "incertae sedis", "Chamissoa acuminata Mart. var. acuminata", 
              "Entrophospora R.N. Ames & R.W. Schneid. 1979", "Schinopsis brasiliensis var. glabra Engl.", 
              "Peronospora hyoscyami f. sp. tabacina Skalický", "Bla bla Fulano f.", 
-             "Syagrus ×andrequiceana")
+             "Syagrus ×andrequiceana", "Agalinis itambensisxangustifolia?", 
+             "Byrsonima rich.", "Morganella rimosa Baseia & Alfredo sp. nov.", 
+             "Leandra euphorbioides (Naudin) D`El Rei Souza & Baumgratz", 
+             "Cyrtocymura harleyi (H.Rob.) H.Rob.", "S polyphylla", 
+             "Phaseolus robustus Piper")
 
 df <- check_string(species)
 ```
@@ -78,7 +82,7 @@ species_new <- unique(df_ok$scientificName_new)
 
 Checking taxonomic status of species name. 
 
-```{r check_taxon}
+```{r check_taxon, eval = FALSE}
 list_taxa <- lapply(species_new, check_taxon)
 ```
 
@@ -88,7 +92,7 @@ Still deciding the output. The columns `synonym` and `scientificName_search` wer
 
 #### *Lindsaea lancea*
 
-```{r lindsaea}
+```{r lindsaea, eval = FALSE}
 # L. lancea
 list_taxa[[1]]$taxon
 list_taxa[[1]]$synonyms
@@ -97,7 +101,7 @@ list_taxa[[1]]$synonyms
 
 #### *Aspidosperma discolor*
 
-```{r aspidosperma}
+```{r aspidosperma, eval = FALSE}
 # para A. discolor
 list_taxa[[2]]$taxon
 list_taxa[[2]]$synonyms
