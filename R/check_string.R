@@ -22,6 +22,7 @@
 #'\item{\code{order_as_genus}}{order as genus, not a valid name}
 #'\item{\code{species_nova}}{species name contains an indication of a new species, possibly not yet a valid name}
 #'\item{\code{non_ascii}}{species name has non ASCII characters, not a valid name}
+#'#'\item{\code{hybrid_species}}{hybrid species}
 #'}
 #'
 #' @param scientificName species name in a raw format
@@ -164,10 +165,14 @@ check_string <- function(scientificName = NULL){
   id_ord <- endsWith(gen, "ales")
   check$scientificName_status[id_ord] <- "order_as_genus"
 
-  #10. possibly ok ####
+  #10. hybrid ####
+  hybrid <- str_detect(check$scientificName_new, "×")
+  check$scientificName_status[hybrid] <- "hybrid_species"
+
+  #11. possibly ok ####
   check$scientificName_status[is.na(check$scientificName_status)] <- "possibly_ok"
 
-  #11. non-ascii ####
+  #12. non-ascii ####
   string_type <- stringi::stri_enc_mark(check$scientificName_new)
   check$scientificName_status[check$scientificName_status == "possibly_ok"
                               & string_type != "ASCII"] <- "name_w_non_ascii"
