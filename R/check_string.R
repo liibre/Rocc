@@ -111,7 +111,8 @@ check_string <- function(scientificName = NULL){
   indet <- stringr::str_detect(check$scientificName,
                                stringr::regex(indet_regex,
                                               ignore_case = TRUE))
-  check$scientificName_status[no_sp | indet] <- "indet"
+  question <- stringr::str_detect(check$scientificName, "\\?")
+  check$scientificName_status[no_sp | indet | question] <- "indet"
 
   #3. recognizig authors ####
   no_authors <- sapply(check$scientificName_new, flora::remove.authors)

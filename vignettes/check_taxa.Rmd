@@ -51,7 +51,7 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Gleicheniales",  "incertae sedis", "Chamissoa acuminata Mart. var. acuminata", 
              "Entrophospora R.N. Ames & R.W. Schneid. 1979", "Schinopsis brasiliensis var. glabra Engl.", 
              "Peronospora hyoscyami f. sp. tabacina Skalický", "Bla bla Fulano f.", 
-             "Syagrus ×andrequiceana")
+             "Syagrus ×andrequiceana", "Agalinis itambensisxangustifolia?")
 
 df <- check_string(species)
 ```
