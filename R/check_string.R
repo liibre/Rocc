@@ -104,7 +104,18 @@ check_string <- function(scientificName = NULL){
   # definindo prevalencia
   prev <- c("affinis", "conferre", "subspecies", "variety", "indet", "forma", "incertae sedis")
 
-  #2. sp. or genus only ####
+  #2. recognizig authors ####
+  no_authors <- sapply(check$scientificName_new, flora::remove.authors)
+  # aqui aff cf subsp var e indet prevalescem
+  id_authors <- is.na(check$scientificName_status) & check$scientificName_new != no_authors |
+    sapply(strsplit(as.character(check$scientificName), " "), length) > 2 &
+    !check$scientificName_status %in% prev
+  # removing f. in the end of author name
+  no_authors <- trim(gsub("f\\.$", "", no_authors))
+  check$scientificName_status[id_authors] <- "name_w_authors"
+  check$scientificName_new[id_authors] <- no_authors[id_authors]
+
+  #3. sp. or genus only ####
   indet_regex <- "[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.|[[:space:]]indet\\.|[[:space:]]ind\\.|\\ssp\\s"
   no_sp <- sapply(stringr::str_split(check$scientificName_new, " "),
                   length) < 2
@@ -113,17 +124,6 @@ check_string <- function(scientificName = NULL){
                                               ignore_case = TRUE))
   question <- stringr::str_detect(check$scientificName, "\\?")
   check$scientificName_status[no_sp | indet | question] <- "indet"
-
-  #3. recognizig authors ####
-  no_authors <- sapply(check$scientificName_new, flora::remove.authors)
-  # aqui aff cf subsp var e indet prevalescem
-  id_authors <- is.na(check$scientificName_status) & check$scientificName_new != no_authors &
-    sapply(strsplit(as.character(check$scientificName), " "), length) > 2 &
-    !check$scientificName_status %in% prev
-  # removing f. in the end of author name
-  no_authors <- trim(gsub("f\\.$", "", no_authors))
-  check$scientificName_status[id_authors] <- "name_w_authors"
-  check$scientificName_new[id_authors] <- no_authors[id_authors]
 
   #4. recognizig digits ####
   id_digits <- stringr::str_detect(check$scientificName, '\\d') &
@@ -138,6 +138,7 @@ check_string <- function(scientificName = NULL){
                                stringr::regex(spnov_regex,
                                               ignore_case = TRUE))
   check$scientificName_status[spnov] <- "species_nova"
+  check$scientificName_new[spnov] <- scientificName[spnov]
 
   #6. names not matching Genus + species pattern ####
   # de novo incluir prevalencia
