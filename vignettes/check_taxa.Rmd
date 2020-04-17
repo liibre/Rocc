@@ -52,7 +52,9 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Entrophospora R.N. Ames & R.W. Schneid. 1979", "Schinopsis brasiliensis var. glabra Engl.", 
              "Peronospora hyoscyami f. sp. tabacina Skalický", "Bla bla Fulano f.", 
              "Syagrus ×andrequiceana", "Agalinis itambensisxangustifolia?", 
-             "Byrsonima rich.", "Morganella rimosa Baseia & Alfredo sp. nov.")
+             "Byrsonima rich.", "Morganella rimosa Baseia & Alfredo sp. nov.", 
+             "Leandra euphorbioides (Naudin) D`El Rei Souza & Baumgratz", 
+             "Cyrtocymura harleyi (H.Rob.) H.Rob.")
 
 df <- check_string(species)
 ```

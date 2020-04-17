@@ -42,7 +42,7 @@
 check_string <- function(scientificName = NULL){
 
   #1. Open nomenclature and infraspecies class ####
-  form_string <- "[[:space:]]f\\.[[:space:]]"
+  form_string <- "[[:space:]]f\\.[[:space:]]|[[:space:]]form\\.[[:space:]]"
   inc_string <- "inc\\.[[:space:]]sed\\.|Incertae[[:space:]]sedis"
   aff_string <- "^aff\\.|^aff[[:space:]]|[[:space:]]aff\\.|[[:space:]]aff[[:space:]]"
   cf_string <- "^cf\\.|^cf[[:space:]]|[[:space:]]cf\\.|[[:space:]]cf[[:space:]]"
@@ -112,6 +112,9 @@ check_string <- function(scientificName = NULL){
     !check$scientificName_status %in% prev
   # removing f. in the end of author name
   no_authors <- trim(gsub("f\\.$", "", no_authors))
+  no_authors <- ifelse(sapply(stringr::str_split(no_authors, " "), length) > 2,
+                       sapply(stringr::str_split(no_authors, " "), function(x) paste(x[1], x[2])),
+                       no_authors)
   check$scientificName_status[id_authors] <- "name_w_authors"
   check$scientificName_new[id_authors] <- no_authors[id_authors]
 
