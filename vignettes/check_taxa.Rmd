@@ -54,7 +54,8 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Syagrus ×andrequiceana", "Agalinis itambensisxangustifolia?", 
              "Byrsonima rich.", "Morganella rimosa Baseia & Alfredo sp. nov.", 
              "Leandra euphorbioides (Naudin) D`El Rei Souza & Baumgratz", 
-             "Cyrtocymura harleyi (H.Rob.) H.Rob.")
+             "Cyrtocymura harleyi (H.Rob.) H.Rob.", "S polyphylla", 
+             "Phaseolus robustus Piper")
 
 df <- check_string(species)
 ```
