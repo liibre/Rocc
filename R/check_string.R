@@ -22,6 +22,7 @@
 #'\item{\code{order_as_genus}}{order as genus, not a valid name}
 #'\item{\code{species_nova}}{species name contains an indication of a new species, possibly not yet a valid name}
 #'\item{\code{non_ascii}}{species name has non ASCII characters, not a valid name}
+#'#'\item{\code{hybrid_species}}{hybrid species}
 #'}
 #'
 #' @param scientificName species name in a raw format
@@ -64,27 +65,36 @@ check_string <- function(scientificName = NULL){
   check$scientificName_status[subsp] <- "subspecies"
   check$scientificName_status[var] <- "variety"
   check$scientificName_status[inc] <- "incertae_sedis"
-  check$scientificName_status[form] <- "form"
+  check$scientificName_status[form] <- "forma"
   # accessory functions
-  clean_uncertain <- function(x)  {
+  clean_open <- function(x)  {
     x_new <- stringr::str_replace(x, stringr::regex(aff_cf, ignore_case = TRUE), " ")
     x_new <- flora::trim(x_new)
     return(x_new)
   }
-  clean_sub <- function(x){
+  clean_infra <- function(x){
     x_new <- unlist(lapply(stringr::str_split(x, stringr::regex(subsp_var, ignore_case = TRUE)),
                            function(x) x[1]))
-    return(x_new)
+    n_strings <- lapply(stringr::str_split(x_new, " "), length)
+    infra_authors <- ifelse(n_strings > 2, TRUE, FALSE)
+    x_new <- sapply(x_new, flora::remove.authors)
+    return(as.character(x_new))
   }
   # providing cleaned name
   check$scientificName_new <- NA
   ## affinis e conferre
   check$scientificName_new[check$scientificName_status
-                           %in% c("affinis", "conferre")] <- clean_uncertain(check$scientificName[check$scientificName_status
-                                                                                                  %in% c("affinis", "conferre")])
+                           %in% c("affinis",
+                                  "conferre")] <- clean_open(check$scientificName[check$scientificName_status
+                                                                                  %in% c("affinis",
+                                                                                         "conferre")])
   check$scientificName_new[check$scientificName_status
-                           %in% c("subspecies", "variety", "form")] <- clean_sub(check$scientificName[check$scientificName_status
-                                                                                              %in% c("subspecies", "variety", "form")])
+                           %in% c("subspecies",
+                                  "variety",
+                                  "forma")] <- clean_infra(check$scientificName[check$scientificName_status
+                                                                               %in% c("subspecies",
+                                                                                      "variety",
+                                                                                      "forma")])
   # other types of basic cleaning
   ## first filling scientificName_new for all
   check$scientificName_new <- ifelse(is.na(check$scientificName_new),
@@ -92,7 +102,7 @@ check_string <- function(scientificName = NULL){
                                      check$scientificName_new)
 
   # definindo prevalencia
-  prev <- c("affinis", "conferre", "subspecies", "variety", "indet", "form")
+  prev <- c("affinis", "conferre", "subspecies", "variety", "indet", "forma", "incertae sedis")
 
   #2. sp. or genus only ####
   indet_regex <- "[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.|[[:space:]]indet\\.|[[:space:]]ind\\.|\\ssp\\s"
@@ -109,12 +119,14 @@ check_string <- function(scientificName = NULL){
   id_authors <- is.na(check$scientificName_status) & check$scientificName_new != no_authors &
     sapply(strsplit(as.character(check$scientificName), " "), length) > 2 &
     !check$scientificName_status %in% prev
+  # removing f. in the end of author name
+  no_authors <- trim(gsub("f\\.$", "", no_authors))
   check$scientificName_status[id_authors] <- "name_w_authors"
   check$scientificName_new[id_authors] <- no_authors[id_authors]
 
   #4. recognizig digits ####
   id_digits <- stringr::str_detect(check$scientificName, '\\d') &
-    !check$scientificName_status %in% prev
+    !check$scientificName_status %in% c(prev, "name_w_authors")
   check$scientificName_status[id_digits] <- "not_name_has_digits"
 
   #5. sp. nov.####
@@ -126,7 +138,7 @@ check_string <- function(scientificName = NULL){
                                               ignore_case = TRUE))
   check$scientificName_status[spnov] <- "species_nova"
 
-  #6. names not matching Genus + species pattern
+  #6. names not matching Genus + species pattern ####
   # de novo incluir prevalencia
   id_not_gensp <- sapply(stringr::str_split(check$scientificName_new, " "),
                          length) > 2 &
@@ -137,7 +149,7 @@ check_string <- function(scientificName = NULL){
   case <- sapply(check$scientificName_new, flora::fixCase)
   # aff cf subsp var e indet prevalescem
   id_case <- check$scientificName_new != case &
-    !check$scientificName_status %in% prev
+    !check$scientificName_status %in% c(prev, "incertae_sedis")
   check$scientificName_status[id_case] <- "name_w_wrong_case"
   check$scientificName_new[id_case] <- case[id_case]
 
@@ -153,13 +165,18 @@ check_string <- function(scientificName = NULL){
   id_ord <- endsWith(gen, "ales")
   check$scientificName_status[id_ord] <- "order_as_genus"
 
-  #10. possibly ok ####
+  #10. hybrid ####
+  hybrid <- str_detect(check$scientificName_new, "×")
+  check$scientificName_status[hybrid] <- "hybrid_species"
+
+  #11. possibly ok ####
   check$scientificName_status[is.na(check$scientificName_status)] <- "possibly_ok"
 
-  #11. non-ascii ####
+  #12. non-ascii ####
   string_type <- stringi::stri_enc_mark(check$scientificName_new)
   check$scientificName_status[check$scientificName_status == "possibly_ok"
                               & string_type != "ASCII"] <- "name_w_non_ascii"
 
   return(check)
+
 }
