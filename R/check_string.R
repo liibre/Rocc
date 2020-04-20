@@ -105,7 +105,8 @@ check_string <- function(scientificName = NULL){
   prev <- c("affinis", "conferre", "subspecies", "variety", "forma", "incertae_sedis", "species_nova", "indet")
 
   #2. recognizig authors ####
-  no_authors <- sapply(check$scientificName_new, flora::remove.authors)
+  no_authors <- sapply(check$scientificName_new,
+                       function(x) flora::remove.authors(flora::fixCase(x)))
   # aqui aff cf subsp var e indet prevalescem
   id_authors <- #is.na(check$scientificName_status) | #&
     check$scientificName_new != no_authors &
