@@ -1,10 +1,11 @@
 #' Function to check species scientific name in Brazilian Flora 2020 database
 #'
-#' @param scientificName Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species.
-#' @param get_synonyms Logical. If `get_synonyms = TRUE` (default) returns a second element containing information of all synonyms a species has.
+#' @param scientificName Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species
+#' @param get_synonyms Logical. If `get_synonyms = TRUE` (default) returns a second element containing information of all synonyms a species has
+#' @param infraspecies Logical. If `infraspecies = TRUE` returns accepted name of any infraspecies classification
 #'
 #' @return
-#' A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a NULL element if the species has no synonyms.
+#' A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a NULL element if the species has no synonyms
 #'
 #' @importFrom flora trim suggest.names
 #'
@@ -12,21 +13,17 @@
 #'
 #' @examples
 #' # single species
-#' check_taxon("Dalbergia nigra")
+#' check_bfg("Dalbergia nigra")
 #'
 #' # more than one species w/ lapply from base
 #' lapply(c("Darbergia nigra", "Aspidosperma discolor"),
-#'        check_taxon)
+#'        check_bfg)
 #'
-check_taxon <- function(scientificName,
-                        get_synonyms = TRUE) {
+check_bfg <- function(scientificName,
+                      get_synonyms = TRUE,
+                      infraspecies = FALSE) {
 
-  # limpeza de espacos
-  trim_sp <- flora::trim(scientificName)
-  # limpeza de digitacao
-  suggest_sp <- sapply(trim_sp, flora::suggest.names)
-
-  # função para buscar na flora do brasil
+    # função para buscar na flora do brasil
   search_flora <- function(x){
     api <- "http://servicos.jbrj.gov.br/flora/taxon/"
     search_sp <- gsub(" ", "%20", x)
@@ -35,7 +32,7 @@ check_taxon <- function(scientificName,
   }
 
   # fazendo a busca
-  res <- search_flora(suggest_sp)
+  res <- search_flora(scientificName)
   # tem na flora?
   success <- res$success
 
@@ -52,6 +49,12 @@ check_taxon <- function(scientificName,
                         FALSE)
   # acrescentando coluna com nome original da busca
   out$scientificName_search <- scientificName
+  out <- out[out$taxonomicstatus %in% "NOME_ACEITO", ]
+  if (infraspecies == FALSE) {
+    out <- out[is.na(out$infraspecificepithet), ]
+  } else {
+    out <- out
+  }
 
   # output sinonimo ####
   # criando coluna com o basinômio em synonyms
