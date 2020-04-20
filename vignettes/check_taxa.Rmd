@@ -63,7 +63,8 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Cyrtocymura harleyi (H.Rob.) H.Rob.", "S polyphylla", 
              "Phaseolus robustus Piper", "Catasetum ×splendens Cogn.", 
              "Catasetum ×evangelistae V.P.Castro & G.F.Carr", "Metrodorea mollis",
-             "Salvinia ×delasotae C.V. Miranda & Schwartsb.", "Helietta glaziovii")
+             "Salvinia ×delasotae C.V. Miranda & Schwartsb.", "Helietta glaziovii", 
+             "Drosera ×fontinalis Rivadavia", "Diplazium lepthochlamys")
 
 df <- check_string(species)
 ```
@@ -71,7 +72,7 @@ df <- check_string(species)
 Checking the output of `check_string()`
 
 ```{r, echo = FALSE}
-kable(df[order(df$scientificName_status), ], row.names = FALSE)
+kable(df[order(df$scientificName_status, df$scientificName), ], row.names = FALSE)
 ```
 
 Now getting only possible correct and unique names. 
@@ -89,28 +90,32 @@ species_new <- unique(df_ok$scientificName_new)
 
 ## 2. Taxonomic check
 
-Checking taxonomic status of species name. 
+First, we will check for typos and get a list of possible names. 
 
-```{r check_taxon, eval = FALSE}
-list_taxa <- lapply(species_new, check_taxon)
+```{r suggest}
+suggest_taxa <- suggest_bfg(species_new)
+search_taxa <- na.omit(as.character(unique(suggest_taxa$scientificName_suggest)))
 ```
 
-### Output??!?!!
+
+```{r check_taxon} 
+list_taxa <- lapply(search_taxa, check_bfg)
+```
+
+### Output
 
 Still deciding the output. The columns `synonym` and `scientificName_search` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
-
 #### *Lindsaea lancea*
 
-```{r lindsaea, eval = FALSE}
+```{r lindsaea}
 # L. lancea
 list_taxa[[1]]$taxon
 list_taxa[[1]]$synonyms
-
 ```
 
 #### *Aspidosperma discolor*
 
-```{r aspidosperma, eval = FALSE}
+```{r aspidosperma}
 # para A. discolor
 list_taxa[[2]]$taxon
 list_taxa[[2]]$synonyms
