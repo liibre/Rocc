@@ -34,7 +34,7 @@
 #' check_string("Asplenium sp.")
 #'
 #' @importFrom stringr str_detect str_replace str_split str_trim
-#' @importFrom flora remove.authors fixCase
+#' @importFrom flora remove.authors fixCase trim
 #' @importFrom stringi stri_enc_mark
 #'
 #' @export
@@ -102,9 +102,26 @@ check_string <- function(scientificName = NULL){
                                      check$scientificName_new)
 
   # definindo prevalencia
-  prev <- c("affinis", "conferre", "subspecies", "variety", "indet", "forma", "incertae sedis")
+  prev <- c("affinis", "conferre", "subspecies", "variety", "forma", "incertae_sedis", "species_nova", "indet")
 
-  #2. sp. nov.####
+  #2. recognizig authors ####
+  no_authors <- sapply(check$scientificName_new, flora::remove.authors)
+  # aqui aff cf subsp var e indet prevalescem
+  id_authors <- #is.na(check$scientificName_status) | #&
+    check$scientificName_new != no_authors &
+    sapply(strsplit(as.character(check$scientificName), " "), length) > 2
+  id_authors <- id_authors & !check$scientificName_status %in% prev |
+    sapply(strsplit(as.character(no_authors), " "), length) > 2 |
+    sapply(strsplit(as.character(no_authors), " "), length) == 1 # genus + author
+  # removing f. in the end of author name
+  no_authors <- flora::trim(gsub("f\\.$", "", no_authors))
+  no_authors <- ifelse(sapply(stringr::str_split(no_authors, " "), length) > 2,
+                       sapply(stringr::str_split(no_authors, " "), function(x) paste(x[1], x[2])),
+                       no_authors)
+  check$scientificName_status[id_authors] <- "name_w_authors"
+  check$scientificName_new[id_authors] <- no_authors[id_authors]
+
+  #3. sp. nov.####
   #sp. nov., spec. nov., sp. n., nov. sp., nov. spec. or n. sp.
   spnov_regex <- "\\ssp\\.\\snov\\.|\\sspec\\.\\snov\\.|\\ssp\\.\\sn\\.|\\snov\\.\\ssp\\.
   |\\snov\\.\\sspec\\.|\\sn\\.\\sp\\."
@@ -114,33 +131,20 @@ check_string <- function(scientificName = NULL){
   check$scientificName_status[spnov] <- "species_nova"
   check$scientificName_new[spnov] <- scientificName[spnov]
 
-  #3. recognizig authors ####
-  no_authors <- sapply(check$scientificName_new, flora::remove.authors)
-  # aqui aff cf subsp var e indet prevalescem
-  id_authors <- is.na(check$scientificName_status) | #& check$scientificName_new != no_authors |
-    sapply(strsplit(as.character(check$scientificName), " "), length) > 2 &
-    !check$scientificName_status %in% prev
-  # removing f. in the end of author name
-  no_authors <- trim(gsub("f\\.$", "", no_authors))
-  no_authors <- ifelse(sapply(stringr::str_split(no_authors, " "), length) > 2,
-                       sapply(stringr::str_split(no_authors, " "), function(x) paste(x[1], x[2])),
-                       no_authors)
-  check$scientificName_status[id_authors] <- "name_w_authors"
-  check$scientificName_new[id_authors] <- no_authors[id_authors]
-
-  #3. sp. or genus only ####
-  indet_regex <- "[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.|[[:space:]]indet\\.|[[:space:]]ind\\.|\\ssp\\s"
+    #3. sp. or genus only ####
+  indet_regex <- "[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.|[[:space:]]indet\\.|[[:space:]]ind\\.|[[:space:]]sp[[:space:]]"
   no_sp <- sapply(stringr::str_split(check$scientificName_new, " "),
                   length) < 2
   indet <- stringr::str_detect(check$scientificName,
                                stringr::regex(indet_regex,
-                                              ignore_case = TRUE))
+                                              ignore_case = TRUE)) &
+    !check$scientificName_status %in% c(prev, "species_nova")
   question <- stringr::str_detect(check$scientificName, "\\?")
   check$scientificName_status[no_sp | indet | question] <- "indet"
 
   #4. recognizig digits ####
   id_digits <- stringr::str_detect(check$scientificName, '\\d') &
-    !check$scientificName_status %in% c(prev, "name_w_authors")
+    !check$scientificName_status %in% prev
   check$scientificName_status[id_digits] <- "not_name_has_digits"
 
   #6. names not matching Genus + species pattern ####
