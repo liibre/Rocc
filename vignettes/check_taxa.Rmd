@@ -10,7 +10,16 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 devtools::load_all()
+library(knitr)
 ```
+
+## 0. Installing and loading package
+
+```{r eval = FALSE}
+remotes::install_github("saramortara/rocc")
+library(rocc)
+```
+
 
 ## 1. String check
 
@@ -29,9 +38,6 @@ The function `check_status` makes preliminary check in a scientific name, catchi
 - `hybrid`: x
 - `parasite`: f. sp. 
 
-```{r eval = FALSE}
-library(rocc)
-```
 
 
 ```{r check_status}
@@ -55,15 +61,18 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Byrsonima rich.", "Morganella rimosa Baseia & Alfredo sp. nov.", 
              "Leandra euphorbioides (Naudin) D`El Rei Souza & Baumgratz", 
              "Cyrtocymura harleyi (H.Rob.) H.Rob.", "S polyphylla", 
-             "Phaseolus robustus Piper")
+             "Phaseolus robustus Piper", "Catasetum ×splendens Cogn.", 
+             "Catasetum ×evangelistae V.P.Castro & G.F.Carr", "Metrodorea mollis",
+             "Salvinia ×delasotae C.V. Miranda & Schwartsb.", "Helietta glaziovii")
 
 df <- check_string(species)
 ```
 
-```{r}
-df
-```
+Checking the output of `check_string()`
 
+```{r, echo = FALSE}
+kable(df[order(df$scientificName_status), ], row.names = FALSE)
+```
 
 Now getting only possible correct and unique names. 
 
