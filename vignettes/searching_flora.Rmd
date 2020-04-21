@@ -80,4 +80,14 @@ head(pb_and_caatinga_and_endemic)
 dim(pb_and_caatinga_and_endemic)
 ```
 
+```{r}
+pb_and_caatinga_and_endemic_and_tree <- search_flora(domain = "Caatinga",
+                                            state = "PB",
+                                            endemism = TRUE,
+                                            lifeform = "Árvore")
+head(pb_and_caatinga_and_endemic_and_tree)
+dim(pb_and_caatinga_and_endemic_and_tree)
+```
+
+
 

@@ -6,8 +6,33 @@
 #' @param states Brazilian states, capitalized (e.g. "MA")
 #' @param endemism logical, return species that are endemic or not from Brazil
 #'  Defaults to NULL to return all species
-#'
-#' @return a list of taxon IDs
+#' @param lifeform character, search species with the following life forms:
+#' \describe{
+#'   \item{\code{Arbusto}}{}
+#'   \item{\code{Árvore}}{}
+#'   \item{\code{Bambu}}{}
+#'   \item{\code{Dracenoide}}{}
+#'   \item{\code{Erva}}{}
+#'   \item{\code{Liana/volúvel/trepadeira}}{}
+#'   \item{\code{Palmeira}}{}
+#'   \item{\code{Subarbusto}}{}
+#'   \item{\code{Suculenta}}{}
+#'   \item{\code{Desconhecida}}{}
+#'}
+#' @param habitat character, search species in the following habitat options:
+#' \describe{
+#'   \item{\code{Aquática}}{}
+#'   \item{\code{Epífita}}{}
+#'   \item{\code{Hemiepífita}}{}
+#'   \item{\code{Hemiparasita}}{}
+#'   \item{\code{Parasita}}{}
+#'   \item{\code{Rupícola}}{}
+#'   \item{\code{Saprófita}}{}
+#'   \item{\code{Terrícola}}{}
+#'   \item{\code{Desconhecido}}{}
+#'}
+#' @return a data frame with taxon IDs, scientific name and binomial name
+#' without authors
 #'
 #'
 #' @importFrom finch dwca_read dwca_cache
@@ -38,7 +63,7 @@ biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pan
     regex_domain <- paste(domain, collapse = "|")
     domain_df <- distribution[
       stringr::str_detect(string = distribution$occurrenceRemarks,
-                          pattern = stringr::regex(regex_domain)), "id"]
+                          pattern = stringr::regex(regex_domain)),]
     id_d <- unique(domain_df$id)
     }
   }
@@ -47,7 +72,7 @@ biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pan
     states_regex <- paste(states, collapse = "|")
     states_df <- distribution[
       stringr::str_detect(string = distribution$locationID,
-                          pattern = stringr::regex(states_regex)), "id"]
+                          pattern = stringr::regex(states_regex)), ]
     id_e <- unique(states_df$id)
   }
 
@@ -55,7 +80,7 @@ biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pan
     endemism_regex <- ifelse(endemism == TRUE, "Endemica", "Não endemica")
     endemism_df <- distribution[
       stringr::str_detect(string = distribution$occurrenceRemarks,
-                          pattern = stringr::regex(endemism_regex)), "id"]
+                          pattern = stringr::regex(endemism_regex)), ]
     id_end <- unique(endemism_df$id)
   }
 
@@ -67,14 +92,14 @@ biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pan
     lf_regex <- paste(lifeform, collapse = "|")
     spprof_df <- speciesprofile[
       stringr::str_detect(string = speciesprofile$lifeForm,
-                          pattern = stringr::regex(lf_regex)), "id"]
+                          pattern = stringr::regex(lf_regex)), ]
     id_lf <- unique(spprof_df$id)
   }
   if (!is.null(habitat)) {
     hab_regex <- paste(habitat, collapse = "|")
     spprof_df <- speciesprofile[
       stringr::str_detect(string = speciesprofile$habitat,
-                          pattern = stringr::regex(hab_regex)), "id"]
+                          pattern = stringr::regex(hab_regex)), ]
     id_hab <- unique(spprof_df$id)
     }
 ## intersects ids
