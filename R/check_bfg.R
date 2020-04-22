@@ -16,7 +16,7 @@
 #' check_bfg("Dalbergia nigra")
 #'
 #' # more than one species w/ lapply from base
-#' lapply(c("Darbergia nigra", "Aspidosperma discolor"),
+#' lapply(c("Dalbergia nigra", "Aspidosperma discolor"),
 #'        check_bfg)
 #'
 check_bfg <- function(scientificName,
@@ -49,29 +49,39 @@ check_bfg <- function(scientificName,
                         FALSE)
   # acrescentando coluna com nome original da busca
   out$scientificName_search <- scientificName
-  out <- out[out$taxonomicstatus %in% "NOME_ACEITO", ]
-  if (infraspecies == FALSE) {
-    out <- out[is.na(out$infraspecificepithet), ]
-  } else {
+  # guardando se tem nome aceito
+  accepted_name <- sum(out$taxonomicstatus == "NOME_ACEITO") > 1
+  # transformando vazio em NA no taxonomicstatus
+  out$taxonomicstatus[out$taxonomicstatus == ""] <- NA
+  #out <- out[out$taxonomicstatus %in% "NOME_ACEITO", ]
+  # creating column w/ scientificName w/o author
+  out$scientificName_noauthor <- paste(out$genus, out$specificepithet)
+  # removing infraspecies information
+  if (is.null(out)) {
     out <- out
-  }
+  } else {
+    if (infraspecies == FALSE) {
+      out <- out[is.na(out$infraspecificepithet), ]
+    } else {
+      out <- out
+    }}
 
   # output sinonimo ####
   # criando coluna com o basinômio em synonyms
-  if (!is.null(synonyms$taxonid)) {
+  if (!is.null(synonyms$taxonid) & accepted_name) {
     syn_remove <- c("higherclassification",
                     "source",
                     "references")
     synonyms <- synonyms[, !names(synonyms) %in% syn_remove]
     synonyms_base <- out[out$taxonomicstatus == "NOME_ACEITO"
-                         & is.na(out$infraspecificepithet),
-                         c('taxonid', 'scientificname')]
-    names(synonyms_base) <- c("taxonid_base", "scientificname_base")
+                         & is.na(out$infraspecificepithet)]
+    synonyms_base <- out[, c('taxonid', 'scientificName_noauthor')]
+    names(synonyms_base) <- c("taxonid_base", "scientificName_base")
     # juntando a info do basinomio com o output de synonyms
     synonyms <- cbind(synonyms, synonyms_base)
   }
   # gerando o output
-  if (get_synonyms) {
+  if (get_synonyms & accepted_name) {
     res <- list(taxon = out,
                 synonyms = synonyms)
   } else {

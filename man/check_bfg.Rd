@@ -24,7 +24,7 @@ Function to check species scientific name in Brazilian Flora 2020 database
 check_bfg("Dalbergia nigra")
 
 # more than one species w/ lapply from base
-lapply(c("Darbergia nigra", "Aspidosperma discolor"),
+lapply(c("Dalbergia nigra", "Aspidosperma discolor"),
        check_bfg)
 
 }
