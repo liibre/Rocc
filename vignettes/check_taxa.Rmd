@@ -65,7 +65,10 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Phaseolus robustus Piper", "Catasetum ×splendens Cogn.", 
              "Catasetum ×evangelistae V.P.Castro & G.F.Carr", "Helietta glaziovii",
              "Drosera ×fontinalis Rivadavia", "Diplazium lepthochlamys", 
-             "Salvinia ×delasotae C.V. Miranda & Schwartsb.")
+             "Salvinia ×delasotae C.V. Miranda & Schwartsb.", "Anemia x elephantensis", 
+             "Abutilon bedfordianum discolor", "Bauhinia ungulata cuiabensis", 
+             "Cf. Lagenocarpus cf. rigidus", "Lychnophora staavioides aff. uniflora",
+             "Pityrogramma] calomelanos calomelanos")
 
 df <- check_string(species)
 ```
