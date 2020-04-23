@@ -199,7 +199,8 @@ check_string <- function(scientificName = NULL){
 
   #12. non-ascii ####
   string_type <- stringi::stri_enc_mark(check$scientificName_new)
-  check$scientificName_status[check$scientificName_status == "possibly_ok"
+  check$scientificName_status[check$scientificName_status %in% c("possibly_ok", "name_w_wrong_case",
+                                                                 "subspecies", "variety", "forma")
                               & string_type != "ASCII"] <- "name_w_non_ascii"
 
   return(check)
