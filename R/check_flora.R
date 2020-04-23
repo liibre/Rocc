@@ -13,13 +13,13 @@
 #'
 #' @examples
 #' # single species
-#' check_bfg("Dalbergia nigra")
+#' check_flora("Dalbergia nigra")
 #'
 #' # more than one species w/ lapply from base
 #' lapply(c("Dalbergia nigra", "Aspidosperma discolor"),
-#'        check_bfg)
+#'        check_flora)
 #'
-check_bfg <- function(scientificName,
+check_flora <- function(scientificName,
                       get_synonyms = TRUE,
                       infraspecies = FALSE) {
 
