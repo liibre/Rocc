@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-suggest_bfg <- function(scientificName) {
+suggest_flora <- function(scientificName) {
   # cleaning spaces
   trim_sp <- flora::trim(scientificName)
   # suggesting a name based using flora pkg
