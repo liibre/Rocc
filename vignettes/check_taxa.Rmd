@@ -65,7 +65,11 @@ species <- c("Lindsaea lancea var. falcata", "Asplenium Aff. truncorum",
              "Phaseolus robustus Piper", "Catasetum ×splendens Cogn.", 
              "Catasetum ×evangelistae V.P.Castro & G.F.Carr", "Helietta glaziovii",
              "Drosera ×fontinalis Rivadavia", "Diplazium lepthochlamys", 
-             "Salvinia ×delasotae C.V. Miranda & Schwartsb.")
+             "Salvinia ×delasotae C.V. Miranda & Schwartsb.", "Anemia x elephantensis", 
+             "Abutilon bedfordianum discolor", "Bauhinia ungulata cuiabensis", 
+             "Cf. Lagenocarpus cf. rigidus", "Lychnophora staavioides aff. uniflora",
+             "Pityrogramma] calomelanos calomelanos", "Chamaecrista asplenÃ¼plia", 
+             "Myrcia multifloravar.glaucensis")
 
 df <- check_string(species)
 ```
@@ -94,13 +98,13 @@ species_new <- unique(df_ok$scientificName_new)
 First, we will check for typos and get a list of possible names. 
 
 ```{r suggest}
-suggest_taxa <- suggest_bfg(species_new)
+suggest_taxa <- suggest_flora(species_new)
 search_taxa <- na.omit(as.character(unique(suggest_taxa$scientificName_suggest)))
 ```
 
 
 ```{r check_taxon} 
-list_taxa <- lapply(search_taxa, check_bfg)
+list_taxa <- lapply(search_taxa, check_flora)
 ```
 
 ### Output

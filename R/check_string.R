@@ -112,7 +112,7 @@ check_string <- function(scientificName = NULL){
     check$scientificName_new != no_authors &
     sapply(strsplit(as.character(check$scientificName), " "), length) > 2
   id_authors <- id_authors & !check$scientificName_status %in% prev |
-    sapply(strsplit(as.character(no_authors), " "), length) > 2 |
+    id_authors & sapply(strsplit(as.character(no_authors), " "), length) > 2 |
     sapply(strsplit(as.character(no_authors), " "), length) == 1 # genus + author
   # removing f. in the end of author name
   no_authors <- flora::trim(gsub("f\\.$", "", no_authors))
@@ -176,8 +176,16 @@ check_string <- function(scientificName = NULL){
   check$scientificName_status[id_ord] <- "order_as_genus"
 
   #10. hybrid ####
-  hybrid <- str_detect(check$scientificName, "\u00D7")
+  hybrid_symbol <- str_detect(check$scientificName, "\u00D7")
+  hybrid_string <- "[[:space:]]x[[:space:]]"
+  hybrid_x <- stringr::str_detect(check$scientificName,
+                                stringr::regex(hybrid_string, ignore_case = TRUE))
+  hybrid <- hybrid_symbol | hybrid_x
   check$scientificName_status[hybrid] <- "hybrid_species"
+  check$scientificName_new[hybrid] <- as.character(check$scientificName)[hybrid]
+  check$scientificName_new[hybrid] <- gsub(hybrid_string,
+                                           paste0(" ", "\u00D7"),
+                                           as.character(check$scientificName))[hybrid]
 
   # 11 abreviated genus ####
   genus <- sapply(str_split(check$scientificName_new, " "), function(x) x[1])
@@ -191,7 +199,8 @@ check_string <- function(scientificName = NULL){
 
   #12. non-ascii ####
   string_type <- stringi::stri_enc_mark(check$scientificName_new)
-  check$scientificName_status[check$scientificName_status == "possibly_ok"
+  check$scientificName_status[check$scientificName_status %in% c("possibly_ok", "name_w_wrong_case",
+                                                                 "subspecies", "variety", "forma")
                               & string_type != "ASCII"] <- "name_w_non_ascii"
 
   return(check)
