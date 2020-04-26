@@ -37,6 +37,7 @@
 #'
 #' @importFrom finch dwca_read dwca_cache
 #' @importFrom stringr str_detect regex
+#' @importFrom utils globalVariables
 #'
 #' @export
 #'
@@ -52,12 +53,8 @@ search_flora <- function(domain = NULL,
                          endemism = NULL,
                          lifeform = NULL,
                          habitat = NULL) {
-biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal")
-  pag <- "http://ipt.jbrj.gov.br/jbrj/archive.do?r=lista_especies_flora_brasil"
-  ipt_flora <- finch::dwca_read(input = pag, read = TRUE, encoding = "UTF-8")
-  # distribution ----
-  distribution <- ipt_flora$data$distribution.txt
-
+  utils::globalVariables(c("distribution", "speciesprofile", "taxon"), add = FALSE)
+  biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal")
   if (!is.null(domain)) {
     if (domain %in% biomas) {
     regex_domain <- paste(domain, collapse = "|")
@@ -85,9 +82,9 @@ biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pan
   }
 
   # lifeform and habitat----
-  if (!is.null(lifeform) | !is.null(habitat)) {
-    speciesprofile <- ipt_flora$data$speciesprofile.txt
-  }
+  #if (!is.null(lifeform) | !is.null(habitat)) {
+   # speciesprofile <- ipt_flora$data$speciesprofile.txt
+  #}
   if (!is.null(lifeform)) {
     lf_regex <- paste(lifeform, collapse = "|")
     spprof_df <- speciesprofile[
@@ -127,7 +124,7 @@ biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pan
 
 
   # get names----
-  taxon <- ipt_flora$data$taxon.txt
+  #taxon <- ipt_flora$data$taxon.txt
   taxon <- subset(taxon, taxon$taxonRank %in% c("ESPECIE",
                                                 "VARIEDADE",
                                                 "SUB_ESPECIE",

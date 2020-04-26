@@ -18,7 +18,13 @@ knitr::opts_chunk$set(
 
 Package `rocc` allows the user to perform searches in the List of Species of the Brazilian Flora (FB2020) database from fields other than scientificName.
 
-These functions download the IPT files from FB2020 to a temporary file in the computer, using package __finch__. This download can be __very slow__ the first time and when in disk the database will access the cached files instead of downloading them. 
+These functions download the IPT files from FB2020 to a temporary file in the computer, using package __finch__. This download can be __very slow__ the first 
+time and when in disk the database will access the cached files instead of downloading them. 
+
+## `update_flora()`
+
+`update_flora()` will download the ipt files into folder data-raw. If a previous file exists in cache, it won't update unless `force_update = TRUE`.
+
 
 Also, the function returns __all name ids irrespective of their taxonomic status__
 

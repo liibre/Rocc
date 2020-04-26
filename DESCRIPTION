@@ -6,6 +6,7 @@ Author: Sara R Mortara
 Maintainer: Sara R Mortara <saramortara@gmail.com>
 Description: This package assesses databases such as speciesLink (API version beta 0.1), jabot and GBIF and
     returns a csv file with the records.
+Depends: R (>= 3.0.0)
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -17,7 +18,8 @@ Imports:
     jsonlite,
     stringi,
     stringr,
-    rgbif
+    rgbif,
+    usethis
 Suggests: 
     knitr,
     rmarkdown

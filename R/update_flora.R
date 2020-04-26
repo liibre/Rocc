@@ -1,6 +1,8 @@
 #' Downloads, updates and formats the data from the ipt server of the List of Species of the Brazilian Flora
 #'
 #' @param  force_update Logical. Forces update in case there is already an ipt file in cache
+#' @param  cache_path Character. The full_path for saving the ipt dataset in cache.
+#' In this package the default is /data-raw, so that data folder and objects can be created transparantly in the package structure.
 #'
 #' @importFrom finch dwca_cache
 #' @importFrom finch dwca_read
