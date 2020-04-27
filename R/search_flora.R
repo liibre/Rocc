@@ -31,6 +31,7 @@
 #'   \item{\code{Terrícola}}{}
 #'   \item{\code{Desconhecido}}{}
 #'}
+#'@param force_update Logical. Update the flora IPT database in cache?
 #' @return a data frame with taxon IDs, scientific name and binomial name
 #' without authors
 #'
@@ -53,9 +54,10 @@ search_flora <- function(domain = NULL,
                          endemism = NULL,
                          lifeform = NULL,
                          habitat = NULL,
-                         ...) {
-  ipt_flora <- update_flora(...)
-  biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal")
+                         force_update = FALSE) {
+  ipt_flora <- update_flora(force_update = force_update)
+  biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa",
+              "Pantanal")
   if (!is.null(domain)) {
     if (domain %in% biomas) {
     distribution <- ipt_flora$data$distribution.txt
