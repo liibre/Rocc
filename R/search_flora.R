@@ -52,11 +52,13 @@ search_flora <- function(domain = NULL,
                          states = NULL,
                          endemism = NULL,
                          lifeform = NULL,
-                         habitat = NULL) {
-  utils::globalVariables(c("distribution", "speciesprofile", "taxon"), add = FALSE)
+                         habitat = NULL,
+                         ...) {
+  ipt_flora <- update_flora(...)
   biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal")
   if (!is.null(domain)) {
     if (domain %in% biomas) {
+    distribution <- ipt_flora$data$distribution.txt
     regex_domain <- paste(domain, collapse = "|")
     domain_df <- distribution[
       stringr::str_detect(string = distribution$occurrenceRemarks,
@@ -66,6 +68,7 @@ search_flora <- function(domain = NULL,
   }
 
   if (!is.null(states)) {
+    distribution <- ipt_flora$data$distribution.txt
     states_regex <- paste(states, collapse = "|")
     states_df <- distribution[
       stringr::str_detect(string = distribution$locationID,
@@ -74,6 +77,7 @@ search_flora <- function(domain = NULL,
   }
 
   if (!is.null(endemism)) {
+    distribution <- ipt_flora$data$distribution.txt
     endemism_regex <- ifelse(endemism == TRUE, "Endemica", "Não endemica")
     endemism_df <- distribution[
       stringr::str_detect(string = distribution$occurrenceRemarks,
@@ -82,9 +86,9 @@ search_flora <- function(domain = NULL,
   }
 
   # lifeform and habitat----
-  #if (!is.null(lifeform) | !is.null(habitat)) {
-   # speciesprofile <- ipt_flora$data$speciesprofile.txt
-  #}
+  if (!is.null(lifeform) | !is.null(habitat)) {
+    speciesprofile <- ipt_flora$data$speciesprofile.txt
+  }
   if (!is.null(lifeform)) {
     lf_regex <- paste(lifeform, collapse = "|")
     spprof_df <- speciesprofile[
@@ -124,7 +128,7 @@ search_flora <- function(domain = NULL,
 
 
   # get names----
-  #taxon <- ipt_flora$data$taxon.txt
+  taxon <- ipt_flora$data$taxon.txt
   taxon <- subset(taxon, taxon$taxonRank %in% c("ESPECIE",
                                                 "VARIEDADE",
                                                 "SUB_ESPECIE",

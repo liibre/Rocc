@@ -6,22 +6,20 @@
 #'
 #' @importFrom finch dwca_cache
 #' @importFrom finch dwca_read
-#' @importFrom usethis use_data
 
-update_flora <- function(force_update = FALSE, cache_path = "./data-raw") {
-  if (!file.exists(cache_path)) dir.create(cache_path)
-  finch::dwca_cache$cache_path_set(full_path = cache_path)
+update_flora <- function(force_update = FALSE) {
+  cache_path <- finch::dwca_cache$cache_path_get()
   if (force_update) {
     finch::dwca_cache$delete_all()
   }
   pag <- "http://ipt.jbrj.gov.br/jbrj/archive.do?r=lista_especies_flora_brasil"
   ipt_flora <- finch::dwca_read(input = pag, read = TRUE, encoding = "UTF-8")
   timestamp <- ipt_flora$emlmeta$additionalMetadata$metadata$gbif$dateStamp
-  writeLines(timestamp, paste(cache_path, "timestamp.txt", sep = "/"))
-  distribution <- ipt_flora$data$distribution.txt
-  speciesprofile <- ipt_flora$data$speciesprofile.txt
-  taxon <- ipt_flora$data$taxon.txt
-  usethis::use_data(distribution)
-  usethis::use_data(speciesprofile)
-  usethis::use_data(taxon)
+  writeLines(paste0("Cache path:", cache_path, "Timestamp:", timestamp),
+             "update_flora_metadata.txt")
+  return(ipt_flora)
+  #distribution <- ipt_flora$data$distribution.txt
+  #speciesprofile <- ipt_flora$data$speciesprofile.txt
+  #taxon <- ipt_flora$data$taxon.txt
+  #usethis::use_data(distribution, speciesprofile, taxon, internal = TRUE)
 }
