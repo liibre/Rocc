@@ -1,0 +1,100 @@
+---
+title: "Searching for species names in FB2020"
+author: "Andrea Sánchez-Tapia"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Searching for species names in FB2020}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Package `rocc` allows the user to perform searches in the List of Species of the Brazilian Flora (FB2020) database from fields other than scientificName.
+
+These functions download the IPT files from FB2020 to a temporary file in the computer, using package __finch__. This download can be __very slow__ the first 
+time and when in disk the database will access the cached files instead of downloading them. 
+
+## Function `update_flora()`
+
+`update_flora()` will download the ipt files into folder data-raw. If a previous file exists in cache, it won't update unless `force_update = TRUE`.
+
+
+Also, the function returns __all name ids irrespective of their taxonomic status__
+
+
+## Function `search_flora()`
+
+Function `search_flora()` returns lists of scientific names (in full format) for species in:
+
+- one or more phytogeographic domains
+- one or more Brazilian states
+- endemics or not from Brazil
+
+```{r, eval = F}
+library(rocc)
+```
+
+```{r echo = FALSE, warning=FALSE}
+devtools::load_all()
+```
+
+Here is an example of the differences between searching for species in a domain: 
+
+```{r dom}
+caatinga <- search_flora(domain = "Caatinga")
+head(caatinga)
+dim(caatinga)
+```
+
+```{r pb}
+pb <- search_flora(states = "PB")
+head(pb)
+dim(pb)
+```
+
+```{r intersect}
+length(intersect(caatinga$id, pb$id))
+```
+
+```{r pb-and-caatinga}
+pb_and_caatinga <- search_flora(domain = "Caatinga",
+                                state = "PB")
+head(pb_and_caatinga)
+dim(pb_and_caatinga)
+```
+
+
+```{r not-endemic}
+pb_and_caatinga_and_not_endemic <- search_flora(domain = "Caatinga",
+                                                state = "PB",
+                                                endemism = FALSE)
+head(pb_and_caatinga_and_not_endemic)
+dim(pb_and_caatinga_and_not_endemic)
+```
+
+```{r endemic}
+pb_and_caatinga_and_endemic <- search_flora(domain = "Caatinga",
+                                            state = "PB",
+                                            endemism = TRUE)
+head(pb_and_caatinga_and_endemic)
+dim(pb_and_caatinga_and_endemic)
+```
+
+```{r arvore}
+pb_and_caatinga_and_endemic_and_tree <- search_flora(domain = "Caatinga",
+                                                     state = "PB",
+                                                     endemism = TRUE,
+                                                     lifeform = "Árvore")
+head(pb_and_caatinga_and_endemic_and_tree)
+dim(pb_and_caatinga_and_endemic_and_tree)
+```
+
+
+
