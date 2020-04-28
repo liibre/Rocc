@@ -2,10 +2,15 @@ Package: rocc
 Type: Package
 Title: Workflows for Downloading Occurrence Data from speciesLink, FB2020, and JABOT API
 Version: 0.1.0
-Author: Sara R Mortara
+Authors@R: c(
+    person("Sara", "Mortara", email = "saramortara@gmail.com", 
+    role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6221-7537")),
+    person("Andrea", "Sánchez-Tapia", email = "andreasancheztapia@gmail.com", 
+    role = c("aut"), comment = c(ORCID = "0000-0002-3521-4338"))
+    )
 Maintainer: Sara R Mortara <saramortara@gmail.com>
-Description: This package assesses databases such as speciesLink (API version beta 0.1), jabot and GBIF and
-    returns a csv file with the records.
+Description: This package download occurrences data from speciesLink (API version beta 0.1), jabot and GBIF and
+    performs taxonomic cleaning according to Brazilian Flora 2020.
 Depends: R (>= 3.0.0)
 License: GPL (>= 3)
 Encoding: UTF-8
