@@ -1,8 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 results/
-data/
+data-raw/
 test.R
 # prototype of a function
 checktaxa.R
 
+R/names_flora.R
+R/problem_species.txt
+vignette/using_rspeciesLink.Rmd
