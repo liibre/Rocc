@@ -23,14 +23,15 @@ See examples in `vignettes` folder.
 - [x] `rgbif2()`
 - [x] `check_string()`
 - [x] `search_flora()`
-- [x] `names_flora()`
-- [ ] check inconsistencies in `name_backbone()` e `occ_search()` from **rgbif**
+- [x] `check_flora()`
+- [x] create function to generate all synomys for a scientific name based on Brazilian Flora 2020
+- [x] check inconsistencies in `name_backbone()` e `occ_search()` from **rgbif**
   - taxonomy backbone
 - [ ] check inconsistencies in `rgbif2()`
   - NULL key
   - multiple keys
 - [ ] function to bind different search results
-- [ ] create function to generate all synomys for a scientific name based on Brazilian Flora 2020
+- [ ] check `fixField()` from plantR
 
 ## Notes
 
