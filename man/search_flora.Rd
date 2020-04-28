@@ -7,9 +7,12 @@ state and/or endemism status from the List of Species of the Brazilian Flora
 2020 database}
 \usage{
 search_flora(
-  domain = c("Cerrado", "Mata Atlântica"),
-  states = "MG",
-  endemism = NULL
+  domain = NULL,
+  states = NULL,
+  endemism = NULL,
+  lifeform = NULL,
+  habitat = NULL,
+  force_update = FALSE
 )
 }
 \arguments{
@@ -19,9 +22,39 @@ search_flora(
 
 \item{endemism}{logical, return species that are endemic or not from Brazil
 Defaults to NULL to return all species}
+
+\item{lifeform}{character, search species with the following life forms:
+\describe{
+  \item{\code{Arbusto}}{}
+  \item{\code{Árvore}}{}
+  \item{\code{Bambu}}{}
+  \item{\code{Dracenoide}}{}
+  \item{\code{Erva}}{}
+  \item{\code{Liana/volúvel/trepadeira}}{}
+  \item{\code{Palmeira}}{}
+  \item{\code{Subarbusto}}{}
+  \item{\code{Suculenta}}{}
+  \item{\code{Desconhecida}}{}
+}}
+
+\item{habitat}{character, search species in the following habitat options:
+\describe{
+  \item{\code{Aquática}}{}
+  \item{\code{Epífita}}{}
+  \item{\code{Hemiepífita}}{}
+  \item{\code{Hemiparasita}}{}
+  \item{\code{Parasita}}{}
+  \item{\code{Rupícola}}{}
+  \item{\code{Saprófita}}{}
+  \item{\code{Terrícola}}{}
+  \item{\code{Desconhecido}}{}
+}}
+
+\item{force_update}{Logical. Update the flora IPT database in cache?}
 }
 \value{
-a list of taxon IDs
+a data frame with taxon IDs, scientific name and binomial name
+without authors
 }
 \description{
 Returns species scientific name lists from phytogeographic domain,

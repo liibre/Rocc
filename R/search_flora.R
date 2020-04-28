@@ -56,7 +56,7 @@ search_flora <- function(domain = NULL,
                          habitat = NULL,
                          force_update = FALSE) {
   ipt_flora <- update_flora(force_update = force_update)
-  biomas <- c("Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa",
+  biomas <- c("Amaz\u00f4nia", "Caatinga", "Cerrado", "Mata Atl\u00e2ntica", "Pampa",
               "Pantanal")
   if (!is.null(domain)) {
     if (domain %in% biomas) {
@@ -80,7 +80,7 @@ search_flora <- function(domain = NULL,
 
   if (!is.null(endemism)) {
     distribution <- ipt_flora$data$distribution.txt
-    endemism_regex <- ifelse(endemism == TRUE, "Endemica", "Não endemica")
+    endemism_regex <- ifelse(endemism == TRUE, "Endemica", "N\u00e3o endemica")
     endemism_df <- distribution[
       stringr::str_detect(string = distribution$occurrenceRemarks,
                           pattern = stringr::regex(endemism_regex)), ]

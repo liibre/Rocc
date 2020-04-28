@@ -11,15 +11,15 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE,
                       comment = "#>",
                       eval = TRUE)
+devtools::load_all()
 ```
 
 Installing and loading the package:
 
 `devtools::install_github("saramortara/rocc")`
 
-```{r setup}
-#library(rocc)
-devtools::load_all() # for development
+```{r setup, eval = FALSE}
+library(rocc)
 ```
 
 This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `jsonlite` package to GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from [CRIA](http://www.cria.org.br/) (Centro de Referência em Informação Ambiental) :)
