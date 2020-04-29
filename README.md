@@ -3,7 +3,6 @@
 Currently available:
 
 - [speciesLink](http://www.splink.org.br/)
-- [jabot](http://jabot.jbrj.gov.br/v3/consulta.php)
 - [GBIF](https://www.gbif.org/) (using the package **rgbif**)
 
 Installing and loading the package:
@@ -19,10 +18,10 @@ See examples in `vignettes` folder.
 ## TODO
 
 - [x] `rspeciesLink()`
-- [x] `rjabot()`
 - [x] `rgbif2()`
 - [x] `check_string()`
 - [x] `search_flora()`
+- [x] `update_flora()`
 - [x] `check_flora()`
 - [x] create function to generate all synomys for a scientific name based on Brazilian Flora 2020
 - [x] check inconsistencies in `name_backbone()` e `occ_search()` from **rgbif**
@@ -30,8 +29,9 @@ See examples in `vignettes` folder.
 - [ ] check inconsistencies in `rgbif2()`
   - NULL key
   - multiple keys
-- [ ] function to bind different search results
+- [ ] `bind_data` function to format fields and bind different search results
 - [ ] check `fixField()` from plantR
+- [ ] `rjabot()` from [API](http://servicos.jbrj.gov.br/jabot/) - API not working... waiting...
 
 ## Notes
 
