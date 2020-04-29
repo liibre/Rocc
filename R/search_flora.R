@@ -1,9 +1,11 @@
+#' Searches in the List of Species of the Brazilian Flora 2020 database
+#'
 #' Returns species scientific name lists from phytogeographic domain,
 #' state and/or endemism status from the List of Species of the Brazilian Flora
 #' 2020 database
 #'
 #' @param domain a domain in Mata Atlântica, Cerrado, Pantanal, Pampa, Amazônia
-#' @param states Brazilian states, capitalized (e.g. "MA")
+#' @param stateProvince Brazilian states, capitalized (e.g. "MA")
 #' @param endemism logical, return species that are endemic or not from Brazil
 #'  Defaults to NULL to return all species
 #' @param lifeform character, search species with the following life forms:
@@ -50,7 +52,7 @@
 #'
 #'
 search_flora <- function(domain = NULL,
-                         states = NULL,
+                         stateProvince = NULL,
                          endemism = NULL,
                          lifeform = NULL,
                          habitat = NULL,
@@ -69,9 +71,9 @@ search_flora <- function(domain = NULL,
     }
   }
 
-  if (!is.null(states)) {
+  if (!is.null(stateProvince)) {
     distribution <- ipt_flora$data$distribution.txt
-    states_regex <- paste(states, collapse = "|")
+    states_regex <- paste(stateProvince, collapse = "|")
     states_df <- distribution[
       stringr::str_detect(string = distribution$locationID,
                           pattern = stringr::regex(states_regex)), ]
@@ -111,9 +113,9 @@ search_flora <- function(domain = NULL,
       ids <- id_d
     }
   }
-  if (!is.null(states))  ids <- id_e
+  if (!is.null(stateProvince))  ids <- id_e
   # if subsetting both by state and domain
-  if (!is.null(domain) & !is.null(states)) {
+  if (!is.null(domain) & !is.null(stateProvince)) {
     ids <- intersect(id_d, id_e)
   }
   if (!is.null(endemism)) {

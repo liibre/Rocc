@@ -2,13 +2,11 @@
 % Please edit documentation in R/search_flora.R
 \name{search_flora}
 \alias{search_flora}
-\title{Returns species scientific name lists from phytogeographic domain,
-state and/or endemism status from the List of Species of the Brazilian Flora
-2020 database}
+\title{Searches in the List of Species of the Brazilian Flora 2020 database}
 \usage{
 search_flora(
   domain = NULL,
-  states = NULL,
+  stateProvince = NULL,
   endemism = NULL,
   lifeform = NULL,
   habitat = NULL,
@@ -18,7 +16,7 @@ search_flora(
 \arguments{
 \item{domain}{a domain in Mata Atlântica, Cerrado, Pantanal, Pampa, Amazônia}
 
-\item{states}{Brazilian states, capitalized (e.g. "MA")}
+\item{stateProvince}{Brazilian states, capitalized (e.g. "MA")}
 
 \item{endemism}{logical, return species that are endemic or not from Brazil
 Defaults to NULL to return all species}

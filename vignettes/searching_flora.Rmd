@@ -37,11 +37,11 @@ Function `search_flora()` returns lists of scientific names (in full format) for
 - one or more Brazilian states
 - endemics or not from Brazil
 
-```{r, eval = F}
+```{r library, eval = F}
 library(rocc)
 ```
 
-```{r echo = FALSE, warning=FALSE}
+```{r load, echo = FALSE, warning=FALSE}
 devtools::load_all()
 ```
 
@@ -54,7 +54,7 @@ dim(caatinga)
 ```
 
 ```{r pb}
-pb <- search_flora(states = "PB")
+pb <- search_flora(stateProvince = "PB")
 head(pb)
 dim(pb)
 ```
@@ -65,7 +65,7 @@ length(intersect(caatinga$id, pb$id))
 
 ```{r pb-and-caatinga}
 pb_and_caatinga <- search_flora(domain = "Caatinga",
-                                state = "PB")
+                                stateProvince = "PB")
 head(pb_and_caatinga)
 dim(pb_and_caatinga)
 ```
@@ -73,7 +73,7 @@ dim(pb_and_caatinga)
 
 ```{r not-endemic}
 pb_and_caatinga_and_not_endemic <- search_flora(domain = "Caatinga",
-                                                state = "PB",
+                                                stateProvince = "PB",
                                                 endemism = FALSE)
 head(pb_and_caatinga_and_not_endemic)
 dim(pb_and_caatinga_and_not_endemic)
@@ -81,7 +81,7 @@ dim(pb_and_caatinga_and_not_endemic)
 
 ```{r endemic}
 pb_and_caatinga_and_endemic <- search_flora(domain = "Caatinga",
-                                            state = "PB",
+                                            stateProvince = "PB",
                                             endemism = TRUE)
 head(pb_and_caatinga_and_endemic)
 dim(pb_and_caatinga_and_endemic)
@@ -89,7 +89,7 @@ dim(pb_and_caatinga_and_endemic)
 
 ```{r arvore}
 pb_and_caatinga_and_endemic_and_tree <- search_flora(domain = "Caatinga",
-                                                     state = "PB",
+                                                     stateProvince = "PB",
                                                      endemism = TRUE,
                                                      lifeform = "Árvore")
 head(pb_and_caatinga_and_endemic_and_tree)

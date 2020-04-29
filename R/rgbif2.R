@@ -52,6 +52,6 @@ rgbif2 <- function(dir = "results/",
                 col.names = TRUE)
     return(gbif_data)
   } else {
-    message(paste0("Please insert a valid scientific name."))
+    message(cat("Please insert a valid scientific name."))
   }
 }
