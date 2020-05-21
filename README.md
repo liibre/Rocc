@@ -17,19 +17,19 @@ See examples in `vignettes` folder.
 
 ## TODO
 
-- [x] `rspeciesLink()`
-- [x] `rgbif2()`
-- [x] `check_string()`
-- [x] `search_flora()`
-- [x] `update_flora()`
-- [x] `check_flora()`
+- [x] `rspeciesLink()` - Sara
+- [x] `rgbif2()` - Sara
+- [x] `check_string()` - Sara
+- [x] `search_flora()` - Andrea
+- [x] `update_flora()` - Andrea
+- [x] `check_flora()` - Sara
 - [x] create function to generate all synomys for a scientific name based on Brazilian Flora 2020
-- [x] check inconsistencies in `name_backbone()` e `occ_search()` from **rgbif**
+- [ ] check inconsistencies in `name_backbone()` e `occ_search()` from **rgbif**
   - taxonomy backbone
-- [ ] check inconsistencies in `rgbif2()`
-  - NULL key
+- [ ] check inconsistencies in `rgbif2()` - Sara
   - multiple keys
-- [ ] `bind_data` function to format fields and bind different search results
+- [ ] check output from `check_flora()` - Sara & Andrea
+- [ ] `bind_data` function to format fields and bind different search results - Sara
 - [ ] check `fixField()` from plantR
 - [ ] `rjabot()` from [API](http://servicos.jbrj.gov.br/jabot/) - API not working... waiting...
 
