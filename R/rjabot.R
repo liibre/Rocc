@@ -16,7 +16,7 @@
 
 rjabot <- function(dir = "results/",
                    filename = "output",
-                   scientificName = NULL
+                   species = NULL
                    #collectionCode = NULL,
                    #stateProvince = NULL,
                    #county = NULL,

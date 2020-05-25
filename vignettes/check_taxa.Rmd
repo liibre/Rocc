@@ -35,9 +35,7 @@ The function `check_status` makes preliminary check in a scientific name, catchi
 - `indet`: species identified only at genus level
 - `family_as_genus`: species family as genus, not a valid name
 - `non_ascii`: species name has non ASCII characters, not a valid name
-- `hybrid`: x
-- `parasite`: f. sp. 
-
+- `hybrid_species`: hybrid species
 
 
 ```{r check_status}
@@ -77,7 +75,7 @@ df <- check_string(species)
 Checking the output of `check_string()`
 
 ```{r, echo = FALSE}
-kable(df[order(df$scientificName_status, df$scientificName), ], row.names = FALSE)
+kable(df[order(df$speciesStatus, df$species), ], row.names = FALSE)
 ```
 
 Now getting only possible correct and unique names. 
@@ -88,9 +86,9 @@ ok <- c("variety",
         "name_w_wrong_case",
         "name_w_authors")
 
-df_ok <- df[df$scientificName_status %in% ok, ]
+df_ok <- df[df$speciesStatus %in% ok, ]
 
-species_new <- unique(df_ok$scientificName_new)
+species_new <- unique(df_ok$species)
 ```
 
 ## 2. Taxonomic check
@@ -110,6 +108,7 @@ list_taxa <- lapply(search_taxa, check_flora)
 ### Output
 
 Still deciding the output. The columns `synonym` and `scientificName_search` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
+
 #### *Lindsaea lancea*
 
 ```{r lindsaea}

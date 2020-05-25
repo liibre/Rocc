@@ -4,14 +4,14 @@
 \alias{rgbif2}
 \title{Gets occurrence data from GBIF}
 \usage{
-rgbif2(dir = "results/", filename = "output", scientificName, ...)
+rgbif2(dir = "results/", filename = "output", species, ...)
 }
 \arguments{
 \item{dir}{Path to directory where the file will be saved. Default is to create a "results/" directory}
 
 \item{filename}{Name of the output file}
 
-\item{scientificName}{Genus and epithet separated by space}
+\item{species}{Genus and specific epithet separated by space. Accepts author if inserted correctly}
 
 \item{...}{any arguments from occ_search in rgbif package}
 }
@@ -24,7 +24,7 @@ This function uses the rgbif package to get occurrence data of a species.
 \examples{
 
 ex_rgbif <- rgbif2(filename = "ex-gbif",
-                   scientificName =  c("Asplenium truncorum"))
+                   species =  "Asplenium truncorum")
 }
 \author{
 Sara Mortara

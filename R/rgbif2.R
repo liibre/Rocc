@@ -11,7 +11,7 @@
 # @param collectionCode
 # @param basisOfRecord
 # @param hasCoordinate
-#' @param scientificName Genus and epithet separated by space
+#' @param species Genus and specific epithet separated by space. Accepts author if inserted correctly
 #' @param ... any arguments from occ_search in rgbif package
 #' @return A data.frame with the search result. Also saves the output on disk.
 #'
@@ -20,7 +20,7 @@
 #' @examples
 #'
 #' ex_rgbif <- rgbif2(filename = "ex-gbif",
-#'                    scientificName =  c("Asplenium truncorum"))
+#'                    species =  "Asplenium truncorum")
 #' @importFrom rgbif name_backbone
 #' @importFrom rgbif occ_search
 #' @importFrom utils write.table
@@ -28,19 +28,18 @@
 #'
 rgbif2 <- function(dir = "results/",
                    filename = "output",
-                   scientificName,
+                   species,
                    ...
 ) {
   dir.create(dir, recursive = TRUE, showWarnings = FALSE)
-  key <- rgbif::name_backbone(name = scientificName)$speciesKey
+  key <- rgbif::name_backbone(name = species)$speciesKey
   if (!is.null(key)) {
     message("Making request to GBIF...")
-    gbif_data <- rgbif::occ_search(
-      hasCoordinate = TRUE,
-      hasGeospatialIssue = FALSE,
-      taxonKey = key,
-      return = "data", ...
-    )
+    gbif_data <- rgbif::occ_search(hasCoordinate = TRUE,
+                                   hasGeospatialIssue = FALSE,
+                                   taxonKey = key,
+                                   return = "data",
+                                   ...)
     gbif_data <- gbif_data[!is.na(gbif_data$decimalLongitude)
                            & !is.na(gbif_data$decimalLatitude), ]
     fullname <- paste0(dir, filename, ".csv")

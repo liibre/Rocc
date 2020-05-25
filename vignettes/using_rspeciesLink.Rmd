@@ -45,7 +45,7 @@ Setting scope `"plants"`.
 
 ```{r ex01}
 ex01 <- rspeciesLink(filename = "ex01",
-                     scientificName =  c(sp1, sp2),
+                     species =  c(sp1, sp2),
                      Scope = "plants")
 ```
 
@@ -86,7 +86,7 @@ Same as: [http://api.splink.org.br/records/CollectionCode/uec/scientificname/Rau
 ```{r ex02}
 ex02 <- rspeciesLink(filename = "ex02",
                      collectionCode = "uec",
-                     scientificName = c("Rauvolfia sellowii", 
+                     species = c("Rauvolfia sellowii", 
                                         "Cantinoa althaeifolia"),
                      Images = "Yes")
 ```
@@ -121,7 +121,7 @@ For species *Tillandsia stricta*.
 
 ```{r ex03}
 ex03 <- rspeciesLink(filename = "ex03",
-                     scientificName = "Tillandsia stricta",
+                     species = "Tillandsia stricta",
                      Coordinates = "Yes",
                      CoordinatesQuality = "Good")
 ```
@@ -146,7 +146,7 @@ Now with another selection of coordinate quality.
 ```{r ex03b}
 # another selection of coordinates quality
 ex03b <- rspeciesLink(filename = "ex03b",
-                      scientificName = "Tillandsia stricta")
+                      species = "Tillandsia stricta")
                    #coordinatesQuality = "Bad")
 ```
 
@@ -165,12 +165,12 @@ This example searches for 100 herbarium plants collected in Mariana county (Mina
 
 ```{r ex04}
 ex04 <- rspeciesLink(filename = "ex04",
-                     Scope="plants", 
+                     Scope = "plants", 
                      basisOfRecord = "PreservedSpecimen",
-                     county="Mariana", 
+                     county = "Mariana", 
                      stateProvince = c("Minas Gerais", "MG"),
-                     country=c("Brazil", "Brasil"),
-                     RedList=TRUE,
+                     country = c("Brazil", "Brasil"),
+                     RedList = TRUE,
                      MaxRecords = 100)
 ```
 
@@ -185,7 +185,7 @@ Checks for synonyms on [Flora do Brasil 2020](http://floradobrasil.jbrj.gov.br/r
 
 ```{r ex05}
 ex05 <- rspeciesLink(filename = "ex05",
-                     scientificName = "Tillandsia stricta", 
+                     species = "Tillandsia stricta", 
                      Synonyms = "flora2020")
 ```
 
@@ -204,7 +204,7 @@ Function stops if argument `Synonyms` is used with more than nine species. If
 
 ```{r ex05b, eval = FALSE}
 ex05 <- rspeciesLink(filename = "ex05",
-                     scientificName = tensp, 
+                     species = tensp, 
                      Synonyms = "flora2020")
 ```
 

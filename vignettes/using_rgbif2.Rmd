@@ -53,12 +53,12 @@ dim(j03$data)
 
 ```{r}
 g01 <- rgbif2(filename = "gbif-01",
-              scientificName = "Aspidosperma limae")
+              species = "Aspidosperma limae")
 
 dim(g01)
 
 g02 <- rgbif2(filename = "gbif-02", 
-              scientificName = "Aspidosperma melanocalyx")
+              species = "Aspidosperma melanocalyx")
 dim(g02)
 ```
 

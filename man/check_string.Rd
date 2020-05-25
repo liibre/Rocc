@@ -4,19 +4,19 @@
 \alias{check_string}
 \title{Check in the scientific name string}
 \usage{
-check_string(scientificName = NULL)
+check_string(species = NULL)
 }
 \arguments{
-\item{scientificName}{species name in a raw format}
+\item{species}{species name in a raw format}
 }
 \value{
-Data frame with `scientificName` as in the original input, `scientificName_status` with the flags in original data and `scientificName_new` with a suggestion for a more correct species name. See Details for a description of flags in the column `scientificName_status`.
+Data frame with `verbatimSpecies` as in the original input, `speciesStatus` with the flags in original data and `species` with a suggestion for a more correct species name. See Details for a description of flags in the column `speciesStatus`.
 }
 \description{
 Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc).
 }
 \details{
-Possible flags returned in `scientificName_status`:
+Possible flags returned in `species_status`:
 \describe{
 \item{\code{possibly_ok}}{scientific name following the expected pattern Genus epithet}
 \item{\code{not_Genus_epithet_format}}{scientific name not following the expected pattern Genus epithet}
