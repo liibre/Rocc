@@ -19,12 +19,6 @@ A list of two elements. The first element is a character string containing the u
 \description{
 This function gets occurrence data in the Jabot database (http://jabot.jbrj.gov.br/v3/consulta.php). Providing a scientific name for a species is mandatory.
 }
-\examples{
-
-ex_jabot <- rjabot(filename = "ex-jabot",
-                  scientificName =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"))
-
-}
 \author{
 Sara Mortara
 }

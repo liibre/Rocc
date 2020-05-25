@@ -1,5 +1,5 @@
 ---
-title: "Downloading Jabot ang GBIF data from R"
+title: "Downloading GBIF data from R"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{jabot}
@@ -17,18 +17,17 @@ Installing and loading the package:
 
 `devtools::install_github("saramortara/rocc")`
 
-This package also downloads records from from [GBIF](https://www.gbif.org/) and [jabot](http://jabot.jbrj.gov.br/v3/consulta.php) collections. The function `rjabot()`  makes a request to the database stored in the portal [model-r](https://model-r.jbrj.gov.br/modelr-web/). It generates the desired url and uses functions from `jsonlite` package to GET the url and save the output as a csv file. In this case, search can only be done by a species scientific name. The function `rgbif2()` encapulates funtions from **rgbif** package to receive a species scientific name and return the output as a .csv file written on disk. 
+This package also downloads records from from [GBIF](https://www.gbif.org/) and [jabot](http://jabot.jbrj.gov.br/v3/consulta.php) collections. The function `rgbif2()` encapulates funtions from **rgbif** package to receive a species scientific name and return the output as a .csv file written on disk. 
 
-```{r setup}
+```{r setup, echo  = FALSE, message = FALSE}
 #library(rocc)
 devtools::load_all() # for development
 ```
 
+```{r ex-01, echo = FALSE, eval = FALSE}
 # Using the funtion **rjabot**
 
 ## Search by species scientific name
-
-```{r ex-01}
 j01 <- rjabot(filename = "jabot-01", 
                scientificName = "Prepusa montana") 
 ```
@@ -49,7 +48,6 @@ dim(j02$data)
 dim(j03$data)
 # all examples provide the same output :facepalm:
 ```
-
 
 # Using the funtion **rgbif2**
 
