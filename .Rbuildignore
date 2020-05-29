@@ -1,11 +1,15 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+
+#outputs
 results/
 data-raw/
-test.R
-# prototype of a function
-checktaxa.R
+update_flora_metadata.txt
 
 R/names_flora.R
 R/problem_species.txt
-vignette/using_rspeciesLink.Rmd
+
+# scripts teste
+test.R
+checktaxa.R
+

@@ -46,9 +46,11 @@
 #'
 #' @examples
 #' # All endemic species from the caatinga in Pernambuco
+#' \dontrun{
 #' search_flora(domain = "Caatinga",
 #'              state = "PE",
 #'              endemism = TRUE)
+#'}
 #'
 #'
 search_flora <- function(domain = NULL,

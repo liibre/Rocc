@@ -24,10 +24,11 @@
 #' @author Sara Mortara
 #'
 #' @examples
-#'
+#'\dontrun{
 #'ex01 <- rspeciesLink(filename = "ex01",
 #'                     species =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
 #'                     Scope = "plants")
+#'}
 #'
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils write.table

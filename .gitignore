@@ -1,10 +1,14 @@
+# geral R
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 inst/doc
+
+# scripts teste
 test.R
-results/
-data/
 checktaxa.R
+
+#outputs
+vignettes/results/
 *update_flora_metadata.txt

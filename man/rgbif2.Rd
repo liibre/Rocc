@@ -22,9 +22,10 @@ A data.frame with the search result. Also saves the output on disk.
 This function uses the rgbif package to get occurrence data of a species.
 }
 \examples{
-
+\dontrun{
 ex_rgbif <- rgbif2(filename = "ex-gbif",
                    species =  "Asplenium truncorum")
+}
 }
 \author{
 Sara Mortara

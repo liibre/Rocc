@@ -4,10 +4,10 @@
 \alias{suggest_flora}
 \title{Function suggest a valid species name for Brazilian plants}
 \usage{
-suggest_flora(scientificName)
+suggest_flora(species)
 }
 \arguments{
-\item{scientificName}{Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`}
+\item{species}{Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`}
 }
 \value{
 A data frame with the name provided by the user and a new suggested name

@@ -65,10 +65,11 @@ This function access version beta 0.1 of speciesLink API and returns
 occurrence data of species.
 }
 \examples{
-
+\dontrun{
 ex01 <- rspeciesLink(filename = "ex01",
                     species =  c("Eugenia platyphylla", "Chaetocalyx acutifolia"),
                     Scope = "plants")
+}
 
 }
 \author{

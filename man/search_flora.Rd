@@ -61,9 +61,11 @@ state and/or endemism status from the List of Species of the Brazilian Flora
 }
 \examples{
 # All endemic species from the caatinga in Pernambuco
+\dontrun{
 search_flora(domain = "Caatinga",
              state = "PE",
              endemism = TRUE)
+}
 
 
 }

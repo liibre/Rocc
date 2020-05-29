@@ -18,9 +18,10 @@
 #' @author Sara Mortara
 #'
 #' @examples
-#'
+#' \dontrun{
 #' ex_rgbif <- rgbif2(filename = "ex-gbif",
 #'                    species =  "Asplenium truncorum")
+#' }
 #' @importFrom rgbif name_backbone
 #' @importFrom rgbif occ_search
 #' @importFrom utils write.table

@@ -4,10 +4,10 @@
 \alias{check_flora}
 \title{Function to check species scientific name in Brazilian Flora 2020 database}
 \usage{
-check_flora(scientificName, get_synonyms = TRUE, infraspecies = FALSE)
+check_flora(species, get_synonyms = TRUE, infraspecies = FALSE)
 }
 \arguments{
-\item{scientificName}{Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species}
+\item{species}{Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species}
 
 \item{get_synonyms}{Logical. If `get_synonyms = TRUE` (default) returns a second element containing information of all synonyms a species has}
 
