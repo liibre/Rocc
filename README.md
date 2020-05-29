@@ -29,7 +29,7 @@ See examples in `vignettes` folder.
 - [ ] check inconsistencies in `rgbif2()` - Sara
   - multiple keys
 - [ ] check output from `check_flora()` - Sara & Andrea
-- [ ] `bind_data` function to format fields and bind different search results - Sara
+- [ ] `bind_data()` function to format fields and bind different search results - Sara
 - [ ] check `fixField()` from plantR
 - [ ] `rjabot()` from [API](http://servicos.jbrj.gov.br/jabot/) - API not working... waiting...
 

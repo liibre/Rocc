@@ -97,7 +97,7 @@ First, we will check for typos and get a list of possible names.
 
 ```{r suggest}
 suggest_taxa <- suggest_flora(species_new)
-search_taxa <- na.omit(as.character(unique(suggest_taxa$scientificName_suggest)))
+search_taxa <- na.omit(as.character(unique(suggest_taxa$species)))
 ```
 
 
