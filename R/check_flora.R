@@ -91,7 +91,7 @@ check_flora <- function(species,
                         "references")
         synonyms <- synonyms[, !names(synonyms) %in% syn_remove]
         synonyms_base <- out[out$taxonomicStatus %in% "NOME_ACEITO"
-                             & is.na(out$infraspecificEpithet)]
+                             & is.na(out$infraspecificEpithet), ]
         synonyms_base <- out[, c('taxonID', 'species')]
         names(synonyms_base) <- c("taxonID_base", "species_base")
         # juntando a info do basinomio com o output de synonyms
