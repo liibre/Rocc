@@ -5,7 +5,7 @@
 #' @param infraspecies Logical. If `infraspecies = TRUE` returns accepted name of any infraspecies classification
 #'
 #' @return
-#' A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a NULL element if the species has no synonyms
+#' A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a `NULL` object if the species has no synonyms.
 #'
 #' @importFrom flora trim suggest.names
 #'
@@ -29,7 +29,8 @@ check_flora <- function(species,
               scientificNameAuthorship = "scientificnameauthorship", taxonomicStatus = "taxonomicstatus",
               acceptedNameUsage = "acceptednameusage", acceptedNameUsageID = "acceptednameusageid",
               modified = "modified")
-
+  campos.syn <- c(campos[1:8], higherClassification = "higherclassification",
+                  source =  "source", references = "references")
   # função para buscar na flora do brasil
   search_flora <- function(x){
     api <- "http://servicos.jbrj.gov.br/flora/taxon/"
@@ -63,12 +64,12 @@ check_flora <- function(species,
     # acrescentando coluna com nome original da busca
     out$verbatimSpecies <- species
     # guardando se tem nome aceito
-    accepted_name <- sum(out$taxonomicStatus == "NOME_ACEITO") > 1
+    accepted_name <- sum(out$taxonomicStatus == "NOME_ACEITO") >= 1
     # transformando vazio em NA no taxonomicstatus
-    out$taxonomicstatus[out$taxonomicStatus == ""] <- NA
+    out$taxonomicStatus[out$taxonomicStatus == ""] <- NA
     #out <- out[out$taxonomicstatus %in% "NOME_ACEITO", ]
     # creating column w/ scientificName w/o author
-    out$species <- paste(out$genus, out$specificepithet)
+    out$species <- paste(out$genus, out$specificEpithet)
     # removing infraspecies information
     if (is.null(out)) {
       out <- out
@@ -82,8 +83,10 @@ check_flora <- function(species,
     # output sinonimo ####
     # criando coluna com o basinômio em synonyms
     if (get_synonyms & accepted_name) {
-      if (!is.null(synonyms$taxonID) & accepted_name) {
-        syn_remove <- c("higherclassification",
+      if (!is.null(synonyms$taxonid) & accepted_name) {
+        # mudando nomes para DwC + recente:
+        names(synonyms) <- names(campos.syn)
+        syn_remove <- c("higherClassification",
                         "source",
                         "references")
         synonyms <- synonyms[, !names(synonyms) %in% syn_remove]
@@ -93,9 +96,10 @@ check_flora <- function(species,
         names(synonyms_base) <- c("taxonID_base", "species_base")
         # juntando a info do basinomio com o output de synonyms
         synonyms <- cbind(synonyms, synonyms_base)
+      } else {
+        synonyms <- NULL
       }
       # gerando o output
-
       res <- list(taxon = out,
                   synonyms = synonyms)
     } else {

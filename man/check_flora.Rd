@@ -14,7 +14,7 @@ check_flora(species, get_synonyms = TRUE, infraspecies = FALSE)
 \item{infraspecies}{Logical. If `infraspecies = TRUE` returns accepted name of any infraspecies classification}
 }
 \value{
-A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a NULL element if the species has no synonyms
+A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a `NULL` object if the species has no synonyms.
 }
 \description{
 Function to check species scientific name in Brazilian Flora 2020 database
