@@ -17,7 +17,7 @@ rjabot(dir = "results/", filename = "output", species = NULL)
 A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 }
 \description{
-This function gets occurrence data in the Jabot database (http://jabot.jbrj.gov.br/v3/consulta.php). Providing a scientific name for a species is mandatory.
+This function gets occurrence data in Jabot's API (http://servicos.jbrj.gov.br/jabot/). Providing a scientific name for a species is mandatory.
 }
 \author{
 Sara Mortara
