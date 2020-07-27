@@ -21,15 +21,29 @@ library(rocc)
 ```
 
 
-## 1. Download data from species Link
+## 1. Download and bind data from different sources
+
+### Species Link
 
 Here, we are downloading data from two species of ferns.
 
 ```{r rspecieslink}
-data_splink <- rspeciesLink(species = c("Asplenium truncorum", "Lindsaea lancea"))
+species = c("Asplenium truncorum", "Lindsaea lancea")
+data_splink <- rspeciesLink(species = species, 
+                            filename = "specieslink")
 ```
 
-## 2. Check string in species name
+### GBIF
+
+```{r}
+data_gbif <- rgbif2(species = species, 
+                    filename = "gbif")
+```
+
+### Bind data from different sources
+
+
+## 3. Check string in species name
 
 Given that the data base might come from source with errors, we perform a basic check on the string of a species name. We will select only unique entries in species names.
 
@@ -53,17 +67,17 @@ Now getting only possible correct and unique names.
 species_ok <- species_name_check[species_name_check$speciesStatus %in% "possibly_ok", ]
 ```
 
-## 2. Taxonomic check
+## 4. Taxonomic check
 
 First, we will check for typos and get a list of possible names. 
 
-```{r suggest, eval = FALSE}
+```{r suggest}
 suggest_taxa <- suggest_flora(species_ok$species)
 search_taxa <- unique(suggest_taxa$species)
 ```
 
 
-```{r check_taxon, eval = FALSE} 
+```{r check_taxon} 
 list_taxa <- lapply(search_taxa, check_flora)
 ```
 
@@ -73,7 +87,7 @@ Still deciding the output. The columns `synonym` and `scientificName_search` wer
 
 #### *Lindsaea lancea*
 
-```{r lindsaea, eval = FALSE}
+```{r lindsaea}
 # L. lancea
 list_taxa[[1]]$taxon
 list_taxa[[1]]$synonyms
