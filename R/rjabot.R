@@ -1,10 +1,9 @@
 #' Gets occurrence data from jabot
 #'
-#' This function gets occurrence data in the Jabot database (http://jabot.jbrj.gov.br/v3/consulta.php). Providing a scientific name for a species is mandatory.
+#' This function gets occurrence data in Jabot's API (http://servicos.jbrj.gov.br/jabot/). Providing a scientific name for a species is mandatory.
 #'
 #' @inheritParams rspeciesLink
 #'
-# @param collectionCode any herbarium in Jabot's API (http://jabot.jbrj.gov.br/v3/herbarios.php)
 #' @return A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
 #' @author Sara Mortara
 #'
