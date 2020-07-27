@@ -1,0 +1,89 @@
+---
+title: "Basic workflow using rocc"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{check}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+devtools::load_all()
+library(knitr)
+```
+
+## 0. Installing and loading package
+
+```{r eval = FALSE}
+remotes::install_github("saramortara/rocc")
+library(rocc)
+```
+
+
+## 1. Download data from species Link
+
+Here, we are downloading data from two species of ferns.
+
+```{r rspecieslink}
+data_splink <- rspeciesLink(species = c("Asplenium truncorum", "Lindsaea lancea"))
+```
+
+## 2. Check string in species name
+
+Given that the data base might come from source with errors, we perform a basic check on the string of a species name. We will select only unique entries in species names.
+
+```{r species-raw}
+# Vector of unique entries in species names
+species_name_raw <- unique(data_splink$data$scientificName) 
+```
+
+For the unique entries, we will perform a basic check on the string.
+
+```{r check-string}
+species_name_check  <- check_string(species_name_raw)
+species_name_check
+```
+
+Here, we are interested only in the names assigned with `possibly_ok`. We see that names with `not_Genus_epithet_format` are probably variety and will be treated separately later.
+
+Now getting only possible correct and unique names. 
+
+```{r species-ok}
+species_ok <- species_name_check[species_name_check$speciesStatus %in% "possibly_ok", ]
+```
+
+## 2. Taxonomic check
+
+First, we will check for typos and get a list of possible names. 
+
+```{r suggest, eval = FALSE}
+suggest_taxa <- suggest_flora(species_ok$species)
+search_taxa <- unique(suggest_taxa$species)
+```
+
+
+```{r check_taxon, eval = FALSE} 
+list_taxa <- lapply(search_taxa, check_flora)
+```
+
+### Output
+
+Still deciding the output. The columns `synonym` and `scientificName_search` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
+
+#### *Lindsaea lancea*
+
+```{r lindsaea, eval = FALSE}
+# L. lancea
+list_taxa[[1]]$taxon
+list_taxa[[1]]$synonyms
+```
+
+#### *Asplenium truncorum*
+
+```{r asplenium}
+# para A. truncorum
+list_taxa[[2]]$taxon
+list_taxa[[2]]$synonyms
+```
+
