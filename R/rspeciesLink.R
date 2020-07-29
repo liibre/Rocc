@@ -5,6 +5,7 @@
 #'
 #' @param dir Path to directory where the file will be saved. Default is to create a "results/" directory
 #' @param filename Name of the output file
+#' @param save Logical. Save output to filename? Defaults to TRUE
 #' @param basisOfRecord Character. Any in 'PreservedSpecimen', 'LivingSpecimen', 'FossilSpecimen',
 #' 'HumanObservation', 'MachineObservation' or 'MaterialSample'. Default is 'PreservedSpecimen' for museum and herbarium search
 #' @param species Genus and epithet separated by space. More than one should be concatenated in a vector
@@ -35,6 +36,7 @@
 #' @export
 rspeciesLink <- function(dir = "results/",
                          filename = "output",
+                         save = TRUE,
                          basisOfRecord = NULL,
                          species = NULL,
                          collectionCode = NULL,
@@ -52,8 +54,7 @@ rspeciesLink <- function(dir = "results/",
 ) { # Yes | No | Live | Polen | Wood
   # speciesLink url
   my_url <- "https://api.splink.org.br/records/"
-  # creting dir
-  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+
   # helper function
   url_query <-  function(vector, name) {
     char <- paste(paste0(vector, "/"), collapse = "")
@@ -209,6 +210,9 @@ rspeciesLink <- function(dir = "results/",
   # requesting JSON format
   rrr <- jsonlite::fromJSON(my_url)$result
   #rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
+  if (save) {
+  # creating dir
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
   fullname <- paste0(dir, filename, ".csv")
   message(paste0("Writing ", fullname, " on disk."))
   write.table(rrr,
@@ -216,6 +220,7 @@ rspeciesLink <- function(dir = "results/",
               sep = ",",
               row.names = FALSE,
               col.names = TRUE)
+  }
   # if output is empty, return message
   if (is.null(dim(rrr))) {
     message("Output is empty. Check your request.")

@@ -28,14 +28,14 @@ library(rocc)
 Here, we are downloading data from two species of ferns.
 
 ```{r rspecieslink}
-species = c("Asplenium truncorum", "Lindsaea lancea")
+species <- c("Asplenium truncorum", "Lindsaea lancea")
 data_splink <- rspeciesLink(species = species, 
                             filename = "specieslink")
 ```
 
 ### GBIF
 
-```{r}
+```{r eval = FALSE}
 data_gbif <- rgbif2(species = species, 
                     filename = "gbif")
 ```

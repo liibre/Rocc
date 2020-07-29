@@ -7,6 +7,7 @@
 #' @param species Genus and specific epithet separated by space. Accepts author if inserted correctly. Either a single value or a vector
 #' @param force Logical. Force downloading data for more than 10 species in a loop. Default `force = FALSE`
 #' @param remove_na Logical. Defalt `TRUE` removes NA in columns decimalLatitude and decimalLongitude
+#' @param save Logical. Save output to filename? Defaults to TRUE
 #' @param ... Any argument from occ_search in rgbif package
 #'
 #' @return A data.frame with the search result. Also saves the output on disk
@@ -29,14 +30,13 @@ rgbif2 <- function(dir = "results/",
                    species,
                    force = FALSE,
                    remove_na = TRUE,
-                   ...
-) {
+                   save = TRUE,
+                   ...) {
   if (length(species) > 9) {
     if (!force) {
       stop("Use force = TRUE if you still want to download data for more than 10 species")
     }
   }
-  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
   key <- sapply(species, function(x) rgbif::name_backbone(name = x)$speciesKey)
   key_pointer <- sapply(key, function(x) !is.null(x))
   message("\nSpecies not found: ", species[!key_pointer],
@@ -60,6 +60,8 @@ rgbif2 <- function(dir = "results/",
     all_data <- all_data[!is.na(all_data$decimalLongitude)
                          & !is.na(all_data$decimalLatitude), ]
   }
+  if (save) {
+  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
   fullname <- paste0(dir, filename, ".csv")
   message(paste0("Writing ", fullname, " on disk."))
   write.table(all_data,
@@ -67,5 +69,6 @@ rgbif2 <- function(dir = "results/",
               sep = ",",
               row.names = FALSE,
               col.names = TRUE)
+  }
   return(all_data)
 }

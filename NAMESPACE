@@ -2,7 +2,6 @@
 
 export(check_flora)
 export(check_string)
-export(format_dwc)
 export(rgbif2)
 export(rjabot)
 export(rspeciesLink)
