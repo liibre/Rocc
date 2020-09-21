@@ -1,46 +1,24 @@
 #' Searches in the List of Species of the Brazilian Flora 2020 database
 #'
 #' Returns species scientific name lists from phytogeographic domain,
-#' state and/or endemism status from the List of Species of the Brazilian Flora
+#' state, life form and/or endemism status from the List of Species of the Brazilian Flora
 #' 2020 database
 #'
 #' @param domain a domain in Mata Atlântica, Cerrado, Pantanal, Pampa, Amazônia
-#' @param stateProvince Brazilian states, capitalized (e.g. "MA")
+#' @param stateProvince Two-letter code for Brazilian states (e.g. "MA")
 #' @param endemism logical, return species that are endemic or not from Brazil
 #'  Defaults to NULL to return all species
-#' @param lifeform character, search species with the following life forms:
-#' \describe{
-#'   \item{\code{Arbusto}}{}
-#'   \item{\code{Árvore}}{}
-#'   \item{\code{Bambu}}{}
-#'   \item{\code{Dracenoide}}{}
-#'   \item{\code{Erva}}{}
-#'   \item{\code{Liana/volúvel/trepadeira}}{}
-#'   \item{\code{Palmeira}}{}
-#'   \item{\code{Subarbusto}}{}
-#'   \item{\code{Suculenta}}{}
-#'   \item{\code{Desconhecida}}{}
-#'}
-#' @param habitat character, search species in the following habitat options:
-#' \describe{
-#'   \item{\code{Aquática}}{}
-#'   \item{\code{Epífita}}{}
-#'   \item{\code{Hemiepífita}}{}
-#'   \item{\code{Hemiparasita}}{}
-#'   \item{\code{Parasita}}{}
-#'   \item{\code{Rupícola}}{}
-#'   \item{\code{Saprófita}}{}
-#'   \item{\code{Terrícola}}{}
-#'   \item{\code{Desconhecido}}{}
-#'}
-#'@param force_update Logical. Update the flora IPT database in cache?
+#' @param life_form character, search species with the following life forms
+#' @param habitat character, search species in the habitat options according to the FB2020
+#' @param vegetation_type character, filter by vegetation type according to the FB2020
+#' @param force_update Logical. Update the flora IPT database in cache?
 #' @return a data frame with taxon IDs, scientific name and binomial name
 #' without authors
-#'
 #'
 #' @importFrom finch dwca_read dwca_cache
 #' @importFrom stringr str_detect regex
 #' @importFrom utils globalVariables
+#' @importFrom textclean replace_non_ascii
 #'
 #' @export
 #'
@@ -55,82 +33,103 @@
 #'
 search_flora <- function(domain = NULL,
                          stateProvince = NULL,
-                         endemism = NULL,
-                         lifeform = NULL,
+                         life_form = NULL,
                          habitat = NULL,
+                         vegetation_type = NULL,
+                         endemism = NULL,
                          force_update = FALSE) {
   ipt_flora <- update_flora(force_update = force_update)
-  biomas <- c("Amaz\u00f4nia", "Caatinga", "Cerrado", "Mata Atl\u00e2ntica", "Pampa",
-              "Pantanal")
-  if (!is.null(domain)) {
-    if (domain %in% biomas) {
+
+    if (!is.null(domain)) {
+    domain <- tolower(textclean::replace_non_ascii(domain))
+    #if (domain %in% biomas) {
     distribution <- ipt_flora$data$distribution.txt
     regex_domain <- paste(domain, collapse = "|")
-    domain_df <- distribution[
-      stringr::str_detect(string = distribution$occurrenceRemarks,
+    temp_df <- distribution[
+      stringr::str_detect(string = tolower(textclean::replace_non_ascii(distribution$occurrenceRemarks)),
                           pattern = stringr::regex(regex_domain)),]
-    id_d <- unique(domain_df$id)
-    }
+    id_d <- unique(temp_df$id)
+    #}
   }
 
   if (!is.null(stateProvince)) {
-    distribution <- ipt_flora$data$distribution.txt
-    states_regex <- paste(stateProvince, collapse = "|")
-    states_df <- distribution[
-      stringr::str_detect(string = distribution$locationID,
+    if (!exists("distribution"))
+      distribution <- ipt_flora$data$distribution.txt
+    states_regex <- paste(tolower(textclean::replace_non_ascii(stateProvince)), collapse = "|")
+    temp_df <- distribution[
+      stringr::str_detect(string = tolower(textclean::replace_non_ascii(distribution$locationID)),
                           pattern = stringr::regex(states_regex)), ]
-    id_e <- unique(states_df$id)
+    id_e <- unique(temp_df$id)
   }
 
   if (!is.null(endemism)) {
+    if (!exists("distribution"))
     distribution <- ipt_flora$data$distribution.txt
     endemism_regex <- ifelse(endemism == TRUE, "Endemica", "N\u00e3o endemica")
-    endemism_df <- distribution[
+    temp_df <- distribution[
       stringr::str_detect(string = distribution$occurrenceRemarks,
                           pattern = stringr::regex(endemism_regex)), ]
-    id_end <- unique(endemism_df$id)
+    id_end <- unique(temp_df$id)
   }
-
   # lifeform and habitat----
-  if (!is.null(lifeform) | !is.null(habitat)) {
-    speciesprofile <- ipt_flora$data$speciesprofile.txt
+
+  if (!is.null(life_form) | !is.null(habitat) | !is.null(vegetation_type)) {
+    #if (any(life_form %in% forma_de_vida == FALSE))
+     # stop("one or more life forms not recognized")
+    #ast ia filtrar assim mas fica fixo demais, melhor a pessoa fazer um filtro que não dê em nada sem forçar um erro.
+    if (!exists("speciesprofile"))
+      speciesprofile <- ipt_flora$data$speciesprofile.txt
   }
-  if (!is.null(lifeform)) {
-    lf_regex <- paste(lifeform, collapse = "|")
-    spprof_df <- speciesprofile[
-      stringr::str_detect(string = speciesprofile$lifeForm,
+  if (!is.null(life_form)) {
+    lf_regex <- paste(tolower(textclean::replace_non_ascii(life_form)), collapse = "|")
+    temp_df <- speciesprofile[
+      stringr::str_detect(string = tolower(textclean::replace_non_ascii(speciesprofile$lifeForm)),
                           pattern = stringr::regex(lf_regex)), ]
-    id_lf <- unique(spprof_df$id)
+    id_lf <- unique(temp_df$id)
   }
   if (!is.null(habitat)) {
-    hab_regex <- paste(habitat, collapse = "|")
-    spprof_df <- speciesprofile[
-      stringr::str_detect(string = speciesprofile$habitat,
+    hab_regex <- paste(tolower(textclean::replace_non_ascii(habitat)), collapse = "|")
+    temp_df <- speciesprofile[
+      stringr::str_detect(string = tolower(textclean::replace_non_ascii(speciesprofile$lifeForm)),
                           pattern = stringr::regex(hab_regex)), ]
-    id_hab <- unique(spprof_df$id)
+    id_hab <- unique(temp_df$id)
     }
-## intersects ids
-  if (!is.null(domain)) {
-    if (domain %in% biomas) {
-      ids <- id_d
+  if (!is.null(vegetation_type)) {
+    veg_regex <- paste(tolower(textclean::replace_non_ascii(vegetation_type)), collapse = "|")
+    temp_df <- speciesprofile[
+      stringr::str_detect(string = tolower(textclean::replace_non_ascii(speciesprofile$lifeForm)),
+                          pattern = stringr::regex(veg_regex)), ]
+    id_veg <- unique(temp_df$id)
     }
-  }
-  if (!is.null(stateProvince))  ids <- id_e
+
+  ## intersects ids
+  #Bioma e estado ou só bioma ou só estado
+
   # if subsetting both by state and domain
-  if (!is.null(domain) & !is.null(stateProvince)) {
+  if (!is.null(domain)) ids <- id_d                 # só bioma
+  if (!is.null(stateProvince))  ids <- id_e         # só estado
+  if (!is.null(domain) & !is.null(stateProvince)) { # ambas: intersecao
     ids <- intersect(id_d, id_e)
   }
+
   if (!is.null(endemism)) {
+    if (!exists("ids")) ids <- id_end
     ids <- intersect(ids, id_end)
   }
-  if (!is.null(lifeform)) {
+  if (!is.null(life_form)) {
+    if (!exists("ids")) ids <- id_lf
     ids <- intersect(ids, id_lf)
   }
   if (!is.null(habitat)) {
+    if (!exists("ids")) ids <- id_hab
     ids <- intersect(ids, id_hab)
   }
+  if (!is.null(vegetation_type)) {
+    if (!exists("ids")) ids <- id_veg
+    ids <- intersect(ids, id_veg)
+  }
 
-  regex_ids <- paste(ids, collapse = "|")
+  #regex_ids <- paste(ids, collapse = "|")
 
 
   # get names----
@@ -139,12 +138,11 @@ search_flora <- function(domain = NULL,
                                                 "VARIEDADE",
                                                 "SUB_ESPECIE",
                                                 "FORMA"))
-  ids_df <-
-    taxon[stringr::str_detect(string = taxon$id,
-                              pattern = regex_ids),
+  taxon_df <-
+    taxon[taxon$id %in% ids,
           c("id", "scientificName", "scientificNameAuthorship",
             "genus", "specificEpithet")]
-  ids_df$names_wo_author <- paste(ids_df$genus, ids_df$specificEpithet)
-  ids_df <- ids_df[, c("id", "scientificName", "names_wo_author")]
-  return(ids_df)
+  taxon_df$names_wo_author <- paste(taxon_df$genus, taxon_df$specificEpithet)
+  taxon_df <- taxon_df[, c("id", "scientificName", "names_wo_author")]
+  return(taxon_df)
 }

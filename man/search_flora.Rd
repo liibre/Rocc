@@ -7,46 +7,26 @@
 search_flora(
   domain = NULL,
   stateProvince = NULL,
-  endemism = NULL,
-  lifeform = NULL,
+  life_form = NULL,
   habitat = NULL,
+  vegetation_type = NULL,
+  endemism = NULL,
   force_update = FALSE
 )
 }
 \arguments{
 \item{domain}{a domain in Mata Atlântica, Cerrado, Pantanal, Pampa, Amazônia}
 
-\item{stateProvince}{Brazilian states, capitalized (e.g. "MA")}
+\item{stateProvince}{Two-letter code for Brazilian states (e.g. "MA")}
+
+\item{life_form}{character, search species with the following life forms}
+
+\item{habitat}{character, search species in the habitat options according to the FB2020}
+
+\item{vegetation_type}{character, filter by vegetation type according to the FB2020}
 
 \item{endemism}{logical, return species that are endemic or not from Brazil
 Defaults to NULL to return all species}
-
-\item{lifeform}{character, search species with the following life forms:
-\describe{
-  \item{\code{Arbusto}}{}
-  \item{\code{Árvore}}{}
-  \item{\code{Bambu}}{}
-  \item{\code{Dracenoide}}{}
-  \item{\code{Erva}}{}
-  \item{\code{Liana/volúvel/trepadeira}}{}
-  \item{\code{Palmeira}}{}
-  \item{\code{Subarbusto}}{}
-  \item{\code{Suculenta}}{}
-  \item{\code{Desconhecida}}{}
-}}
-
-\item{habitat}{character, search species in the following habitat options:
-\describe{
-  \item{\code{Aquática}}{}
-  \item{\code{Epífita}}{}
-  \item{\code{Hemiepífita}}{}
-  \item{\code{Hemiparasita}}{}
-  \item{\code{Parasita}}{}
-  \item{\code{Rupícola}}{}
-  \item{\code{Saprófita}}{}
-  \item{\code{Terrícola}}{}
-  \item{\code{Desconhecido}}{}
-}}
 
 \item{force_update}{Logical. Update the flora IPT database in cache?}
 }
@@ -56,7 +36,7 @@ without authors
 }
 \description{
 Returns species scientific name lists from phytogeographic domain,
-state and/or endemism status from the List of Species of the Brazilian Flora
+state, life form and/or endemism status from the List of Species of the Brazilian Flora
 2020 database
 }
 \examples{

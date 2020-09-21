@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 
 Package `rocc` allows the user to perform searches in the List of Species of the Brazilian Flora (FB2020) database from fields other than scientificName.
 
-These functions download the IPT files from FB2020 to a temporary file in the computer, using package __finch__. This download can be __very slow__ the first 
-time and when in disk the database will access the cached files instead of downloading them. 
+These functions download the IPT files from FB2020 to a temporary file in the computer, using package __finch__. This download can be __very slow__ the first
+time and when in disk the database will access the cached files instead of downloading them.
 
 ## Function `update_flora()`
 
@@ -45,56 +45,75 @@ library(rocc)
 devtools::load_all()
 ```
 
-Here is an example of the differences between searching for species in a domain: 
+Here is an example of the differences between searching for species in a domain:
 
 ```{r dom}
-caatinga <- search_flora(domain = "Caatinga")
-head(caatinga)
-dim(caatinga)
+baf <- search_flora(domain = "Mata Atlântica",
+                    force_update = FALSE)
+head(baf)
+dim(baf)
 ```
 
-```{r pb}
-pb <- search_flora(stateProvince = "PB")
-head(pb)
-dim(pb)
+```{r rj}
+rj <- search_flora(stateProvince = "RJ")
+head(rj)
+dim(rj)
 ```
 
 ```{r intersect}
-length(intersect(caatinga$id, pb$id))
+length(intersect(baf$id, rj$id))
 ```
 
-```{r pb-and-caatinga}
-pb_and_caatinga <- search_flora(domain = "Caatinga",
-                                stateProvince = "PB")
-head(pb_and_caatinga)
-dim(pb_and_caatinga)
+```{r rj-and-baf}
+rj_and_baf <- search_flora(domain = "Mata Atlântica",
+                           stateProvince = "RJ")
+head(rj_and_baf)
+dim(rj_and_baf)
 ```
 
 
 ```{r not-endemic}
-pb_and_caatinga_and_not_endemic <- search_flora(domain = "Caatinga",
-                                                stateProvince = "PB",
-                                                endemism = FALSE)
-head(pb_and_caatinga_and_not_endemic)
-dim(pb_and_caatinga_and_not_endemic)
+rj_and_baf_and_not_endemic <-
+  search_flora(domain = "Mata Atlântica",
+               stateProvince = "RJ",
+               endemism = FALSE)
+head(rj_and_baf_and_not_endemic)
+dim(rj_and_baf_and_not_endemic)
 ```
 
 ```{r endemic}
-pb_and_caatinga_and_endemic <- search_flora(domain = "Caatinga",
-                                            stateProvince = "PB",
-                                            endemism = TRUE)
-head(pb_and_caatinga_and_endemic)
-dim(pb_and_caatinga_and_endemic)
+rj_and_baf_and_endemic <-
+  search_flora(domain = "Mata Atlântica",
+               stateProvince = "RJ",
+               endemism = TRUE)
+head(rj_and_baf_and_endemic)
+dim(rj_and_baf_and_endemic)
 ```
 
-```{r arvore}
-pb_and_caatinga_and_endemic_and_tree <- search_flora(domain = "Caatinga",
-                                                     stateProvince = "PB",
-                                                     endemism = TRUE,
-                                                     lifeform = "Árvore")
-head(pb_and_caatinga_and_endemic_and_tree)
-dim(pb_and_caatinga_and_endemic_and_tree)
+```{r arbusto}
+rj_and_baf_and_tree <-
+  search_flora(domain = "Mata Atlântica",
+               stateProvince = "RJ",
+               life_form = "Arbusto")
+head(rj_and_baf_and_tree)
+dim(rj_and_baf_and_tree)
 ```
 
+```{r cda}
+campos_de_altitude <-
+  search_flora(domain = "Mata Atlântica",
+               vegetation_type = c("campo de altitude"))
+head(campos_de_altitude)
+dim(campos_de_altitude)
+```
+
+```{r cdaetal}
+campos_de_altitude_shrub <-
+  search_flora(domain = "Mata Atlântica",
+               life_form = "arbusto",
+               vegetation_type = c("campo de altitude"))
+head(campos_de_altitude_shrub)
+dim(campos_de_altitude_shrub)
+```
 
 
