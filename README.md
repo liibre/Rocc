@@ -6,19 +6,30 @@
 library(rocc)
 ```
 
-# Downloading occurrence data from R
-Currently available:
+# Downloading and binding occurrence data from R
 
-- [speciesLink](http://www.splink.org.br/) using function `rspeciesLink`
-- [GBIF](https://www.gbif.org/) using function `rgbif2` (wrapper of `rgbif` function in the package **rgbif**)
+- `rspeciesLink()` downloads occurrences directely from [speciesLink API](https://api.splink.org.br/)
 
-Installing and loading the package:
+- `rgbif2()` downloads occurrences from [GBIF](https://www.gbif.org/), a wrapper function of `rgbif()` in the package **rgbif**
+
+- `bind_dwc()` formats an output of occurrence data based on the current [DarwinCore standard](https://dwc.tdwg.org/terms/) and bind data from the different sources such as GBIF and speciesLink
 
 # Basic taxonomic cleaning
 
-Performs basic taxonomic cleaning: generates a valid name from a "raw" string and checks taxonomy according to Brazilian Flora 2020.
+Performs basic taxonomic cleaning: generates a valid name from a "raw" string and checks taxonomy according to the Brazilian Flora 2020 API and the R package flora. 
 
+- `check_sting()` identifies open nomenclature, infraspecies categories, authorship, indetermined species, hybrid species, nonascii characters in species name, digits in species name. Performs a check in the given name and returns a flag of the status and a string correction. For taxonomic check see `suggest_flora()` and `check_flora()`
 
-# Short example
+- `suggest_flora()` trims and corrects typo of a given species name
 
-For more details, see `vignettes` folder. 
+- `check_flora()` makes a request to [Brazilian Flora 2020 API](http://servicos.jbrj.gov.br/flora/) and returns accepted name and synonyms
+
+# Direct query to Brazilian Flora 2020 database
+
+- `search_flora()` searches in the List of Species of the Brazilian Flora 2020 database (by endemism, life form, habitat or vegetation type)
+
+- `update_flora()` downloads, updates and formats the data from the ipt server of the List of Species of the Brazilian Flora
+
+# Example
+
+For more details, see `vignettes` folder.
