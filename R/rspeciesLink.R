@@ -1,6 +1,6 @@
 #' Gets occurrence data from speciesLink
 #'
-#' This function access version beta 0.1 of speciesLink API and returns
+#' This function access version beta 0.1 of speciesLink API (https://api.splink.org.br/) and returns
 #' occurrence data of species.
 #'
 #' @param dir Path to directory where the file will be saved. Default is to create a "results/" directory
@@ -208,22 +208,22 @@ rspeciesLink <- function(dir = "results/",
   #message("Extracting content ...")
   #rr <- httr::content(r, as="parse") # text content
   # requesting JSON format
-  rrr <- jsonlite::fromJSON(my_url)$result
+  df <- jsonlite::fromJSON(my_url)$result
   #rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
   if (save) {
   # creating dir
-  dir.create(dir, recursive = TRUE, showWarnings = FALSE)
+  if (!dir.exists(dir)) {dir.create(dir)}
   fullname <- paste0(dir, filename, ".csv")
   message(paste0("Writing ", fullname, " on disk."))
-  write.table(rrr,
+  write.table(dir,
               fullname,
               sep = ",",
               row.names = FALSE,
               col.names = TRUE)
   }
   # if output is empty, return message
-  if (is.null(dim(rrr))) {
+  if (is.null(dim(df))) {
     message("Output is empty. Check your request.")
   }
-  return(list(data = rrr, url = my_url))
+  return(df)
 }

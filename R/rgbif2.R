@@ -70,5 +70,5 @@ rgbif2 <- function(dir = "results/",
               row.names = FALSE,
               col.names = TRUE)
   }
-  return(all_data)
+  return(as.data.frame(all_data))
 }
