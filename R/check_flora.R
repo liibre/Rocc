@@ -78,7 +78,8 @@ check_flora <- function(species,
         out <- out[is.na(out$infraspecificEpithet), ]
       } else {
         out <- out
-      }}
+      }
+    }
 
     # output sinonimo ####
     # criando coluna com o basinômio em synonyms
@@ -94,8 +95,10 @@ check_flora <- function(species,
                              & is.na(out$infraspecificEpithet), ]
         synonyms_base <- synonyms_base[, c('taxonID', 'species')]
         names(synonyms_base) <- c("taxonID_base", "species_base")
+        # creating column w/ scientificName w/o author
+        syn_species <- paste(synonyms$genus, synonyms$specificEpithet)
         # juntando a info do basinomio com o output de synonyms
-        synonyms <- cbind(synonyms, synonyms_base)
+        synonyms <- cbind(synonyms, synonym_species = syn_species, synonyms_base)
       } else {
         synonyms <- NULL
       }
