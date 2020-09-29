@@ -20,28 +20,81 @@ remotes::install_github("saramortara/rocc")
 library(rocc)
 ```
 
+## 1. Taxonomy check of the preliminary species list
 
-## 1. Download and bind data from different sources
+Here, we have a short list of two fern species. 
+
+```{r spp}
+species <- c("Asplenium truncorum", "Lindsaea lancea")
+```
+
+We'll start by checking species taxonomy and searching for synonyms.
+
+```{r check-taxon}
+species_check <- lapply(species, check_flora)
+```
+
+#### *Asplenium truncorum*
+
+```{r asplenium}
+# para A. truncorum
+species_check[[1]]$taxon
+species_check[[1]]$synonyms
+```
+
+This is a valid name with no synonyms.
+
+#### *Lindsaea lancea*
+
+```{r lindsaea}
+# L. lancea
+species_check[[2]]$taxon
+species_check[[2]]$synonyms
+```
+
+This is a valid name and `r species_check[[2]]$synonym_species` is a synonym. The synonym will also be included in the search in order to get the complete distribution of the species.
+
+## 2. Download and bind data from different sources
+
+Here, we are downloading data from two species of ferns and its synonyms.
+
+```{r syn-search}
+synonyms <- unlist(sapply(species_check, function(x) x$synonyms$synonym_species))
+species_search <- c(species, synonyms)
+```
+
 
 ### Species Link
 
-Here, we are downloading data from two species of ferns.
-
 ```{r rspecieslink}
-species <- c("Asplenium truncorum", "Lindsaea lancea")
-data_splink <- rspeciesLink(species = species, 
-                            filename = "specieslink")
+data_splink <- list()
+for (sp in species_search) {
+  data_splink[[sp]] <- rspeciesLink(species = sp, 
+                              filename = paste0(gsub(" ", "_", sp), "_splink"))
+}
+
+df_splink <- bind_rows(data_splink, .id = "species_id") 
 ```
 
 ### GBIF
 
-```{r eval = FALSE}
-data_gbif <- rgbif2(species = species, 
-                    filename = "gbif")
+```{r gbif}
+data_gbif <- list()
+
+for (sp in species_search) {
+  data_gbif[[sp]] <- rgbif2(species = sp, 
+                      filename = paste0(gsub(" ", "_", sp), "_gbif"))
+}
+
+df_gbif <- bind_rows(data_gbif, .id = "species_id")
 ```
 
-### Bind data from different sources
 
+## 3. Binding data from different sources
+
+```{r bind_data}
+df <- bind_dwc(splink_data = df_splink, gbif_data = df_gbif)
+```
 
 ## 3. Check string in species name
 
@@ -49,7 +102,7 @@ Given that the data base might come from source with errors, we perform a basic 
 
 ```{r species-raw}
 # Vector of unique entries in species names
-species_name_raw <- unique(data_splink$data$scientificName) 
+species_name_raw <- unique(df$scientificName)
 ```
 
 For the unique entries, we will perform a basic check on the string.
@@ -59,45 +112,19 @@ species_name_check  <- check_string(species_name_raw)
 species_name_check
 ```
 
-Here, we are interested only in the names assigned with `possibly_ok`. We see that names with `not_Genus_epithet_format` are probably variety and will be treated separately later.
-
-Now getting only possible correct and unique names. 
+Here, we are interested only in the names assigned with `possibly_ok` and `name_w_authors`. Now we will filter the occurrence data within these categories. 
 
 ```{r species-ok}
-species_ok <- species_name_check[species_name_check$speciesStatus %in% "possibly_ok", ]
+verbatimSpecies_ok <- species_name_check$verbatimSpecies[species_name_check$speciesStatus %in% c("possibly_ok", "name_w_authors")]
+df_ok <- df[df$scientificName %in% verbatimSpecies_ok, ]
+
 ```
 
-## 4. Taxonomic check
+In this cleaning we went from a total of `r nrow(df)` occurrences to `r 1505` occurrences. 
 
-First, we will check for typos and get a list of possible names. 
+Finally, we can write the resultant occurrence data on disk. 
 
-```{r suggest}
-suggest_taxa <- suggest_flora(species_ok$species)
-search_taxa <- unique(suggest_taxa$species)
-```
-
-
-```{r check_taxon} 
-list_taxa <- lapply(search_taxa, check_flora)
-```
-
-### Output
-
-Still deciding the output. The columns `synonym` and `scientificName_search` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
-
-#### *Lindsaea lancea*
-
-```{r lindsaea}
-# L. lancea
-list_taxa[[1]]$taxon
-list_taxa[[1]]$synonyms
-```
-
-#### *Asplenium truncorum*
-
-```{r asplenium}
-# para A. truncorum
-list_taxa[[2]]$taxon
-list_taxa[[2]]$synonyms
+```{r write}
+write.csv(df_ok, "results/occurrence_data.csv", row.names = FALSE)
 ```
 
