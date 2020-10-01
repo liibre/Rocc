@@ -4,7 +4,8 @@
 #'
 #' @importFrom finch dwca_cache
 #' @importFrom finch dwca_read
-
+#'
+#' @export
 update_flora <- function(force_update = FALSE) {
   cache_path <- finch::dwca_cache$cache_path_get()
   if (force_update) {

@@ -27,9 +27,9 @@ coarser resolution files)}
 \item{...}{Options for download.file()}
 }
 \description{
-This function downloads the GADM shapefile for a country. If the file is
-already on disk it will not perform the download. The function can check if
-better resolutions are available in disk.
+This function downloads the GADM shapefile for a country (https://gadm.org/data.html).
+If the file is already on disk it will not perform the download. The function
+can check if better resolutions are available in disk.
 }
 \details{
 https://gadm.org/data.html
