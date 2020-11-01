@@ -21,6 +21,7 @@ Imports:
     dplyr,
     finch,
     flora,
+    fs,
     jsonlite,
     stringi,
     stringr,

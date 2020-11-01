@@ -23,10 +23,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' getGADM(cod = "BRA", level = 3)
+#' getGADM(cod = "BRA", level = 0)
 #' getGADM(cod = "BRA", level = 1, best = TRUE) # will not download if lower levels exist
 #' getGADM(cod = "BRA", level = 3, type = "sp")
 #' }
+#'
 getGADM <- function(cod,
                     level = 4,
                     type = "sf",
@@ -50,7 +51,7 @@ getGADM <- function(cod,
             url <- paste0("https://biogeo.ucdavis.edu/data/gadm3.6/R",type,"/gadm36_", file)
             download.file(url,
                           destfile = this, ...)
-            message(paste("Downloading", cod, level, "OK"))
+            message(paste("Downloading", cod, level, "..."))
           }
         }
     },
@@ -67,9 +68,9 @@ getGADM <- function(cod,
 
     },
     finally = {
-      message("") #check and delete empty files
       file.inf <- list.files(destfolder, full.names = T)
       empty <- file.inf[file.info(file.inf)[["size"]] == 0]
+      if (length(empty) > 0) message("Downloading failed") #check and delete empty files
       unlink(empty)
     }
   )

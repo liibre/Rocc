@@ -2,7 +2,7 @@
 title: "Basic workflow using rocc"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{check}
+  %\VignetteIndexEntry{Basic workflow using rocc}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ library(knitr)
 ## 0. Installing and loading package
 
 ```{r eval = FALSE}
-remotes::install_github("saramortara/rocc")
+remotes::install_github("liibre/rocc")
 library(rocc)
 ```
 
@@ -74,6 +74,8 @@ for (sp in species_search) {
 }
 
 df_splink <- bind_rows(data_splink, .id = "species_id") 
+dim(df_splink)
+unique(df_splink$species_id)
 ```
 
 ### GBIF
@@ -85,8 +87,8 @@ for (sp in species_search) {
   data_gbif[[sp]] <- rgbif2(species = sp, 
                       filename = paste0(gsub(" ", "_", sp), "_gbif"))
 }
-
-df_gbif <- bind_rows(data_gbif, .id = "species_id")
+nro <- lapply(data_gbif, nrow) > 0
+df_gbif <- bind_rows(data_gbif[nro], .id = "species_id")
 ```
 
 

@@ -4,12 +4,10 @@
 #outputs
 results/
 data-raw/
-update_flora_metadata.txt
-
-R/names_flora.R
-R/problem_species.txt
 
 # scripts teste
 test.R
 checktaxa.R
-
+vignettes/articles
+docs/
+R/GADM_to_gazetteer.R
