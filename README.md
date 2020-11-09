@@ -34,6 +34,8 @@ library(rocc)
 
 + `getGAZ()` downloads the corresponding DIVA-GIS gazetteer from [http://www.diva-gis.org/gData](http://www.diva-gis.org/gData) 
 
++ `getWDPA()` downloads shapefiles from the the IUCN Global Database for Protected Areas for each country ([https://www.protectedplanet.net](https://www.protectedplanet.net))
+
 
 ## Examples
 
