@@ -27,7 +27,8 @@
 #'
 #' @importFrom stringr str_trim
 #' @importFrom flora remove.authors
-#' @importFrom dplyr bind_rows any_of select
+#' @importFrom dplyr bind_rows select
+#' @importFrom tidyselect any_of
 #' @importFrom stats na.omit
 #'
 #' @export bind_dwc
