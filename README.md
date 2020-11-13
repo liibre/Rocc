@@ -1,14 +1,14 @@
 ## Installing and loading the package
 
-`devtools::install_github("liibre/rocc")`
 
-```{r setup}
-library(rocc)
+```
+devtools::install_github("liibre/Rocc")
+library(Rocc)
 ```
 
 ## Downloading and binding occurrence data from R
 
-- `rspeciesLink()` downloads occurrences directely from [speciesLink API](https://api.splink.org.br/)
+- `rspeciesLink()` downloads occurrences directly from [speciesLink API](https://api.splink.org.br/)
 
 - `rgbif2()` downloads occurrences from [GBIF](https://www.gbif.org/), a wrapper function of `rgbif()` in the package **rgbif**
 
@@ -16,7 +16,7 @@ library(rocc)
 
 ## Basic taxonomic cleaning
 
-- `check_sting()` identifies open nomenclature, infraspecies categories, authorship, indetermined species, hybrid species, nonascii characters in species name, digits in species name. Performs a check in the given name and returns a flag of the status and a string correction. For taxonomic check see `suggest_flora()` and `check_flora()`
+- `check_string()` identifies open nomenclature, infraspecies categories, authorship, undetermined species, hybrid species, non-ascii characters in species name, digits in species name. Performs a check in the given name and returns a flag of the status and a string correction. For taxonomic check see `suggest_flora()` and `check_flora()`
 
 - `suggest_flora()` trims and corrects typo of a given species name
 
@@ -27,6 +27,15 @@ library(rocc)
 - `search_flora()` searches in the List of Species of the Brazilian Flora 2020 database (by endemism, life form, habitat or vegetation type)
 
 - `update_flora()` downloads, updates and formats the data from the ipt server of the List of Species of the Brazilian Flora
+
+## Additional functions
+
++ `getGADM()` downloads shapefiles for administrative units for countries from [https://gadm.org/data.html](https://gadm.org/data.html) in either sf or sp formats
+
++ `getGAZ()` downloads the corresponding DIVA-GIS gazetteer from [http://www.diva-gis.org/gData](http://www.diva-gis.org/gData) 
+
++ `getWDPA()` downloads shapefiles from the the IUCN Global Database for Protected Areas for each country ([https://www.protectedplanet.net](https://www.protectedplanet.net))
+
 
 ## Examples
 

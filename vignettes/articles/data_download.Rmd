@@ -1,0 +1,69 @@
+---
+title: "Geographic data download with rocc"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Geographic data download with rocc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  
+---
+
+Functions `getGADM()`, `getGaz()`, and `getWDPA()` help download data from the GADM administrative units for the countries of the world [link](https://gadm.org/data.html), DIVA-GIS gazetteers (link), and the IUCN Global Database for Protected Areas ([link](https://www.iucn.org/theme/protected-areas/our-work/world-database-protected-areas)).
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+devtools::load_all()
+```
+
+```{r load}
+library(dplyr)
+library(rocc)
+```
+
+## Downloading the datasets
+
+### GADM
+
+Function `getGADM()` will download the GADM shapefiles in `sp` or `sf` formats if they are not already in disk. Parameter `"best = TRUE"` will seek to download the best available resolution, it will not download coarser datasets if finer resolution datasets are available. 
+
+
+
+```{r}
+countries <- c("Colombia", "Brazil", "Ecuador", "Peru", "Venezuela", "Bolivia")
+
+iso3 <- countrycode::countrycode(countries,
+                                 "country.name",
+                                 "iso3c")
+destfolder <- "./GADM/"
+#the downloading scheme: cbind(rep(iso3, each = 5), rep(4:0, length(countries)))
+
+arquivos <- purrr::walk2(.x = rep(iso3, each = 5),
+                         .y = rep(4:0, length(countries)),
+                         ~ getGADM(cod = .x,
+                                   level = .y,
+                                   best = TRUE,
+                                   destfolder = destfolder
+                                   ))
+gadm_files <- list.files(destfolder, pattern = paste(iso3, collapse = "|"), full.names = TRUE) 
+lev <- stringr::str_extract(string = gadm_files, pattern = "\\d+")
+```
+
+## DIVA-GIS gazetteer
+
+Function `getGAZ()` downloads the DIVA-GIS gazetteer files for each country. These are zipped .dbf files.
+
+```{r}
+iso3 %>%
+  purrr::map(.x = ., ~getGAZ(cod = .x, destfolder = destfolder, unzip = TRUE))
+```
+
+## IUCN files
+
+Function `getWDPA()` downloads the shapefiles from the the IUCN Global Database for Protected Areas for each country. These are zipped .shp files.
+
+```{r}
+getWDPA(cod = iso3[1])
+```
+
+

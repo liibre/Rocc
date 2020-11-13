@@ -36,8 +36,9 @@ https://gadm.org/data.html
 }
 \examples{
 \dontrun{
-getGADM(cod = "BRA", level = 3)
+getGADM(cod = "BRA", level = 0)
 getGADM(cod = "BRA", level = 1, best = TRUE) # will not download if lower levels exist
 getGADM(cod = "BRA", level = 3, type = "sp")
 }
+
 }

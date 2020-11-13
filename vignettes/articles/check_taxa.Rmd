@@ -1,8 +1,8 @@
 ---
-title: "Building an workflow of taxonomic check"
+title: "Building a workflow of taxonomic check"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{check}
+  %\VignetteIndexEntry{Building a workflow of taxonomic check}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

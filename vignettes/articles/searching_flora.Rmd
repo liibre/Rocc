@@ -1,6 +1,5 @@
 ---
 title: "Searching for species names in FB2020"
-author: "Andrea Sánchez-Tapia"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
