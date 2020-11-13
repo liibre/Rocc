@@ -1,8 +1,8 @@
 ---
-title: "Geographic data download with rocc"
+title: "Geographic data download with Rocc"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Geographic data download with rocc}
+  %\VignetteIndexEntry{Geographic data download with Rocc}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
   
@@ -18,7 +18,7 @@ devtools::load_all()
 
 ```{r load}
 library(dplyr)
-library(rocc)
+#library(Rocc)
 ```
 
 ## Downloading the datasets
@@ -35,18 +35,16 @@ countries <- c("Colombia", "Brazil", "Ecuador", "Peru", "Venezuela", "Bolivia")
 iso3 <- countrycode::countrycode(countries,
                                  "country.name",
                                  "iso3c")
-destfolder <- "./GADM/"
-#the downloading scheme: cbind(rep(iso3, each = 5), rep(4:0, length(countries)))
-
-arquivos <- purrr::walk2(.x = rep(iso3, each = 5),
-                         .y = rep(4:0, length(countries)),
-                         ~ getGADM(cod = .x,
-                                   level = .y,
-                                   best = TRUE,
-                                   destfolder = destfolder
-                                   ))
-gadm_files <- list.files(destfolder, pattern = paste(iso3, collapse = "|"), full.names = TRUE) 
-lev <- stringr::str_extract(string = gadm_files, pattern = "\\d+")
+# Check the downloading scheme: 
+df <- data.frame(codigo = rep(iso3, each = 5), pais = rep(4:0, length(countries)))
+# we try the downloads at the finest scale first and ask best = TRUE to avoid downloading coarser levels. this is not beautiful, maybe the user should use EITHER level OR best internally. hmmm. if best = TRUE then default level is 4, then 3 etc. with a while loop. 
+purrr::walk2(.x = rep(iso3, each = 5),
+             .y = rep(4:0, length(countries)),
+             ~ getGADM(
+               cod = .x,
+               level = .y,
+               best = TRUE
+             ))
 ```
 
 ## DIVA-GIS gazetteer
@@ -54,16 +52,67 @@ lev <- stringr::str_extract(string = gadm_files, pattern = "\\d+")
 Function `getGAZ()` downloads the DIVA-GIS gazetteer files for each country. These are zipped .dbf files.
 
 ```{r}
-iso3 %>%
-  purrr::map(.x = ., ~getGAZ(cod = .x, destfolder = destfolder, unzip = TRUE))
+iso3 %>% purrr::map(.x = ., ~ getGAZ(cod = .x))
 ```
 
 ## IUCN files
 
-Function `getWDPA()` downloads the shapefiles from the the IUCN Global Database for Protected Areas for each country. These are zipped .shp files.
+Function `getWDPA()` downloads the shapefiles from the IUCN Global Database for Protected Areas for each country. These are zipped .shp files. Read [the documentation](https://www.protectedplanet.net/en/resources/wdpa-manual) carefully, not every country has data, and it can be in different stages of completion, revision and approval. 
 
 ```{r}
-getWDPA(cod = iso3[1])
+iso3 %>% purrr::map(.x = ., ~getWDPA(cod = .x))
 ```
 
+## 
+
+
+```{r}
+gadm_files <- list.files("GADM", pattern = paste(iso3, collapse = "|"), full.names = TRUE) 
+lev <- stringr::str_extract(string = gadm_files, pattern = "\\d+")
+
+gaz_files <- list.files("GAZ", pattern = ".dbf", full.names = TRUE) 
+
+wdpa_files <- list.files("WDPA", full.names = TRUE, recursive = T, pattern = ".shp$") 
+library(sf)
+library(rgdal)
+
+bol0_pts <- read_sf(wdpa_files[1])
+bol0_pol <- read_sf(wdpa_files[2])
+bol1_pts <- read_sf(wdpa_files[3])
+bol1_pol <- read_sf(wdpa_files[4])
+library(tmap)
+
+mapbol <- tm_shape(bol) + 
+  tm_polygons(col = "white") + 
+  tm_shape(bol0_pol) +
+  tm_fill(col = "darkgreen") + 
+  tm_shape(bol1_pol) +
+  tm_fill(col = "green") + 
+  tm_shape(bol1_pts) + 
+  tm_dots()
+
+  
+bol <- readRDS(gadm_files[1])
+
+plot(bol[1])
+maptools
+library(dplyr)
+bol_gaz <- read_sf(gaz_files[1]) #mk, sirve
+bol_gaz <- mutate(bol_gaz, 
+                  LONG = as.numeric(LONG),
+                  LAT  = as.numeric(LAT)
+                  ) 
+coordinates(bol_gaz) <- ~LONG+LAT
+
+ex <- head(bol_gaz)
+apply(ex, 2, class)
+library(sf)
+st_sf(ex)
+
+mapbol +
+  tm_shape(bol_gaz) + 
+  tm_dots()
+
+
+```
 
