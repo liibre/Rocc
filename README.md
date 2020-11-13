@@ -2,8 +2,8 @@
 
 
 ```
-devtools::install_github("liibre/rocc")
-library(rocc)
+devtools::install_github("liibre/Rocc")
+library(Rocc)
 ```
 
 ## Downloading and binding occurrence data from R
