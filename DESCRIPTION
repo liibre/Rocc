@@ -1,4 +1,4 @@
-Package: rocc
+Package: Rocc
 Type: Package
 Title: Workflows for Downloading Occurrence Data from speciesLink, FB2020, and JABOT API
 Version: 0.1.0
