@@ -27,7 +27,7 @@
 #'
 #' @importFrom stringr str_trim
 #' @importFrom flora remove.authors
-#' @importFrom dplyr bind_rows
+#' @importFrom dplyr bind_rows any_of select
 #' @importFrom stats na.omit
 #'
 #' @export bind_dwc
@@ -82,7 +82,8 @@ bind_dwc <- function(splink_data = NULL,
     # Creating field municipality
     splink_data$municipality <- NA
     # Creating field dateIdentified
-    splink_date <- apply(X = splink_data[, c("yearIdentified", "monthIdentified", "dayIdentified")],
+    date_cols <- c("yearIdentified", "monthIdentified", "dayIdentified")
+    splink_date <- apply(X = dplyr::select(splink_data, any_of(date_cols)),
                          MARGIN = 1,
                          FUN = function(x) paste(x, collapse = "-"))
     splink_data$dateIdentified <- ifelse(grepl("NA-NA-NA", splink_date), NA, splink_date)
