@@ -1,6 +1,6 @@
 #' Function to check species scientific name in Brazilian Flora 2020 database
 #'
-#' @param species Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species
+#' @param species Character. A species scientific name without authors, ideally already passed by the string check in `Rocc::check_status()`. Accepts only one name at a time. Use `lapply()` or functions from `purrr` package to run for multiple species
 #' @param get_synonyms Logical. If `get_synonyms = TRUE` (default) returns a second element containing information of all synonyms a species has
 #' @param infraspecies Logical. If `infraspecies = TRUE` returns accepted name of any infraspecies classification
 #'
@@ -23,16 +23,23 @@ check_flora <- function(species,
                         get_synonyms = TRUE,
                         infraspecies = FALSE) {
   # equivalencia de campos flora2020 e DwC
-  campos <- c(taxonID = "taxonid", family = "family",
-              genus = "genus", scientificName = "scientificname",
-              specificEpithet = "specificepithet", infraspecificEpithet = "infraspecificepithet",
-              scientificNameAuthorship = "scientificnameauthorship", taxonomicStatus = "taxonomicstatus",
-              acceptedNameUsage = "acceptednameusage", acceptedNameUsageID = "acceptednameusageid",
-              modified = "modified")
+  campos <- c(
+    taxonID = "taxonid",
+    family = "family",
+    genus = "genus",
+    scientificName = "scientificname",
+    specificEpithet = "specificepithet",
+    infraspecificEpithet = "infraspecificepithet",
+    scientificNameAuthorship = "scientificnameauthorship",
+    taxonomicStatus = "taxonomicstatus",
+    acceptedNameUsage = "acceptednameusage",
+    acceptedNameUsageID = "acceptednameusageid",
+    modified = "modified"
+  )
   campos.syn <- c(campos[1:8], higherClassification = "higherclassification",
                   source =  "source", references = "references")
   # função para buscar na flora do brasil
-  search_flora <- function(x){
+  search_flora <- function(x) {
     api <- "http://servicos.jbrj.gov.br/flora/taxon/"
     search_sp <- gsub(" ", "%20", x)
     res <- jsonlite::fromJSON(paste0(api, search_sp))

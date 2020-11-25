@@ -7,7 +7,7 @@
 check_flora(species, get_synonyms = TRUE, infraspecies = FALSE)
 }
 \arguments{
-\item{species}{Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`. Accepts only one name per time. Use `lapply` ou functions from `purr` package to run for multiple species}
+\item{species}{Character. A species scientific name without authors, ideally already passed by the string check in `Rocc::check_status()`. Accepts only one name at a time. Use `lapply()` or functions from `purrr` package to run for multiple species}
 
 \item{get_synonyms}{Logical. If `get_synonyms = TRUE` (default) returns a second element containing information of all synonyms a species has}
 

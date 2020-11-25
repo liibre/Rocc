@@ -11,6 +11,9 @@ checktaxa.R
 vignettes/articles
 docs/
 R/GADM_to_gazetteer.R
+R/get_geocode.R
 update_flora_metadata.txt
 
 _pkgdown.yml
+vrac
+.travis.yml

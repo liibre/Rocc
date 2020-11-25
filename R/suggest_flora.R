@@ -1,6 +1,6 @@
 #' Function suggest a valid species name for Brazilian plants
 #'
-#' @param species Character. A species scientific name without authors, ideally already passed by the string check in `rocc::check_status`
+#' @param species Character. A species scientific name without authors, ideally already passed by the string check in `Rocc::check_status()`
 #'
 #' @return
 #' A data frame with the name provided by the user and a new suggested name

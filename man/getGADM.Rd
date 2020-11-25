@@ -4,7 +4,7 @@
 \alias{getGADM}
 \title{Function to download GADM data for a country at a specific level}
 \usage{
-getGADM(cod, level = 4, type = "sf", best = FALSE, destfolder = "./GADM/", ...)
+getGADM(cod, level = 4, type = "sf", best = FALSE, destfolder = "GADM", ...)
 }
 \arguments{
 \item{cod}{Three letter ISO code for the country.}
@@ -15,8 +15,8 @@ the nestedness is sequential. This means a country with two levels has levels
 0 and 1, not 0 and 4, and that units such as states or municipalities can
 correspond to different levels depending on the country}
 
-\item{type}{The class of spatial object to be downloaded. Defaults to sf
-but can be set to sp}
+\item{type}{The class of spatial object to be downloaded. Defaults to "sf"
+but can be set to "sp"}
 
 \item{best}{TRUE Checks if finer resolutions are available and avoids
 downloading data at coarser resolutions. Defaults to TRUE (will not download

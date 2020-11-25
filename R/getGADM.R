@@ -10,8 +10,8 @@
 #'  the nestedness is sequential. This means a country with two levels has levels
 #'  0 and 1, not 0 and 4, and that units such as states or municipalities can
 #'  correspond to different levels depending on the country
-#' @param type The class of spatial object to be downloaded. Defaults to sf
-#'  but can be set to sp
+#' @param type The class of spatial object to be downloaded. Defaults to "sf"
+#'  but can be set to "sp"
 #' @param best TRUE Checks if finer resolutions are available and avoids
 #'  downloading data at coarser resolutions. Defaults to TRUE (will not download
 #'  coarser resolution files)
@@ -19,6 +19,7 @@
 #' @param destfolder The destination folder
 #' @details https://gadm.org/data.html
 #' @importFrom utils download.file
+#' @importFrom fs path
 #' @export
 #'
 #' @examples
@@ -32,16 +33,16 @@ getGADM <- function(cod,
                     level = 4,
                     type = "sf",
                     best = FALSE,
-                    destfolder = "./GADM/",
+                    destfolder = "GADM",
                     ...) {
   out <- tryCatch(
     {
       message(paste("Downloading", cod, level))
       file <- paste0(cod, "_", level, "_", type, ".rds")
+      up   <- paste0(cod, "_", level + 1:4, "_", type, ".rds")
       if (!file.exists(destfolder)) dir.create(destfolder)
-      this <- paste0(destfolder, file)
-      upper <- paste0(destfolder, cod, "_", level + 1:4, "_", type, ".rds")
-
+      this <- fs::path(destfolder, file)
+      upper <- fs::path(destfolder, up)
       if (any(file.exists(upper)) && best) {
         message("A better resolution file already exists")
         } else {
