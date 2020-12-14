@@ -50,13 +50,16 @@ rgbif2 <- function(dir = "results/",
   for (i in 1:length(key_pointer)) {
     if (key_pointer[i]) {
       message("Making request to GBIF...")
-      gbif_data[[i]] <- rgbif::occ_search(hasCoordinate = TRUE,
-                                          hasGeospatialIssue = FALSE,
-                                          taxonKey = key[i])$data
-    } else {gbif_data[[i]] <- data.frame(key = NA)}
+      gbif_data[[i]] <- tryCatch(cbind(rgbif::occ_search(hasCoordinate = TRUE,
+                                                   hasGeospatialIssue = FALSE,
+                                                   taxonKey = key[i])$data,
+                                       download = "succeded"),
+                                 error = function(e){data.frame(download = "failed",
+                                                                stringsAsFactors = FALSE)})
+    } else {gbif_data[[i]] <- data.frame(key = NA, dowload = "no_species_key")}
   }
   names(gbif_data) <- species
-  all_data <- as.data.frame(dplyr::bind_rows(gbif_data, .id = "species_id"))
+  all_data <- as.data.frame(dplyr::bind_rows(gbif_data, .id = "species_search"))
   if (remove_na) {
     all_data <- all_data[!is.na(all_data$decimalLongitude)
                          & !is.na(all_data$decimalLatitude), ]
