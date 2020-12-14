@@ -15,54 +15,20 @@ library(knitr)
 
 ## 0. Installing and loading package
 
-```{r eval = FALSE}
+```{r install, eval = FALSE}
 remotes::install_github("liibre/rocc")
 library(rocc)
 ```
 
-## 1. Taxonomy check of the preliminary species list
+## 1. Download and bind data from different sources
 
 Here, we have a short list of two fern species. 
 
 ```{r spp}
-species <- c("Asplenium truncorum", "Lindsaea lancea")
+species_search <- c("Asplenium truncorum", "Lindsaea lancea")
 ```
 
-We'll start by checking species taxonomy and searching for synonyms.
-
-```{r check-taxon}
-species_check <- lapply(species, check_flora)
-```
-
-#### *Asplenium truncorum*
-
-```{r asplenium}
-# para A. truncorum
-species_check[[1]]$taxon
-species_check[[1]]$synonyms
-```
-
-This is a valid name with no synonyms.
-
-#### *Lindsaea lancea*
-
-```{r lindsaea}
-# L. lancea
-species_check[[2]]$taxon
-species_check[[2]]$synonyms
-```
-
-This is a valid name and `r species_check[[2]]$synonym_species` is a synonym. The synonym will also be included in the search in order to get the complete distribution of the species.
-
-## 2. Download and bind data from different sources
-
-Here, we are downloading data from two species of ferns and its synonyms.
-
-```{r syn-search}
-synonyms <- unlist(sapply(species_check, function(x) x$synonyms$synonym_species))
-species_search <- c(species, synonyms)
-```
-
+Here, we are downloading data from two species of ferns.
 
 ### Species Link
 
@@ -73,9 +39,9 @@ for (sp in species_search) {
                               filename = paste0(gsub(" ", "_", sp), "_splink"))
 }
 
-df_splink <- bind_rows(data_splink, .id = "species_id") 
+df_splink <- bind_rows(data_splink, .id = "species_search") 
 dim(df_splink)
-unique(df_splink$species_id)
+unique(df_splink$species_search)
 ```
 
 ### GBIF
@@ -87,12 +53,13 @@ for (sp in species_search) {
   data_gbif[[sp]] <- rgbif2(species = sp, 
                       filename = paste0(gsub(" ", "_", sp), "_gbif"))
 }
-nro <- lapply(data_gbif, nrow) > 0
-df_gbif <- bind_rows(data_gbif[nro], .id = "species_id")
+
+names(data_gbif) <- species_search
+df_gbif <- bind_rows(data_gbif, .id = "species_search")
 ```
 
 
-## 3. Binding data from different sources
+## 2. Binding data from different sources
 
 ```{r bind_data}
 df <- bind_dwc(splink_data = df_splink, gbif_data = df_gbif)
