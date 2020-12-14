@@ -12,9 +12,9 @@ df_splink <- read.csv("vignettes/results/Asplenium_truncorum_splink.csv")
 dwc_dic <- read.csv("https://raw.githubusercontent.com/tdwg/dwc/master/vocabulary/term_versions.csv")
 
 dwc <- dwc_dic %>%
-  select(c("label", "definition", "organized_in")) %>%
+  select(term_localName, definition, organized_in) %>%
   filter(organized_in != "") %>%
-  mutate(low_dwc = tolower(label), dwc = label) %>%
+  mutate(low_dwc = tolower(term_localName), dwc = term_localName) %>%
   select(dwc, low_dwc, definition) %>%
   distinct()
 
@@ -39,6 +39,7 @@ fields_dwc <- data.frame(low_dwc = low_gbif, gbif = cols_gbif) %>%
   left_join(splink, ., by = "low_dwc") %>%
   left_join(dwc, ., by = c("dwc", "low_dwc"))
 
+# adding data to package -------------------------------------------------------
 usethis::use_data(fields_dwc,
                   overwrite = TRUE,
                   internal = TRUE)
