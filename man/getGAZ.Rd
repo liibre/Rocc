@@ -30,3 +30,6 @@ lapply(countries, getGAZ)
 }
 
 }
+\author{
+Andrea Sánchez-Tapia & Sara Mortara
+}

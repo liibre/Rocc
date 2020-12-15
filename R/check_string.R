@@ -26,7 +26,6 @@
 #'}
 #'
 #' @param species species name in a raw format
-#' @author Sara Mortara
 #'
 #' @examples
 #' check_string("Lindsaea lancea var. falcata")

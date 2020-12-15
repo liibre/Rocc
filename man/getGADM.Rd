@@ -42,3 +42,6 @@ getGADM(cod = "BRA", level = 3, type = "sp")
 }
 
 }
+\author{
+Andrea Sánchez-Tapia & Sara Mortara
+}

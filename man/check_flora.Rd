@@ -28,3 +28,6 @@ lapply(c("Dalbergia nigra", "Aspidosperma discolor"),
        check_flora)
 
 }
+\author{
+Sara Mortara & Andrea Sánchez-Tapia
+}

@@ -12,3 +12,6 @@ update_flora(force_update = FALSE)
 \description{
 Downloads, updates and formats the data from the ipt server of the List of Species of the Brazilian Flora
 }
+\author{
+Andrea Sánchez-Tapia & Sara Mortara
+}

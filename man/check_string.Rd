@@ -42,5 +42,5 @@ check_string("Asplenium sp.")
 
 }
 \author{
-Sara Mortara
+Sara Mortara & Andrea Sánchez-Tapia
 }

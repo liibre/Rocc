@@ -20,5 +20,5 @@ A list of two elements. The first element is a character string containing the u
 This function gets occurrence data in Jabot's API (http://servicos.jbrj.gov.br/jabot/). Providing a scientific name for a species is mandatory.
 }
 \author{
-Sara Mortara
+Sara Mortara & Andrea Sánchez-Tapia
 }
