@@ -22,7 +22,8 @@
 #' @param RedList Logic. If TRUE only species in the IUCN Red List are returned
 #' @param MaxRecords Numeric. Maximum number of records to be required
 #' @return A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
-#' @author Sara Mortara
+#'
+#' @author Sara Mortara & Andrea Sánchez-Tapia
 #'
 #' @examples
 #'\dontrun{

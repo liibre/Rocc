@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Basic workflow using rocc</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Basic workflow using rocc</h1>
+
+
+
+<div id="installing-and-loading-package" class="section level2">
+<h2>0. Installing and loading package</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;liibre/rocc&quot;</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(rocc)</a></code></pre></div>
+</div>
+<div id="download-and-bind-data-from-different-sources" class="section level2">
+<h2>1. Download and bind data from different sources</h2>
+<p>Here, we have a short list of two fern species.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">species_search &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Asplenium truncorum&quot;</span>, <span class="st">&quot;Lindsaea lancea&quot;</span>)</a></code></pre></div>
+<p>Here, we are downloading data from two species of ferns.</p>
+<div id="species-link" class="section level3">
+<h3>Species Link</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">data_splink &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="cf">for</span> (sp <span class="cf">in</span> species_search) {</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  data_splink[[sp]] &lt;-<span class="st"> </span><span class="kw">rspeciesLink</span>(<span class="dt">species =</span> sp, </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">                              <span class="dt">filename =</span> <span class="kw">paste0</span>(<span class="kw">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, sp), <span class="st">&quot;_splink&quot;</span>))</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">}</a></code></pre></div>
+<pre><code>## Making request to speciesLink...</code></pre>
+<pre><code>## Writing results/Asplenium_truncorum_splink.csv on disk.</code></pre>
+<pre><code>## Making request to speciesLink...</code></pre>
+<pre><code>## Writing results/Lindsaea_lancea_splink.csv on disk.</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">df_splink &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(data_splink, <span class="dt">.id =</span> <span class="st">&quot;species_search&quot;</span>) </a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">dim</span>(df_splink)</a></code></pre></div>
+<pre><code>## [1] 2744   50</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">unique</span>(df_splink<span class="op">$</span>species_search)</a></code></pre></div>
+<pre><code>## [1] &quot;Asplenium truncorum&quot; &quot;Lindsaea lancea&quot;</code></pre>
+</div>
+<div id="gbif" class="section level3">
+<h3>GBIF</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">data_gbif &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="cf">for</span> (sp <span class="cf">in</span> species_search) {</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">  data_gbif[[sp]] &lt;-<span class="st"> </span><span class="kw">rgbif2</span>(<span class="dt">species =</span> sp, </a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">                      <span class="dt">filename =</span> <span class="kw">paste0</span>(<span class="kw">gsub</span>(<span class="st">&quot; &quot;</span>, <span class="st">&quot;_&quot;</span>, sp), <span class="st">&quot;_gbif&quot;</span>))</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">}</a></code></pre></div>
+<pre><code>## Making request to GBIF...</code></pre>
+<pre><code>## Writing results/Asplenium_truncorum_gbif.csv on disk.</code></pre>
+<pre><code>## Making request to GBIF...</code></pre>
+<pre><code>## Writing results/Lindsaea_lancea_gbif.csv on disk.</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">names</span>(data_gbif) &lt;-<span class="st"> </span>species_search</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">df_gbif &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(data_gbif, <span class="dt">.id =</span> <span class="st">&quot;species_search&quot;</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="binding-data-from-different-sources" class="section level2">
+<h2>2. Binding data from different sources</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">bind_dwc</span>(<span class="dt">splink_data =</span> df_splink, <span class="dt">gbif_data =</span> df_gbif)</a></code></pre></div>
+</div>
+<div id="check-string-in-species-name" class="section level2">
+<h2>3. Check string in species name</h2>
+<p>Given that the data base might come from source with errors, we perform a basic check on the string of a species name. We will select only unique entries in species names.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># Vector of unique entries in species names</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">species_name_raw &lt;-<span class="st"> </span><span class="kw">unique</span>(df<span class="op">$</span>scientificName)</a></code></pre></div>
+<p>For the unique entries, we will perform a basic check on the string.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">species_name_check  &lt;-<span class="st"> </span><span class="kw">check_string</span>(species_name_raw)</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">species_name_check</a></code></pre></div>
+<pre><code>##                                      verbatimSpecies            speciesStatus
+## 1  Asplenium truncorum F.B.Matos, Labiak &amp; Sylvestre           name_w_authors
+## 2                                Asplenium truncorum              possibly_ok
+## 3                                    Lindsaea lancea              possibly_ok
+## 4                             Lindsaea lancea lancea not_Genus_epithet_format
+## 5                            Lindsaea lancea elatior not_Genus_epithet_format
+## 6                            Lindsaea lancea falcata not_Genus_epithet_format
+## 7                         Lindsaea lancea leprieurii not_Genus_epithet_format
+## 8                             Lindsaea lancea remota not_Genus_epithet_format
+## 9                     Lindsaea lancea x schomburgkii           hybrid_species
+## 10                      Lindsaea lancea var. elatior                  variety
+## 11                      Lindsaea lancea var. falcata                  variety
+## 12                       Lindsaea lancea var. lancea                  variety
+## 13                       Lindsaea lancea var. remota                  variety
+## 14                    Lindsaea lancea quadrangularis not_Genus_epithet_format
+## 15                                  Lindsaea lanceae              possibly_ok
+## 16                        Lindsaea lancea longifolia not_Genus_epithet_format
+## 17                        Lindsaea lancea submontana not_Genus_epithet_format
+## 18                                  Lindsaeae lancea              possibly_ok
+## 19                               Lindsaea cf. lancea                 conferre
+## 20                        Lindsaea lancea semilunata not_Genus_epithet_format
+##                           species
+## 1             Asplenium truncorum
+## 2             Asplenium truncorum
+## 3                 Lindsaea lancea
+## 4          Lindsaea lancea lancea
+## 5         Lindsaea lancea elatior
+## 6         Lindsaea lancea falcata
+## 7      Lindsaea lancea leprieurii
+## 8          Lindsaea lancea remota
+## 9   Lindsaea lancea ×schomburgkii
+## 10                Lindsaea lancea
+## 11                Lindsaea lancea
+## 12                Lindsaea lancea
+## 13                Lindsaea lancea
+## 14 Lindsaea lancea quadrangularis
+## 15               Lindsaea lanceae
+## 16     Lindsaea lancea longifolia
+## 17     Lindsaea lancea submontana
+## 18               Lindsaeae lancea
+## 19                Lindsaea lancea
+## 20     Lindsaea lancea semilunata</code></pre>
+<p>Here, we are interested only in the names assigned with <code>possibly_ok</code> and <code>name_w_authors</code>. Now we will filter the occurrence data within these categories.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">verbatimSpecies_ok &lt;-<span class="st"> </span>species_name_check<span class="op">$</span>verbatimSpecies[species_name_check<span class="op">$</span>speciesStatus <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;possibly_ok&quot;</span>, <span class="st">&quot;name_w_authors&quot;</span>)]</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">df_ok &lt;-<span class="st"> </span>df[df<span class="op">$</span>scientificName <span class="op">%in%</span><span class="st"> </span>verbatimSpecies_ok, ]</a></code></pre></div>
+<p>In this cleaning we went from a total of 2778 occurrences to 1505 occurrences.</p>
+<p>Finally, we can write the resultant occurrence data on disk.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">write.csv</span>(df_ok, <span class="st">&quot;results/occurrence_data.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -22,6 +22,8 @@
 #' @importFrom fs path
 #' @export
 #'
+#' @author Andrea Sánchez-Tapia & Sara Mortara
+#'
 #' @examples
 #' \dontrun{
 #' getGADM(cod = "BRA", level = 0)

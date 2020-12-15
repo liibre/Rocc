@@ -33,6 +33,8 @@
 #'
 #' @export bind_dwc
 #'
+#' @author Sara Mortara & Andrea Sánchez-Tapia
+#'
 bind_dwc <- function(splink_data = NULL,
                       gbif_data = NULL,
                       user_data = NULL,

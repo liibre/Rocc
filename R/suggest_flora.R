@@ -7,6 +7,8 @@
 #'
 #' @importFrom flora trim suggest.names
 #'
+#' @author Sara Mortara & Andrea Sánchez-Tapia
+#'
 #' @export
 #'
 suggest_flora <- function(species) {

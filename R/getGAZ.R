@@ -11,6 +11,8 @@
 #' @importFrom utils download.file unzip
 #' @export
 #'
+#' @author Andrea Sánchez-Tapia & Sara Mortara
+#'
 #' @examples
 #' \dontrun{
 #' getGAZ(cod = "COL", unzip = TRUE)

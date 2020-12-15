@@ -12,6 +12,8 @@
 #' @importFrom utils download.file
 #' @export
 #'
+#' @author Andrea Sánchez-Tapia & Sara Mortara
+#'
 #' @examples
 #' \dontrun{
 #' getWDPA(cod = "BRA", unzip = TRUE)

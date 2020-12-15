@@ -24,6 +24,7 @@
 #' @importFrom utils write.table
 #' @importFrom dplyr bind_rows
 #' @export
+#' @author Sara Mortara & Andrea Sánchez-Tapia
 #'
 rgbif2 <- function(dir = "results/",
                    filename = "output",

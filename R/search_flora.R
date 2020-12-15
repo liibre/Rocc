@@ -22,6 +22,8 @@
 #'
 #' @export
 #'
+#' @author Andrea Sánchez-Tapia & Sara Mortara
+#'
 #' @examples
 #' # All endemic species from the caatinga in Pernambuco
 #' \dontrun{

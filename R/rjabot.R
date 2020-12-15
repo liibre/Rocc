@@ -5,7 +5,7 @@
 #' @inheritParams rspeciesLink
 #'
 #' @return A list of two elements. The first element is a character string containing the url search and the second element is a data.frame with the search result. It also saves the output on disk
-#' @author Sara Mortara
+#' @author Sara Mortara & Andrea Sánchez-Tapia
 #'
 #'
 #' @importFrom jsonlite fromJSON

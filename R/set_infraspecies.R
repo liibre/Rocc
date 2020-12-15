@@ -3,6 +3,8 @@
 #' @param subspecies Species name containing three stings: Genus, species epithet, and infraspecies epithet
 #' @param type Type of infraspecies classification. Any type in: `"var"` or `"subsp"` or `"form"`.
 #'
+#' @author Sara Mortara & Andrea Sánchez-Tapia
+#'
 #' @export
 #' @examples
 #' set_infraspecies("Lindsaea lancea lancea", type = "var")

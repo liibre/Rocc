@@ -39,6 +39,8 @@
 #'
 #' @export
 #'
+#' @author Sara Mortara & Andrea Sánchez-Tapia
+#'
 check_string <- function(species = NULL){
 
   # ö: implement status parasite "f. sp." not f. from forma

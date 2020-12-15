@@ -5,6 +5,8 @@
 #' @importFrom finch dwca_cache
 #' @importFrom finch dwca_read
 #'
+#' @author Andrea Sánchez-Tapia & Sara Mortara
+#'
 #' @export
 update_flora <- function(force_update = FALSE) {
   cache_path <- finch::dwca_cache$cache_path_get()

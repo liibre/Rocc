@@ -11,6 +11,8 @@
 #'
 #' @export
 #'
+#' @author Sara Mortara & Andrea Sánchez-Tapia
+#'
 #' @examples
 #' # single species
 #' check_flora("Dalbergia nigra")
