@@ -1,5 +1,7 @@
 ## Installing and loading the package
 
+<img src="https://raw.githubusercontent.com/liibre/Rocc_logo/master/figs/Rocc_logo.png" align="right" alt="" width="120" />
+
 
 ```
 devtools::install_github("liibre/Rocc")
