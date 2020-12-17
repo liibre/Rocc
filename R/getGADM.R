@@ -71,7 +71,7 @@ getGADM <- function(cod,
 
     },
     finally = {
-      file.inf <- list.files(destfolder, full.names = T)
+      file.inf <- list.files(destfolder, full.names = TRUE)
       empty <- file.inf[file.info(file.inf)[["size"]] == 0]
       if (length(empty) > 0) message("Downloading failed") #check and delete empty files
       unlink(empty)
