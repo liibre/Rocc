@@ -15,3 +15,6 @@ A data frame with the name provided by the user and a new suggested name
 \description{
 Function suggest a valid species name for Brazilian plants
 }
+\author{
+Sara Mortara & Andrea Sánchez-Tapia
+}

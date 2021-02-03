@@ -76,5 +76,5 @@ ex01 <- rspeciesLink(filename = "ex01",
 
 }
 \author{
-Sara Mortara
+Sara Mortara & Andrea Sánchez-Tapia
 }

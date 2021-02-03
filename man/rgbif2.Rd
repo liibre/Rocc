@@ -43,4 +43,6 @@ ex_rgbif <- rgbif2(filename = "ex-gbif",
 }
 \author{
 Sara Mortara & Andrea Sánchez-Tapia
+
+Sara Mortara & Andrea Sánchez-Tapia
 }

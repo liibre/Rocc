@@ -9,15 +9,18 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-devtools::load_all()
+#devtools::load_all()
+library(Rocc)
 library(knitr)
+library(dplyr)
 ```
 
 ## 0. Installing and loading package
 
 ```{r install, eval = FALSE}
 remotes::install_github("liibre/rocc")
-library(rocc)
+library(dplyr)
+library(Rocc)
 ```
 
 ## 1. Download and bind data from different sources

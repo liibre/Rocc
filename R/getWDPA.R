@@ -51,7 +51,7 @@ getWDPA <- function(cod,
     },
     finally = {
       message("deleting empty files") #check and delete empty files
-      file.inf <- list.files(destfolder, full.names = T)
+      file.inf <- list.files(destfolder, full.names = TRUE)
       empty <- file.inf[file.info(file.inf)[["size"]] == 0]
       unlink(empty)
     }

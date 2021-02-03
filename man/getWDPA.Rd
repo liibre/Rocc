@@ -28,3 +28,6 @@ getWDPA(cod = "BRA", unzip = TRUE)
 }
 
 }
+\author{
+Andrea Sánchez-Tapia & Sara Mortara
+}

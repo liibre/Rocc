@@ -18,3 +18,6 @@ Adds infraspecies identification if missing
 set_infraspecies("Lindsaea lancea lancea", type = "var")
 
 }
+\author{
+Sara Mortara & Andrea Sánchez-Tapia
+}

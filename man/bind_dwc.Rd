@@ -74,3 +74,6 @@ Either a data.frame or list with the database fields formatted following DarwinC
 \description{
 Formats fields in the occurrence data frame -either downloaded from a database or provided by the user- according to the DarwinCore standard. Optionally, drops fields not used in data cleaning performed by plantR. In addition, this functions can bind different sources of data after formatting.
 }
+\author{
+Sara Mortara & Andrea Sánchez-Tapia
+}

@@ -49,3 +49,6 @@ search_flora(domain = "Caatinga",
 
 
 }
+\author{
+Andrea Sánchez-Tapia & Sara Mortara
+}
