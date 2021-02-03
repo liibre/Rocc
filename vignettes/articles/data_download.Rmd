@@ -12,7 +12,8 @@ Functions `getGADM()`, `getGaz()`, and `getWDPA()` help download data from the G
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      eval = FALSE) # accepting my onw failures
 devtools::load_all()
 ```
 

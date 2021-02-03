@@ -1,7 +1,8 @@
-## Installing and loading the package
+# Rocc package: R functions to deal with species occurrences
 
 <img src="https://raw.githubusercontent.com/liibre/Rocc_logo/master/figs/Rocc_logo.png" align="right" alt="" width="120" />
 
+## Installing and loading the package
 
 ```
 devtools::install_github("liibre/Rocc")
@@ -41,4 +42,4 @@ library(Rocc)
 
 ## Examples
 
-For more details, see `vignettes` folder.
+For more details, see `Articles` section.

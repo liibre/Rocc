@@ -1,8 +1,8 @@
 ---
-title: "Basic workflow using rocc"
+title: "Basic workflow using Rocc"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Basic workflow using rocc}
+  %\VignetteIndexEntry{Basic workflow using Rocc}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

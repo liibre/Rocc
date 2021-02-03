@@ -101,7 +101,7 @@ search_taxa <- na.omit(as.character(unique(suggest_taxa$species)))
 ```
 
 
-```{r check_taxon} 
+```{r check_taxon, eval = FALSE} 
 list_taxa <- lapply(search_taxa, check_flora)
 ```
 
@@ -111,7 +111,7 @@ Still deciding the output. The columns `synonym` and `scientificName_search` wer
 
 #### *Lindsaea lancea*
 
-```{r lindsaea}
+```{r lindsaea, eval = FALSE}
 # L. lancea
 list_taxa[[1]]$taxon
 list_taxa[[1]]$synonyms
@@ -119,7 +119,7 @@ list_taxa[[1]]$synonyms
 
 #### *Aspidosperma discolor*
 
-```{r aspidosperma}
+```{r aspidosperma, eval = FALSE}
 # para A. discolor
 list_taxa[[2]]$taxon
 list_taxa[[2]]$synonyms

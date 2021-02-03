@@ -17,3 +17,6 @@ update_flora_metadata.txt
 _pkgdown.yml
 vrac
 .travis.yml
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
