@@ -52,6 +52,11 @@ check_string <- function(species = NULL){
   var_string <- "[[:space:]]var\\.|[[:space:]]var[[:space:]]"
   aff_cf <- paste(aff_string, cf_string, sep = "|")
   subsp_var <- paste(subsp_string, var_string, form_string, sep = "|")
+
+  # cleaning undesired spacies
+  species <- trimws(species, whitespace = "[ \\t\\r\\n\U00A0]")
+  species <- gsub("\\t|\\r|\\n|\U00A0", " ", species)
+
   # detecting status
   aff <- stringr::str_detect(species, stringr::regex(aff_string, ignore_case = TRUE))
   cf <- stringr::str_detect(species, stringr::regex(cf_string, ignore_case = TRUE))
