@@ -15,8 +15,8 @@ update_flora <- function(force_update = FALSE) {
   }
   pag <- "http://ipt.jbrj.gov.br/jbrj/archive.do?r=lista_especies_flora_brasil"
   ipt_flora <- finch::dwca_read(input = pag, read = TRUE, encoding = "UTF-8")
-  timestamp <- ipt_flora$emlmeta$additionalMetadata$metadata$gbif$dateStamp
-  writeLines(paste0("Cache path:", cache_path, "Timestamp:", timestamp),
+  timestmp <- ipt.files$emlmeta$dataset$pubDate
+  writeLines(paste0("Cache path:", cache_path, "Timestamp:", timestmp),
              "update_flora_metadata.txt")
   return(ipt_flora)
   #distribution <- ipt_flora$data$distribution.txt
