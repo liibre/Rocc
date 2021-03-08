@@ -26,6 +26,7 @@
 #'}
 #'
 #' @param species species name in a raw format
+#' @param drop_infra Logical. Either to remove any infraspecies classification
 #'
 #' @examples
 #' check_string("Lindsaea lancea var. falcata")
@@ -40,22 +41,23 @@
 #'
 #' @author Sara Mortara & Andrea Sánchez-Tapia
 #'
-check_string <- function(species = NULL){
+check_string <- function(species = NULL,
+                         drop_infra = FALSE){
 
   # ö: implement status parasite "f. sp." not f. from forma
+  # 0. cleaning undesired spacies ####
+  species <- trimws(species, whitespace = "[ \\t\\r\\n\U00A0]")
+  species <- gsub("\\t|\\r|\\n|\U00A0", " ", species)
+
   #1. Open nomenclature and infraspecies class ####
   form_string <- "[[:space:]]f\\.[[:space:]]|[[:space:]]form\\.[[:space:]]"
   inc_string <- "inc\\.[[:space:]]sed\\.|Incertae[[:space:]]sedis"
   aff_string <- "^aff\\.|^aff[[:space:]]|[[:space:]]aff\\.|[[:space:]]aff[[:space:]]"
   cf_string <- "^cf\\.|^cf[[:space:]]|[[:space:]]cf\\.|[[:space:]]cf[[:space:]]"
   subsp_string <-  "[[:space:]]ssp\\.|[[:space:]]subsp\\.|[[:space:]]subsp[[:space:]]|[[:space:]]ssp[[:space:]]"
-  var_string <- "[[:space:]]var\\.|[[:space:]]var[[:space:]]"
+  var_string <- "[[:space:]]var\\.|[[:space:]]var[[:space:]]|f\\.[[:space:]]var[[:space:]]"
   aff_cf <- paste(aff_string, cf_string, sep = "|")
   subsp_var <- paste(subsp_string, var_string, form_string, sep = "|")
-
-  # cleaning undesired spacies
-  species <- trimws(species, whitespace = "[ \\t\\r\\n\U00A0]")
-  species <- gsub("\\t|\\r|\\n|\U00A0", " ", species)
 
   # detecting status
   aff <- stringr::str_detect(species, stringr::regex(aff_string, ignore_case = TRUE))
@@ -70,23 +72,45 @@ check_string <- function(species = NULL){
   check$species_status[aff] <- "affinis"
   check$species_status[cf] <- "conferre"
   check$species_status[subsp] <- "subspecies"
-  check$species_status[var] <- "variety"
   check$species_status[inc] <- "incertae_sedis"
   check$species_status[form] <- "forma"
+  check$species_status[var] <- "variety"
+
   # accessory functions
   clean_open <- function(x)  {
     x_new <- stringr::str_replace(x, stringr::regex(aff_cf, ignore_case = TRUE), " ")
     x_new <- flora::trim(x_new)
     return(x_new)
   }
-  clean_infra <- function(x){
-    x_new <- unlist(lapply(stringr::str_split(x, stringr::regex(subsp_var, ignore_case = TRUE)),
-                           function(x) x[1]))
-    n_strings <- lapply(stringr::str_split(x_new, " "), length)
-    infra_authors <- ifelse(n_strings > 2, TRUE, FALSE)
-    x_new <- sapply(x_new, flora::remove.authors)
-    return(as.character(x_new))
+
+  clean_infra <- function(x, drop_infra){
+    check <- check$species_status
+
+    if (check %in% "subspecies") {
+      check_string <- subsp_string
+      infra_string <- "subsp."
+      }
+    if (check %in% "forma") {
+      check_string <- form_string
+      infra_string <- "f."}
+    if (check %in% "variety") {
+      check_string <- var_string
+      infra_string <- "var."
+      }
+
+    x_list <- stringr::str_split(x, stringr::regex(check_string, ignore_case = TRUE))
+    x_new <-  unlist(lapply(x_list, function(x) x[1]))
+    x2_new <- unlist(lapply(x_list, function(x) x[2]))
+    x_new <- sapply(gsub("f\\.", "", x_new), flora::remove.authors)
+    x2_new <- sapply(gsub("f\\.", "", x2_new), flora::remove.authors)
+    if (drop_infra) {
+      infra_new <- paste(x_new, infra_string)
+    } else {
+      infra_new <- paste(x_new, infra_string, x2_new)
+    }
+    return(as.character(infra_new))
   }
+
   # providing cleaned name
   check$species_new <- NA
   ## affinis e conferre
@@ -101,7 +125,8 @@ check_string <- function(species = NULL){
                                   "forma")] <- clean_infra(check$species[check$species_status
                                                                                %in% c("subspecies",
                                                                                       "variety",
-                                                                                      "forma")])
+                                                                                      "forma")],
+                                                           drop_infra = drop_infra)
   # other types of basic cleaning
   ## first filling species_new for all
   check$species_new <- ifelse(is.na(check$species_new),
@@ -209,10 +234,12 @@ check_string <- function(species = NULL){
   check$species_status[check$species_status %in% c("possibly_ok", "name_w_wrong_case",
                                                                  "subspecies", "variety", "forma")
                               & string_type != "ASCII"] <- "name_w_non_ascii"
-  # padronizando estilo de nomenclatura
-  names(check)[names(check) == "species"] <- 'verbatimSpecies'
-  names(check)[names(check) == "species_new"] <- 'species'
-  names(check)[names(check) == "species_status"] <- 'speciesStatus'
+
+  # Standardizing nomenclature style
+  names(check)[names(check) == "species"] <- "verbatimSpecies"
+  names(check)[names(check) == "species_new"] <- "species"
+  names(check)[names(check) == "species_status"] <- "speciesStatus"
+
   return(check)
 
 }
