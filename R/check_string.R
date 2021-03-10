@@ -83,30 +83,31 @@ check_string <- function(species = NULL,
     return(x_new)
   }
 
-  clean_infra <- function(x, drop_infra){
+  clean_infra <- function(x, drop_infra) {
     check <- check$species_status
-
+    check_str <- " "
+    infra_str <- ""
     if (check %in% "subspecies") {
-      check_string <- subsp_string
-      infra_string <- "subsp."
+      check_str <- subsp_string
+      infra_str <- "subsp."
       }
     if (check %in% "forma") {
-      check_string <- form_string
-      infra_string <- "f."}
+      check_str <- form_string
+      infra_str <- "f."}
     if (check %in% "variety") {
-      check_string <- var_string
-      infra_string <- "var."
+      check_str <- var_string
+      infra_str <- "var."
       }
 
-    x_list <- stringr::str_split(x, stringr::regex(check_string, ignore_case = TRUE))
+    x_list <- stringr::str_split(x, stringr::regex(check_str, ignore_case = TRUE))
     x_new <-  unlist(lapply(x_list, function(x) x[1]))
     x2_new <- unlist(lapply(x_list, function(x) x[2]))
     x_new <- sapply(gsub("f\\.", "", x_new), flora::remove.authors)
     x2_new <- sapply(gsub("f\\.", "", x2_new), flora::remove.authors)
     if (drop_infra) {
-      infra_new <- paste(x_new, infra_string)
+      infra_new <- paste(x_new, infra_str)
     } else {
-      infra_new <- paste(x_new, infra_string, x2_new)
+      infra_new <- paste(x_new, infra_str, x2_new)
     }
     return(as.character(infra_new))
   }

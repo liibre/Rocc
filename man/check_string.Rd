@@ -4,10 +4,12 @@
 \alias{check_string}
 \title{Check in the scientific name string}
 \usage{
-check_string(species = NULL)
+check_string(species = NULL, drop_infra = FALSE)
 }
 \arguments{
 \item{species}{species name in a raw format}
+
+\item{drop_infra}{Logical. Either to remove any infraspecies classification}
 }
 \value{
 Data frame with `verbatimSpecies` as in the original input, `speciesStatus` with the flags in original data and `species` with a suggestion for a more correct species name. See Details for a description of flags in the column `speciesStatus`.
