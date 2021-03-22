@@ -173,7 +173,7 @@ rspeciesLink <- function(dir = "results/",
   }
   #  }
   #  Typus
-  if (Typus == FALSE) {
+  if (!Typus) {
     my_url
   } else {
     my_url <- paste0(my_url, "Typus/Yes/")
@@ -188,7 +188,7 @@ rspeciesLink <- function(dir = "results/",
     }
   }
   # RedList
-  if (RedList == FALSE) {
+  if (RedList) {
     my_url
   } else {
     my_url <- paste0(my_url, "RedList/Yes/")
@@ -212,15 +212,15 @@ rspeciesLink <- function(dir = "results/",
   df <- jsonlite::fromJSON(my_url)$result
   #rrr <- readr::read_tsv(rr, locale = readr::locale(encoding = "UTF-8"))
   if (save) {
-  # creating dir
-  if (!dir.exists(dir)) {dir.create(dir)}
-  fullname <- paste0(dir, filename, ".csv")
-  message(paste0("Writing ", fullname, " on disk."))
-  write.table(dir,
-              fullname,
-              sep = ",",
-              row.names = FALSE,
-              col.names = TRUE)
+    # creating dir
+    if (!dir.exists(dir)) {dir.create(dir)}
+    fullname <- paste0(dir, filename, ".csv")
+    message(paste0("Writing ", fullname, " on disk."))
+    write.table(x = df,
+                file = fullname,
+                sep = ",",
+                row.names = FALSE,
+                col.names = TRUE)
   }
   # if output is empty, return message
   if (is.null(dim(df))) {
