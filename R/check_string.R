@@ -3,7 +3,7 @@
 #' Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc).
 #'
 #' @return
-#' Data frame with `verbatimSpecies` as in the original input, `speciesStatus` with the flags in original data and `species` with a suggestion for a more correct species name. See Details for a description of flags in the column `speciesStatus`.
+#' Data frame with `verbatimSpecies` as in the original input, `speciesStatus` with the flags in original data, `species` with a suggestion for a more correct species name, and `remove_author` a boolean column indicating if the original input had author names. See Details for a description of flags in the column `speciesStatus`.
 #'
 #' @details
 #' Possible flags returned in `species_status`:
@@ -22,8 +22,9 @@
 #'\item{\code{family_as_genus}}{family as genus, not a valid name}
 #'\item{\code{order_as_genus}}{order as genus, not a valid name}
 #'\item{\code{species_nova}}{species name contains an indication of a new species, possibly not yet a valid name}
-#'\item{\code{non_ascii}}{species name has non ASCII characters, not a valid name}
-#'#'\item{\code{hybrid_species}}{hybrid species}
+#'\item{\code{name_w_non_ascii}}{species name has non ASCII characters, not a valid name}
+#'\item{\code{hybrid_species}}{hybrid species}
+#'\item{\code{not_available}}{any species entry related to Not Available (NA) status}
 #'}
 #'
 #' @param species species name in a raw format
