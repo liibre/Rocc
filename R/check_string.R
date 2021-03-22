@@ -27,8 +27,7 @@
 #'}
 #'
 #' @param species species name in a raw format
-#' @param drop_infra Logical. Either to remove any infraspecies classification. Defalts to FALSE
-#' @param drop_author Logial. Either to remove authors in species name. Defaults to TRUE
+#' @param drop_infra Logical. Either to remove any infraspecies classification. Defaults to FALSE
 #'
 #' @examples
 #' check_string("Lindsaea lancea var. falcata")
@@ -52,7 +51,7 @@ check_string <- function(species = NULL,
   species <- trimws(species, whitespace = "[ \\t\\r\\n\U00A0]")
   species <- gsub("\\t|\\r|\\n|\U00A0", " ", species)
 
-  # 1. Open nomenclature and infraspecies class ####
+  # 1. Open nomenclature and infraspecies class --------------------------------
   gr_string <- "[[:space:]]gr\\.[[:space:]]|[[:space:]]gr[[:space:]]"
   form_string <- "[[:space:]]f\\.[[:space:]]sp\\.[[:space:]]|[[:space:]]f\\.[[:space:]]|[[:space:]]form\\.[[:space:]]"
   inc_string <- "inc\\.[[:space:]]sed\\.|Incertae[[:space:]]sedis"
@@ -101,19 +100,19 @@ check_string <- function(species = NULL,
   clean_infra <- function(x, drop_infra){
 
     check_infra <- x$species_status
-    check_string <- NA
-    infra_string <- NA
+    check_str <- NA
+    infra_str <- NA
 
-    check_string[check_infra %in% "subspecies"] <- subsp_string
-    infra_string[check_infra %in% "subspecies"] <- "subsp."
+    check_str[check_infra %in% "subspecies"] <- subsp_string
+    infra_str[check_infra %in% "subspecies"] <- "subsp."
 
-    check_string[check_infra %in% "forma"] <- form_string
-    infra_string[check_infra %in% "forma"] <- "f."
+    check_str[check_infra %in% "forma"] <- form_string
+    infra_str[check_infra %in% "forma"] <- "f."
 
-    check_string[check_infra %in% "variety"] <- var_string
-    infra_string[check_infra %in% "variety"] <- "var."
+    check_str[check_infra %in% "variety"] <- var_string
+    infra_str[check_infra %in% "variety"] <- "var."
 
-    x_list <- stringr::str_split(x$species, stringr::regex(check_string, ignore_case = TRUE))
+    x_list <- stringr::str_split(x$species, stringr::regex(check_str, ignore_case = TRUE))
     x_new <-  unlist(lapply(x_list, function(x) x[1]))
     x2_new <- unlist(lapply(x_list, function(x) x[2]))
     # Creating new names w/o author names
@@ -124,7 +123,7 @@ check_string <- function(species = NULL,
     if (drop_infra) {
       infra_new <- paste(x_new_woa)
     } else {
-      infra_new <- paste(x_new_woa, infra_string, x2_new_woa)
+      infra_new <- paste(x_new_woa, infra_str, x2_new_woa)
     }
     return(c(species = as.character(infra_new),
              author_name = author_name))
@@ -158,9 +157,17 @@ check_string <- function(species = NULL,
                               check$species_new)
 
   # Defining status to prevail
-  prev <- c(open_status, infra_status, "incertae_sedis", "species_nova", "indet")
+  prev <- c(open_status, infra_status, "incertae_sedis", "species_nova", "indet", "not_available")
 
-  # 2. sp. nov. ----------------------------------------------------------------
+  # 2. NA ----------------------------------------------------------------------
+  na_regex <- c("^na$|^nc$")
+  na_id <- stringr::str_detect(check$species, stringr::regex(na_regex, ignore_case = TRUE))
+  check$species_status[is.na(check$species)] <- "not_available"
+  check$species_status[na_id] <- "not_available"
+  check$species_new[check$species_status %in% "not_available"] <- NA
+  check$remove_author[check$species_status %in% "not_available"] <- FALSE
+
+  # 3. sp. nov. ----------------------------------------------------------------
   # sp. nov., spec. nov., sp. n., nov. sp., nov. spec. or n. sp.
   spnov_regex <- "\\ssp\\.\\snov\\.|\\sspec\\.\\snov\\.|\\ssp\\.\\sn\\.|\\snov\\.\\ssp\\.
   |\\snov\\.\\sspec\\.|\\sn\\.\\sp\\."
@@ -174,7 +181,7 @@ check_string <- function(species = NULL,
   check$remove_author[spnov] <- author_spnov
   check$species_new[spnov] <- spnov_new_woa
 
-  # 3. recognizing authors -----------------------------------------------------
+  # 4. recognizing authors -----------------------------------------------------
   no_authors <- sapply(check$species_new,
                        function(x) flora::remove.authors(flora::fixCase(x)))
 
@@ -191,12 +198,14 @@ check_string <- function(species = NULL,
                        sapply(stringr::str_split(no_authors, " "), function(x) paste(x[1], x[2])),
                        no_authors)
 
-  check$species_status[id_authors & !check$species_status %in% c(open_status, infra_status)] <- "possibly_ok"
+  check$species_status[id_authors & !check$species_status %in% c("not_available",
+                                                                 open_status,
+                                                                 infra_status)] <- "possibly_ok"
   check$species_new[id_authors] <- no_authors[id_authors]
   # skipping infraspecific, open nomenclature or sp nova status (authors already removed)
-  check$remove_author[!check$species_status %in% c(infra_status, open_status, "species_nova")] <- id_authors[!check$species_status %in% c(infra_status, open_status, "species_nova")]
+  check$remove_author[!check$species_status %in% c(infra_status, open_status, "species_nova", "not_available")] <- id_authors[!check$species_status %in% c(infra_status, open_status, "species_nova", "not_available")]
 
-  # 4. recognizig digits -------------------------------------------------------
+  # 5. recognizig digits -------------------------------------------------------
   id_digits <- stringr::str_detect(check$species, '\\d') &
     !check$species_status %in% prev
   digits_new <- ifelse(id_digits, trimws(gsub("\\d", "", check$species)),
@@ -206,8 +215,28 @@ check_string <- function(species = NULL,
   check$species_new[id_digits] <- digits_woa
   check$species_status[id_digits] <- "not_name_has_digits"
 
-  # 5. Indet: sp. or genus only ------------------------------------------------
-  indet_regex <- "[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.|[[:space:]]indet\\.|[[:space:]]ind\\.|[[:space:]]sp[[:space:]]"
+  # 6. aceae in first string ---------------------------------------------------
+  gen <- sapply(stringr::str_split(check$species_new, " "),
+                function(x) x[1])
+  id_gen <- endsWith(gen, "aceae")
+  gen_woa <- sapply(gen, remove_authors)
+  check$remove_author[id_gen] <- gen[id_gen] != gen_woa[id_gen]
+  check$species_new[id_gen] <- gen_woa[id_gen]
+  check$species_status[id_gen] <- "family_as_genus"
+
+  # 7. order as genus ----------------------------------------------------------
+  ord <- gen
+  id_ord <- endsWith(ord, "ales")
+  ord_woa <- sapply(ord, remove_authors)
+  check$remove_author[id_ord] <- ord[id_ord] != ord_woa[id_ord]
+  check$species_new[id_ord] <- ord_woa[id_ord]
+  check$species_status[id_ord] <- "order_as_genus"
+
+  # 8. Indet: sp. or genus only ------------------------------------------------
+  indet_sp <- "[[:space:]]sp\\.$|[[:space:]]sp$|[[:space:]]sp\\.|[[:space:]]indet\\.|[[:space:]]ind\\.|[[:space:]]sp[[:space:]]|[[:space:]]sp\\d"
+  indet_str <- paste(c("|^indet", "indeterminada", "unclassified", "undetermined"),
+                      collapse = "$|^")
+  indet_regex <- paste0(indet_sp, indet_str)
   indet_split <- stringr::str_split(check$species_new, " ")
   no_sp <- sapply(indet_split, length) < 2
   indet <- stringr::str_detect(check$species,
@@ -215,22 +244,27 @@ check_string <- function(species = NULL,
                                               ignore_case = TRUE)) &
     !check$species_status %in% prev
   question <- stringr::str_detect(check$species, "\\?")
-  check$species_status[no_sp | indet | question] <- "indet"
-  check$species_new[no_sp | indet | question] <- paste(sapply(indet_split[no_sp | indet | question],
+  indet_id <- (no_sp | indet | question) & !check$species_status %in% c(prev, "family_as_genus", "order_as_genus")
+  check$species_status[indet_id] <- "indet"
+  check$species_new[indet_id] <- paste(sapply(indet_split[indet_id],
                                                               function(x) x[1]), "sp.")
   indet_new <- gsub(paste0(indet_regex, "|\\?"), "",
-                    check$species[no_sp | indet | question])
+                    check$species[indet_id])
   indet_new_woa <- sapply(indet_new, remove_authors)
-  check$remove_author[no_sp | indet | question] <- indet_new != indet_new_woa
+  check$remove_author[indet_id] <- indet_new != indet_new_woa
+  # forcing indet to be indet
+  check$species_new[stringr::str_detect(indet_split, stringr::regex("^indet", ignore_case = TRUE)) &
+                      check$species_status %in% "indet"] <- "indet"
+  check$remove_author[stringr::str_detect(indet_split, stringr::regex("^indet", ignore_case = TRUE)) &
+                      check$species_status %in% "indet"] <- FALSE
 
-
-  # 6. names not matching Genus + species pattern ------------------------------
+  # 9. names not matching Genus + species pattern ------------------------------
   id_not_gensp <- sapply(stringr::str_split(check$species_new, " "),
                          length) > 2 &
     !check$species_status %in% c(prev, "species_nova")
   check$species_status[id_not_gensp] <- "not_Genus_epithet_format"
 
-  # 7. case --------------------------------------------------------------------
+  # 10. case --------------------------------------------------------------------
   case <- sapply(check$species_new, flora::fixCase)
   # aff cf subsp var e indet prevalescem
   id_case <- check$species_new != case &
@@ -238,19 +272,7 @@ check_string <- function(species = NULL,
   check$species_status[id_case] <- "name_w_wrong_case"
   check$species_new[id_case] <- case[id_case]
 
-  # 8. aceae in first string ---------------------------------------------------
-  gen <- sapply(stringr::str_split(check$species_new, " "),
-                function(x) x[1])
-  id_gen <- endsWith(gen, "aceae")
-  check$species_status[id_gen] <- "family_as_genus"
-
-  # 9. order as genus ----------------------------------------------------------
-  ord <- sapply(stringr::str_split(check$species_new, " "),
-                function(x) x[1])
-  id_ord <- endsWith(gen, "ales")
-  check$species_status[id_ord] <- "order_as_genus"
-
-  # 10. hybrid -----------------------------------------------------------------
+  # 11. hybrid -----------------------------------------------------------------
   hybrid_symbol <- str_detect(check$species, "\u00D7")
   hybrid_string <- "[[:space:]]x[[:space:]]|[[:space:]]X[[:space:]]"
   hybrid_x <- stringr::str_detect(check$species,
@@ -268,21 +290,23 @@ check_string <- function(species = NULL,
   check$species_new[hybrid] <- hybrid_new_woa[hybrid]
   check$remove_author[hybrid] <- author_hybrid[hybrid]
 
-  # 11 abreviated genus --------------------------------------------------------
+  # 12 abreviated genus --------------------------------------------------------
   genus <- sapply(str_split(check$species_new, " "), function(x) x[1])
   abbrev_gen <- gsub("\\.", "", genus)
   char_gen <- nchar(abbrev_gen)
   abbrev_gen <- char_gen == 1
   check$species_status[abbrev_gen] <- "abbreviated_genus"
 
-  # 12. possibly ok ------------------------------------------------------------
+  # 13. possibly ok ------------------------------------------------------------
   check$species_status[is.na(check$species_status)] <- "possibly_ok"
 
-  # 13. non-ascii --------------------------------------------------------------
+  # 14. non-ascii --------------------------------------------------------------
   string_type <- stringi::stri_enc_mark(check$species_new)
-  check$species_status[check$species_status %in% c("possibly_ok", "name_w_wrong_case",
-                                                   "subspecies", "variety", "forma")
-                       & string_type != "ASCII"] <- "name_w_non_ascii"
+  nonascii_id <- check$species_status %in% c("possibly_ok", "name_w_wrong_case", "indet",
+                                             "subspecies", "variety", "forma") & string_type != "ASCII"
+  check$species_status[nonascii_id] <- "name_w_non_ascii"
+  # forcing removal of sp.
+  check$species_new[nonascii_id] <- gsub(" sp\\.$", "", check$species_new[nonascii_id])
 
   # Standardizing nomenclature style
   names(check)[names(check) == "species"] <- "verbatimSpecies"
