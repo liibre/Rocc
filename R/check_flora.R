@@ -45,6 +45,9 @@ check_flora <- function(species,
     api <- "http://servicos.jbrj.gov.br/flora/taxon/"
     search_sp <- gsub(" ", "%20", x)
     res <- jsonlite::fromJSON(paste0(api, search_sp))
+    sp <- paste(res$result$genus, res$result$specificepithet)
+    cual <- which(sp == x)
+    res$result <- res$result[cual,]
     return(res)
   }
 
