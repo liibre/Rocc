@@ -18,7 +18,7 @@ library(dplyr)
 ## 0. Installing and loading package
 
 ```{r install, eval = FALSE}
-remotes::install_github("liibre/rocc")
+remotes::install_github("liibre/Rocc")
 library(dplyr)
 library(Rocc)
 ```
@@ -92,7 +92,7 @@ df_ok <- df[df$scientificName %in% verbatimSpecies_ok, ]
 
 ```
 
-In this cleaning we went from a total of `r nrow(df)` occurrences to `r 1505` occurrences. 
+In this cleaning we went from a total of `r nrow(df)` occurrences to `r nrow(df_ok)` occurrences. 
 
 Finally, we can write the resultant occurrence data on disk. 
 

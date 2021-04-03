@@ -16,10 +16,10 @@ devtools::load_all()
 
 Installing and loading the package:
 
-`devtools::install_github("saramortara/rocc")`
+`devtools::install_github("liibre/Rocc")`
 
 ```{r setup, eval = FALSE}
-library(rocc)
+library(Rocc)
 ```
 
 This package downloads information from the [speciesLink API](http://api.splink.org.br/). It generates the desired url and uses functions from `jsonlite` package to GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from [CRIA](http://www.cria.org.br/) (Centro de Referência em Informação Ambiental) :)
