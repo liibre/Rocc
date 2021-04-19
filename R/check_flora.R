@@ -24,7 +24,7 @@
 #'
 check_flora <- function(species,
                         get_synonyms = TRUE,
-                        infraspecies = FALSE) {
+                        infraspecies = TRUE) {
   # equivalencia de campos flora2020 e DwC
   campos <- c(
     taxonID = "taxonid",
@@ -85,12 +85,13 @@ check_flora <- function(species,
     out$taxonomicStatus[out$taxonomicStatus == ""] <- NA
     #out <- out[out$taxonomicstatus %in% "NOME_ACEITO", ]
     # creating column w/ scientificName w/o author
-    out$species <- paste(out$genus, out$specificEpithet)
+    out$species <- out$verbatimSpecies #eu queria entender esta implicacao
     # removing infraspecies information
     if (is.null(out)) {
       out <- out
     } else {
       if (infraspecies == FALSE) {
+        #se a busca original eh um infra aqui fica vazio
         out <- out[is.na(out$infraspecificEpithet), ]
       } else {
         out <- out
@@ -107,14 +108,21 @@ check_flora <- function(species,
                         "source",
                         "references")
         synonyms <- synonyms[, !names(synonyms) %in% syn_remove]
+        if (infraspecies == FALSE) {
         synonyms_base <- out[out$taxonomicStatus %in% "NOME_ACEITO"
                              & is.na(out$infraspecificEpithet), ]
+        }
+        if (infraspecies) {
+        synonyms_base <- out[out$taxonomicStatus %in% "NOME_ACEITO", ]
         synonyms_base <- synonyms_base[, c('taxonID', 'species')]
+        }
         names(synonyms_base) <- c("taxonID_base", "species_base")
         # creating column w/ scientificName w/o author
-        syn_species <- paste(synonyms$genus, synonyms$specificEpithet)
+        syn_species <- tidyr::unite(synonyms, sp, genus,specificEpithet, infraspecificEpithet, sep = " ", na.rm = T, remove = T)$sp
         # juntando a info do basinomio com o output de synonyms
-        synonyms <- cbind(synonyms, synonym_species = syn_species, synonyms_base)
+        synonyms <- cbind(synonyms,
+                          synonym_species = syn_species,
+                          synonyms_base)
       } else {
         synonyms <- NULL
       }
