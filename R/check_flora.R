@@ -8,6 +8,7 @@
 #' A list with one or two elements. If `get_synonyms = TRUE` the second element of the list contains the names and additional information of synonyms or a `NULL` object if the species has no synonyms.
 #'
 #' @importFrom flora trim suggest.names
+#' @importFrom tidyr unite
 #'
 #' @export
 #'
@@ -45,8 +46,11 @@ check_flora <- function(species,
     api <- "http://servicos.jbrj.gov.br/flora/taxon/"
     search_sp <- gsub(" ", "%20", x)
     res <- jsonlite::fromJSON(paste0(api, search_sp))
-    sp <- paste(res$result$genus, res$result$specificepithet)
-    cual <- which(sp == x)
+    no_var <- gsub("var\\. ", "", x)
+    no_subsp <- gsub("subsp\\. ", "", no_var)
+
+    sp <- tidyr::unite(res$result ,col = sp, genus, specificepithet, infraspecificepithet, sep = " ", na.rm = T, remove = T)$sp
+    cual <- which(sp == no_subsp)
     res$result <- res$result[cual,]
     return(res)
   }
