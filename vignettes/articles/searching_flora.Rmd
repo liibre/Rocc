@@ -38,7 +38,7 @@ Function `search_flora()` returns lists of scientific names (in full format) for
 - endemics or not from Brazil
 
 ```{r library, eval = F}
-library(rocc)
+library(Rocc)
 ```
 
 ```{r load, echo = FALSE, warning=FALSE}

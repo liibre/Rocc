@@ -107,7 +107,7 @@ list_taxa <- lapply(search_taxa, check_flora)
 
 ### Output
 
-Still deciding the output. The columns `synonym` and `scientificName_search` were additioned by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
+Still deciding the output. The columns `synonym` and `scientificName_search` were added by hand inside function, other columns are exactly the same as in the API of Brazilian Flora 2020. 
 
 #### *Lindsaea lancea*
 
