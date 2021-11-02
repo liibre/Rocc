@@ -16,8 +16,8 @@ library(knitr)
 ## 0. Installing and loading package
 
 ```{r eval = FALSE}
-remotes::install_github("saramortara/rocc")
-library(rocc)
+remotes::install_github("liibre/Rocc")
+library(Rocc)
 ```
 
 

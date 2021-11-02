@@ -1,4 +1,4 @@
-# Rocc package: R functions to deal with species occurrences
+# Rocc package: management and analysis of species occurrence data
 
 <img src="https://raw.githubusercontent.com/liibre/Rocc_logo/master/figs/Rocc_logo.png" align="right" alt="" width="120" />
 
