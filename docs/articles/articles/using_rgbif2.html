@@ -105,7 +105,7 @@
     
     
 <p>Installing and loading the package:</p>
-<p><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("saramortara/rocc")</a></code></p>
+<p><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("liibre/Rocc")</a></code></p>
 <p>This package also downloads records from from <a href="https://www.gbif.org/">GBIF</a> and <a href="http://jabot.jbrj.gov.br/v3/consulta.php">jabot</a> collections. The function <code><a href="../../reference/rgbif2.html">rgbif2()</a></code> encapulates funtions from <strong>rgbif</strong> package to receive a species scientific name and return the output as a .csv file written on disk.</p>
 <div id="using-the-funtion-rgbif2" class="section level1">
 <h1 class="hasAnchor">
@@ -118,14 +118,14 @@
 <span class="co">#&gt; Writing results/gbif-01.csv on disk.</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">g01</span><span class="op">)</span>
-<span class="co">#&gt; [1]  3 79</span>
+<span class="co">#&gt; [1]  4 83</span>
 
 <span class="va">g02</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/rgbif2.html">rgbif2</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"gbif-02"</span>, 
               species <span class="op">=</span> <span class="st">"Aspidosperma melanocalyx"</span><span class="op">)</span>
 <span class="co">#&gt; Making request to GBIF...</span>
 <span class="co">#&gt; Writing results/gbif-02.csv on disk.</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">g02</span><span class="op">)</span>
-<span class="co">#&gt; [1] 500 159</span></code></pre></div>
+<span class="co">#&gt; [1] 500 167</span></code></pre></div>
 </div>
   </div>
 

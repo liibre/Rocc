@@ -49,74 +49,82 @@ check_flora <- function(species,
   }
 
   # fazendo a busca
-  res <- search_flora(species)
-  # tem na flora?
-  success <- res$success & !is.null(res$result)
+  fail_message <- "Flora 2020 API is out of service"
+  res <- tryCatch(search_flora(species), error = function(e) e, finally = print(fail_message))
 
-  if (success == FALSE) {
-    message("species scientific name not found in Brazilian Flora 2020")
-    res <- NULL
-  } else {
-    # output taxon ####
-    cols_remove <- c("SINONIMO", "NOME ACEITO",
-                     "higherclassification", "source",
-                     "references")
-    out <- res$result[, !names(res$result) %in% cols_remove]
-    # mudando nomes para padrao DwC + recente:
-    names(out) <- names(campos)
-    # output synonym
-    synonyms <- res$result$SINONIMO[[1]]
-    # acrescentando coluna em out com sinonimo
-    out$synonyms <- ifelse(!is.null(synonyms$taxonid),
-                           TRUE,
-                           FALSE)
-    # acrescentando coluna com nome original da busca
-    out$verbatimSpecies <- species
-    # guardando se tem nome aceito
-    accepted_name <- sum(out$taxonomicStatus == "NOME_ACEITO") >= 1
-    # transformando vazio em NA no taxonomicstatus
-    out$taxonomicStatus[out$taxonomicStatus == ""] <- NA
-    #out <- out[out$taxonomicstatus %in% "NOME_ACEITO", ]
-    # creating column w/ scientificName w/o author
-    out$species <- paste(out$genus, out$specificEpithet)
-    # removing infraspecies information
-    if (is.null(out)) {
-      out <- out
+  # checando se a busca funcionou
+  if (!"error" %in% class(res)) {
+    #res <- search_flora(species)
+
+    # tem na flora?
+    success <- res$success & !is.null(res$result)
+
+    if (success == FALSE) {
+      message("species scientific name not found in Brazilian Flora 2020")
+      res <- NULL
     } else {
-      if (infraspecies == FALSE) {
-        out <- out[is.na(out$infraspecificEpithet), ]
-      } else {
+      # output taxon ####
+      cols_remove <- c("SINONIMO", "NOME ACEITO",
+                       "higherclassification", "source",
+                       "references")
+      out <- res$result[, !names(res$result) %in% cols_remove]
+      # mudando nomes para padrao DwC + recente:
+      names(out) <- names(campos)
+      # output synonym
+      synonyms <- res$result$SINONIMO[[1]]
+      # acrescentando coluna em out com sinonimo
+      out$synonyms <- ifelse(!is.null(synonyms$taxonid),
+                             TRUE,
+                             FALSE)
+      # acrescentando coluna com nome original da busca
+      out$verbatimSpecies <- species
+      # guardando se tem nome aceito
+      accepted_name <- sum(out$taxonomicStatus == "NOME_ACEITO") >= 1
+      # transformando vazio em NA no taxonomicstatus
+      out$taxonomicStatus[out$taxonomicStatus == ""] <- NA
+      #out <- out[out$taxonomicstatus %in% "NOME_ACEITO", ]
+      # creating column w/ scientificName w/o author
+      out$species <- paste(out$genus, out$specificEpithet)
+      # removing infraspecies information
+      if (is.null(out)) {
         out <- out
-      }
-    }
-
-    # output sinonimo ####
-    # criando coluna com o basinômio em synonyms
-    if (get_synonyms & accepted_name) {
-      if (!is.null(synonyms$taxonid) & accepted_name) {
-        # mudando nomes para DwC + recente:
-        names(synonyms) <- names(campos.syn)
-        syn_remove <- c("higherClassification",
-                        "source",
-                        "references")
-        synonyms <- synonyms[, !names(synonyms) %in% syn_remove]
-        synonyms_base <- out[out$taxonomicStatus %in% "NOME_ACEITO"
-                             & is.na(out$infraspecificEpithet), ]
-        synonyms_base <- synonyms_base[, c('taxonID', 'species')]
-        names(synonyms_base) <- c("taxonID_base", "species_base")
-        # creating column w/ scientificName w/o author
-        syn_species <- paste(synonyms$genus, synonyms$specificEpithet)
-        # juntando a info do basinomio com o output de synonyms
-        synonyms <- cbind(synonyms, synonym_species = syn_species, synonyms_base)
       } else {
-        synonyms <- NULL
+        if (infraspecies == FALSE) {
+          out <- out[is.na(out$infraspecificEpithet), ]
+        } else {
+          out <- out
+        }
       }
-      # gerando o output
-      res <- list(taxon = out,
-                  synonyms = synonyms)
-    } else {
-      res <- list(taxon = out)
-    }
-  }
-  return(res)
+
+      # output sinonimo ####
+      # criando coluna com o basinômio em synonyms
+      if (get_synonyms & accepted_name) {
+        if (!is.null(synonyms$taxonid) & accepted_name) {
+          # mudando nomes para DwC + recente:
+          names(synonyms) <- names(campos.syn)
+          syn_remove <- c("higherClassification",
+                          "source",
+                          "references")
+          synonyms <- synonyms[, !names(synonyms) %in% syn_remove]
+          synonyms_base <- out[out$taxonomicStatus %in% "NOME_ACEITO"
+                               & is.na(out$infraspecificEpithet), ]
+          synonyms_base <- synonyms_base[, c('taxonID', 'species')]
+          names(synonyms_base) <- c("taxonID_base", "species_base")
+          # creating column w/ scientificName w/o author
+          syn_species <- paste(synonyms$genus, synonyms$specificEpithet)
+          # juntando a info do basinomio com o output de synonyms
+          synonyms <- cbind(synonyms, synonym_species = syn_species, synonyms_base)
+        } else {
+          synonyms <- NULL
+        }
+        # gerando o output
+        res <- list(taxon = out,
+                    synonyms = synonyms)
+      } else {
+        res <- list(taxon = out)
+      }
+    } # end of success if
+    return(res)
+
+  } # end of search test if
 }

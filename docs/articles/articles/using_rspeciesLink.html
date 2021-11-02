@@ -105,9 +105,9 @@
     
     
 <p>Installing and loading the package:</p>
-<p><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("saramortara/rocc")</a></code></p>
+<p><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("liibre/Rocc")</a></code></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rocc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/liibre/rocc">Rocc</a></span><span class="op">)</span></code></pre></div>
 <p>This package downloads information from the <a href="http://api.splink.org.br/">speciesLink API</a>. It generates the desired url and uses functions from <code>jsonlite</code> package to GET the url and save the output as a csv file. The speciesLink API is a courtesy of Sidnei de Souza from <a href="http://www.cria.org.br/">CRIA</a> (Centro de Referência em Informação Ambiental) :)</p>
 <p>See <code><a href="../../reference/rspeciesLink.html">?rspeciesLink</a></code> for all search options. Bellow function’s arguments.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -151,8 +151,6 @@
 <p>Checking colnames in data output.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ex01</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></code></pre></div>
-<pre><code>#&gt; Warning in kable_pipe(x = structure(character(0), .Dim = c(0L, 0L), .Dimnames =
-#&gt; list(: The table should have a header (column names)</code></pre>
 <p>|| || || ||</p>
 </div>
 <div id="example-2-specifying-collection-of-origin-and-specimens-with-image" class="section level2">
@@ -160,7 +158,7 @@
 <a href="#example-2-specifying-collection-of-origin-and-specimens-with-image" class="anchor"></a>Example 2: specifying collection of origin and specimens with image</h2>
 <p>Search for <em>Rauvolfia selowii</em> and <em>Cantinoa althaeifolia</em>. Now using <code>collectioncode</code> and <code>Images</code> arguments.</p>
 <p>Same as: <a href="http://api.splink.org.br/records/CollectionCode/uec/scientificname/Rauvolfia%20sellowii/Cantinoa%20althaeifolia/Images/yes">http://api.splink.org.br/records/CollectionCode/uec/scientificname/Rauvolfia%20sellowii/Cantinoa%20althaeifolia/Images/yes</a></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex02</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/rspeciesLink.html">rspeciesLink</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"ex02"</span>,
                      collectionCode <span class="op">=</span> <span class="st">"uec"</span>,
                      species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rauvolfia sellowii"</span>, 
@@ -169,12 +167,12 @@
 <span class="co">#&gt; Making request to speciesLink...</span>
 <span class="co">#&gt; Writing results/ex02.csv on disk.</span></code></pre></div>
 <p>Checking again if species are in the search.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># again species are in the output</span>
 <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Rauvolfia sellowii"</span>, <span class="st">"Cantinoa althaeifolia"</span><span class="op">)</span> <span class="op">%in%</span> <span class="va">ex02</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">scientificName</span>
 <span class="co">#&gt; [1] FALSE FALSE</span></code></pre></div>
 <p>Checking url used in the search.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex02</span><span class="op">$</span><span class="va">url</span>
 <span class="co">#&gt; NULL</span>
 <span class="co"># check output</span>
@@ -185,7 +183,7 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">ex02</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>
 <span class="co">#&gt;  NULL</span></code></pre></div>
 <p>Is data only from UEC collection?</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># check fiel collectioncode</span>
 <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">ex02</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">collectionCode</span><span class="op">)</span>
 <span class="co">#&gt; NULL</span></code></pre></div>
@@ -194,7 +192,7 @@
 <h2 class="hasAnchor">
 <a href="#example-3-testing-coordinates-quality-selection" class="anchor"></a>Example 3: testing coordinates quality selection</h2>
 <p>For species <em>Tillandsia stricta</em>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex03</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/rspeciesLink.html">rspeciesLink</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"ex03"</span>,
                      species <span class="op">=</span> <span class="st">"Tillandsia stricta"</span>,
                      Coordinates <span class="op">=</span> <span class="st">"Yes"</span>,
@@ -202,11 +200,11 @@
 <span class="co">#&gt; Making request to speciesLink...</span>
 <span class="co">#&gt; Writing results/ex03.csv on disk.</span></code></pre></div>
 <p>Checking if species is in the output.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="st">"Tillandsia stricta"</span><span class="op">%in%</span><span class="va">ex03</span><span class="op">$</span><span class="va">data</span><span class="op">$</span><span class="va">scientificName</span>
 <span class="co">#&gt; [1] FALSE</span></code></pre></div>
 <p>Checking url and output.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex03</span><span class="op">$</span><span class="va">url</span>
 <span class="co">#&gt; NULL</span>
 <span class="co"># output check</span>
@@ -215,7 +213,7 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ex03</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>
 <span class="co">#&gt; NULL</span></code></pre></div>
 <p>Now with another selection of coordinate quality.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># another selection of coordinates quality</span>
 <span class="va">ex03b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/rspeciesLink.html">rspeciesLink</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"ex03b"</span>,
                       species <span class="op">=</span> <span class="st">"Tillandsia stricta"</span><span class="op">)</span>
@@ -223,7 +221,7 @@
 <span class="co">#&gt; Writing results/ex03b.csv on disk.</span>
                    <span class="co">#coordinatesQuality = "Bad")</span></code></pre></div>
 <p>Checking url and output.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex03b</span><span class="op">$</span><span class="va">url</span>
 <span class="co">#&gt; NULL</span>
 <span class="co"># check output</span>
@@ -236,7 +234,7 @@
 <h2 class="hasAnchor">
 <a href="#example-4-only-plant-species-in-iucn-red-list-in-a-particular-geographic-area" class="anchor"></a>Example 4: Only plant species in IUCN Red List in a particular geographic area</h2>
 <p>This example searches for 100 herbarium plants collected in Mariana county (Minas Gerais state, Brazil) that are in the IUCN Red List.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex04</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/rspeciesLink.html">rspeciesLink</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"ex04"</span>,
                      Scope <span class="op">=</span> <span class="st">"plants"</span>, 
                      basisOfRecord <span class="op">=</span> <span class="st">"PreservedSpecimen"</span>,
@@ -247,7 +245,7 @@
                      MaxRecords <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="co">#&gt; Making request to speciesLink...</span>
 <span class="co">#&gt; Writing results/ex04.csv on disk.</span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ex04</span><span class="op">$</span><span class="va">data</span><span class="op">)</span>
 <span class="co">#&gt; NULL</span></code></pre></div>
 </div>
@@ -255,14 +253,14 @@
 <h2 class="hasAnchor">
 <a href="#example-5" class="anchor"></a>Example 5:</h2>
 <p>Checks for synonyms on <a href="http://floradobrasil.jbrj.gov.br/reflora/listaBrasil/PrincipalUC/PrincipalUC.do;jsessionid=4887DC37EAB2ECF4A6754924CFD60AFB#CondicaoTaxonCP">Flora do Brasil 2020</a>, the official plant list for taxonomic nomenclature.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex05</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/rspeciesLink.html">rspeciesLink</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"ex05"</span>,
                      species <span class="op">=</span> <span class="st">"Tillandsia stricta"</span>, 
                      Synonyms <span class="op">=</span> <span class="st">"flora2020"</span><span class="op">)</span>
 <span class="co">#&gt; Making request to speciesLink...</span>
 <span class="co">#&gt; Writing results/ex05.csv on disk.</span></code></pre></div>
 <p>There is a limit of nine species for requiring to check for synonyms. If the lenght of species name vector is &gt; 9, function stops.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tensp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
   <span class="st">"Tillandsia stricta"</span>, <span class="st">"Rauvolfia sellowii"</span>, <span class="st">"Cantinoa althaeifolia"</span>,
   <span class="st">"Eugenia platyphylla"</span>,<span class="st">"Chaetocalyx acutifolia"</span>, <span class="st">"Asplenium serra"</span>, 
@@ -270,7 +268,7 @@
   <span class="st">"Asplenium triquetrum"</span>
             <span class="op">)</span></code></pre></div>
 <p>Function stops if argument <code>Synonyms</code> is used with more than nine species. If</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ex05</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/rspeciesLink.html">rspeciesLink</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"ex05"</span>,
                      species <span class="op">=</span> <span class="va">tensp</span>, 
                      Synonyms <span class="op">=</span> <span class="st">"flora2020"</span><span class="op">)</span></code></pre></div>
@@ -284,10 +282,10 @@
 <h3 class="hasAnchor">
 <a href="#checking-if-files-were-written-on-disk" class="anchor"></a>Checking if files were written on disk</h3>
 <p>Listing files on list.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">resu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">"results"</span>, pattern <span class="op">=</span> <span class="st">'.csv'</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>All outputs are readable.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all.resu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">resu</span>, <span class="va">read.csv</span><span class="op">)</span></code></pre></div>
 </div>
 </div>

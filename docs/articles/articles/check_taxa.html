@@ -108,8 +108,8 @@
 <h2 class="hasAnchor">
 <a href="#installing-and-loading-package" class="anchor"></a>0. Installing and loading package</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"saramortara/rocc"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rocc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"liibre/Rocc"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/liibre/rocc">Rocc</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="string-check" class="section level2">
 <h2 class="hasAnchor">
@@ -171,303 +171,366 @@
              <span class="st">"Myrcia multifloravar.glaucensis"</span><span class="op">)</span>
 
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/check_string.html">check_string</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning in stri_detect_regex(string, pattern, negate = negate, opts_regex =
+## opts(pattern)): argument is not an atomic vector; coercing
+
+## Warning in stri_detect_regex(string, pattern, negate = negate, opts_regex =
+## opts(pattern)): argument is not an atomic vector; coercing</code></pre>
 <p>Checking the output of <code><a href="../../reference/check_string.html">check_string()</a></code></p>
 <table class="table">
 <colgroup>
-<col width="44%">
-<col width="19%">
-<col width="35%">
+<col width="42%">
+<col width="18%">
+<col width="28%">
+<col width="10%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">verbatimSpecies</th>
 <th align="left">speciesStatus</th>
 <th align="left">species</th>
+<th align="left">remove_author</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">S polyphylla</td>
 <td align="left">abbreviated_genus</td>
 <td align="left">S polyphylla</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Aspidosperma aff. discolor</td>
 <td align="left">affinis</td>
 <td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">Aspidosperma Aff. discolor</td>
 <td align="left">affinis</td>
 <td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Aspidosperma aff. discolor A.DC.</td>
 <td align="left">affinis</td>
-<td align="left">Aspidosperma discolor A.DC.</td>
+<td align="left">Aspidosperma discolor</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">Asplenium Aff. truncorum</td>
 <td align="left">affinis</td>
 <td align="left">Asplenium truncorum</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Lychnophora staavioides aff. uniflora</td>
 <td align="left">affinis</td>
 <td align="left">Lychnophora staavioides uniflora</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">aff. Piper dilatatum</td>
 <td align="left">affinis</td>
 <td align="left">Piper dilatatum</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Aspidosperma cf. discolor</td>
 <td align="left">conferre</td>
 <td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">Aspidosperma CF. discolor</td>
 <td align="left">conferre</td>
 <td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Aspidosperma cf.discolor</td>
 <td align="left">conferre</td>
 <td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">Aspidosperma cf. discolor A.DC.</td>
 <td align="left">conferre</td>
-<td align="left">Aspidosperma discolor A.DC.</td>
+<td align="left">Aspidosperma discolor</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">Cf. Lagenocarpus cf. rigidus</td>
 <td align="left">conferre</td>
-<td align="left">Lagenocarpus cf. rigidus</td>
+<td align="left">Lagenocarpus c rigidus</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">cf. Piper dilatatum</td>
 <td align="left">conferre</td>
 <td align="left">Piper dilatatum</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Apocynaceae Aspidosperma</td>
 <td align="left">family_as_genus</td>
-<td align="left">Apocynaceae aspidosperma</td>
+<td align="left">Apocynaceae</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">Bowlesia incana f. crassifolia</td>
 <td align="left">forma</td>
 <td align="left">Bowlesia incana</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Peronospora hyoscyami f. sp. tabacina Skalický</td>
 <td align="left">forma</td>
 <td align="left">Peronospora hyoscyami</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">Anemia x elephantensis</td>
 <td align="left">hybrid_species</td>
 <td align="left">Anemia ×elephantensis</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Catasetum ×evangelistae V.P.Castro &amp; G.F.Carr</td>
 <td align="left">hybrid_species</td>
-<td align="left">Catasetum ×evangelistae V.P.Castro &amp; G.F.Carr</td>
+<td align="left">Catasetum ×evangelistae</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">Catasetum ×splendens Cogn.</td>
 <td align="left">hybrid_species</td>
-<td align="left">Catasetum ×splendens Cogn.</td>
+<td align="left">Catasetum ×splendens</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">Drosera ×fontinalis Rivadavia</td>
 <td align="left">hybrid_species</td>
-<td align="left">Drosera ×fontinalis Rivadavia</td>
+<td align="left">Drosera ×fontinalis</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">Salvinia ×delasotae C.V. Miranda &amp; Schwartsb.</td>
 <td align="left">hybrid_species</td>
-<td align="left">Salvinia ×delasotae C.V. Miranda &amp; Schwartsb.</td>
+<td align="left">Salvinia ×delasotae</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
 <td align="left">Syagrus ×andrequiceana</td>
 <td align="left">hybrid_species</td>
 <td align="left">Syagrus ×andrequiceana</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">incertae sedis</td>
 <td align="left">incertae_sedis</td>
 <td align="left">incertae sedis</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Agalinis itambensisxangustifolia?</td>
 <td align="left">indet</td>
-<td align="left">Agalinis</td>
+<td align="left">Agalinis sp.</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">Aspidosperma sp. discolor</td>
 <td align="left">indet</td>
-<td align="left">Aspidosperma discolor</td>
+<td align="left">Aspidosperma sp.</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
+<td align="left">Asplenium sp.</td>
+<td align="left">indet</td>
+<td align="left">Asplenium sp.</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
 <td align="left">Asplenium sp 2</td>
 <td align="left">indet</td>
-<td align="left">Asplenium sp</td>
-</tr>
-<tr class="odd">
 <td align="left">Asplenium sp.</td>
-<td align="left">indet</td>
-<td align="left">Asplenium sp.</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
-<td align="left">Byrsonima rich.</td>
-<td align="left">indet</td>
-<td align="left">Byrsonima</td>
-</tr>
-<tr class="odd">
 <td align="left">Entrophospora R.N. Ames &amp; R.W. Schneid. 1979</td>
 <td align="left">indet</td>
-<td align="left">Entrophospora</td>
-</tr>
-<tr class="even">
-<td align="left">Aspidosperma discolor A.DC.</td>
-<td align="left">name_w_authors</td>
-<td align="left">Aspidosperma discolor</td>
+<td align="left">Entrophospora sp.</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
-<td align="left">Aspidosperma discolor A. &amp; DC.</td>
-<td align="left">name_w_authors</td>
-<td align="left">Aspidosperma discolor</td>
-</tr>
-<tr class="even">
-<td align="left">Bla bla Fulano f.</td>
-<td align="left">name_w_authors</td>
-<td align="left">Bla bla</td>
-</tr>
-<tr class="odd">
-<td align="left">Cyrtocymura harleyi (H.Rob.) H.Rob.</td>
-<td align="left">name_w_authors</td>
-<td align="left">Cyrtocymura harleyi</td>
-</tr>
-<tr class="even">
-<td align="left">Leandra euphorbioides (Naudin) D`El Rei Souza &amp; Baumgratz</td>
-<td align="left">name_w_authors</td>
-<td align="left">Leandra euphorbioides</td>
-</tr>
-<tr class="odd">
-<td align="left">Miconia albicans (Sw.) Triana</td>
-<td align="left">name_w_authors</td>
-<td align="left">Miconia albicans</td>
-</tr>
-<tr class="even">
-<td align="left">Miconia albicans (Sw.) TRIana</td>
-<td align="left">name_w_authors</td>
-<td align="left">Miconia albicans</td>
-</tr>
-<tr class="odd">
-<td align="left">Phaseolus robustus Piper</td>
-<td align="left">name_w_authors</td>
-<td align="left">Phaseolus robustus</td>
-</tr>
-<tr class="even">
 <td align="left">Chamaecrista asplenÃ¼plia</td>
 <td align="left">name_w_non_ascii</td>
 <td align="left">Chamaecrista asplenã¼plia</td>
+<td align="left">FALSE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Aspidosperma Discolor</td>
 <td align="left">name_w_wrong_case</td>
 <td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Aspidosperma discolor A. &amp; DC.</td>
+<td align="left">name_w_wrong_case</td>
+<td align="left">Aspidosperma discolor a. &amp; dc.</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
+<td align="left">Aspidosperma discolor A.DC.</td>
+<td align="left">name_w_wrong_case</td>
+<td align="left">Aspidosperma discolor a.dc.</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Bla bla Fulano f.</td>
+<td align="left">name_w_wrong_case</td>
+<td align="left">Bla bla fulano f.</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Miconia albicans (Sw.) Triana</td>
+<td align="left">name_w_wrong_case</td>
+<td align="left">Miconia albicans (sw.) triana</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Miconia albicans (Sw.) TRIana</td>
+<td align="left">name_w_wrong_case</td>
+<td align="left">Miconia albicans (sw.) triana</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Phaseolus robustus Piper</td>
+<td align="left">name_w_wrong_case</td>
+<td align="left">Phaseolus robustus piper</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
 <td align="left">Abutilon bedfordianum discolor</td>
 <td align="left">not_Genus_epithet_format</td>
 <td align="left">Abutilon bedfordianum discolor</td>
-</tr>
-<tr class="odd">
-<td align="left">Bauhinia ungulata cuiabensis</td>
-<td align="left">not_Genus_epithet_format</td>
-<td align="left">Bauhinia ungulata cuiabensis</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
+<td align="left">Bauhinia ungulata cuiabensis</td>
+<td align="left">not_Genus_epithet_format</td>
+<td align="left">Bauhinia ungulata cuiabensis</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
 <td align="left">Pityrogramma] calomelanos calomelanos</td>
 <td align="left">not_Genus_epithet_format</td>
 <td align="left">Pityrogramma] calomelanos calomelanos</td>
+<td align="left">FALSE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Asplenium truncorum 2</td>
 <td align="left">not_name_has_digits</td>
 <td align="left">Asplenium truncorum</td>
+<td align="left">FALSE</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">Gleicheniales</td>
 <td align="left">order_as_genus</td>
 <td align="left">Gleicheniales</td>
+<td align="left">FALSE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Aspidosperma dicolor</td>
 <td align="left">possibly_ok</td>
 <td align="left">Aspidosperma dicolor</td>
-</tr>
-<tr class="even">
-<td align="left">Aspidosperma discolor</td>
-<td align="left">possibly_ok</td>
-<td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
-<td align="left">Diplazium lepthochlamys</td>
+<td align="left">Aspidosperma discolor</td>
 <td align="left">possibly_ok</td>
-<td align="left">Diplazium lepthochlamys</td>
+<td align="left">Aspidosperma discolor</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
+<td align="left">Byrsonima rich.</td>
+<td align="left">possibly_ok</td>
+<td align="left">Byrsonima rich.</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">Cyrtocymura harleyi (H.Rob.) H.Rob.</td>
+<td align="left">possibly_ok</td>
+<td align="left">Cyrtocymura harleyi</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">Diplazium lepthochlamys</td>
+<td align="left">possibly_ok</td>
+<td align="left">Diplazium lepthochlamys</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
 <td align="left">Helietta glaziovii</td>
 <td align="left">possibly_ok</td>
 <td align="left">Helietta glaziovii</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">Leandra euphorbioides (Naudin) D`El Rei Souza &amp; Baumgratz</td>
+<td align="left">possibly_ok</td>
+<td align="left">Leandra euphorbioides</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="odd">
 <td align="left">Metrodorea mollis</td>
 <td align="left">possibly_ok</td>
 <td align="left">Metrodorea mollis</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
-<td align="left">Myrcia multifloravar.glaucensis</td>
-<td align="left">possibly_ok</td>
-<td align="left">Myrcia multifloravar.glaucensis</td>
-</tr>
-<tr class="odd">
 <td align="left">Asplenium sp. nov. truncorum</td>
 <td align="left">species_nova</td>
-<td align="left">Asplenium sp. nov. truncorum</td>
-</tr>
-<tr class="even">
-<td align="left">Morganella rimosa Baseia &amp; Alfredo sp. nov.</td>
-<td align="left">species_nova</td>
-<td align="left">Morganella rimosa Baseia &amp; Alfredo sp. nov.</td>
+<td align="left">Asplenium truncorum</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="odd">
-<td align="left">Piper dilatatum sp. nov.</td>
+<td align="left">Morganella rimosa Baseia &amp; Alfredo sp. nov.</td>
 <td align="left">species_nova</td>
-<td align="left">Piper dilatatum sp. nov.</td>
+<td align="left">Morganella rimosa</td>
+<td align="left">TRUE</td>
 </tr>
 <tr class="even">
+<td align="left">Piper dilatatum sp. nov.</td>
+<td align="left">species_nova</td>
+<td align="left">Piper dilatatum</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
 <td align="left">Chamissoa acuminata Mart. var. acuminata</td>
 <td align="left">variety</td>
-<td align="left">Chamissoa acuminata</td>
+<td align="left">Chamissoa acuminata var. acuminata</td>
+<td align="left">TRUE</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Lindsaea lancea var. falcata</td>
 <td align="left">variety</td>
-<td align="left">Lindsaea lancea</td>
+<td align="left">Lindsaea lancea var. falcata</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">Myrcia multifloravar.glaucensis</td>
+<td align="left">variety</td>
+<td align="left">Myrcia multiflora var. glaucensis</td>
+<td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">Schinopsis brasiliensis var. glabra Engl.</td>
 <td align="left">variety</td>
-<td align="left">Schinopsis brasiliensis</td>
+<td align="left">Schinopsis brasiliensis var. glabra</td>
+<td align="left">TRUE</td>
 </tr>
 </tbody>
 </table>
 <p>Now getting only possible correct and unique names.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ok</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"variety"</span>, 
         <span class="st">"possibly_ok"</span>, 
         <span class="st">"name_w_wrong_case"</span>,
@@ -481,10 +544,10 @@
 <h2 class="hasAnchor">
 <a href="#taxonomic-check" class="anchor"></a>2. Taxonomic check</h2>
 <p>First, we will check for typos and get a list of possible names.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">suggest_taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/suggest_flora.html">suggest_flora</a></span><span class="op">(</span><span class="va">species_new</span><span class="op">)</span>
 <span class="va">search_taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">suggest_taxa</span><span class="op">$</span><span class="va">species</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">list_taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">search_taxa</span>, <span class="va">check_flora</span><span class="op">)</span></code></pre></div>
 <div id="output" class="section level3">
 <h3 class="hasAnchor">
@@ -494,7 +557,7 @@
 <h4 class="hasAnchor">
 <a href="#lindsaea-lancea" class="anchor"></a><em>Lindsaea lancea</em>
 </h4>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># L. lancea</span>
 <span class="va">list_taxa</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">taxon</span>
 <span class="va">list_taxa</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">synonyms</span></code></pre></div>
@@ -503,7 +566,7 @@
 <h4 class="hasAnchor">
 <a href="#aspidosperma-discolor" class="anchor"></a><em>Aspidosperma discolor</em>
 </h4>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># para A. discolor</span>
 <span class="va">list_taxa</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">taxon</span>
 <span class="va">list_taxa</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">synonyms</span></code></pre></div>

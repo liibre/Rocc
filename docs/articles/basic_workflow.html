@@ -108,7 +108,7 @@
 <h2 class="hasAnchor">
 <a href="#installing-and-loading-package" class="anchor"></a>0. Installing and loading package</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"liibre/rocc"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"liibre/Rocc"</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/liibre/rocc">Rocc</a></span><span class="op">)</span></code></pre></div>
 </div>
@@ -135,7 +135,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df_splink</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="va">data_splink</span>, .id <span class="op">=</span> <span class="st">"species_search"</span><span class="op">)</span> 
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">df_splink</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 2759   50</code></pre>
+<pre><code>## [1] 2812   50</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">df_splink</span><span class="op">$</span><span class="va">species_search</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "Asplenium truncorum" "Lindsaea lancea"</code></pre>
@@ -174,69 +174,67 @@
 <span class="va">species_name_raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">scientificName</span><span class="op">)</span></code></pre></div>
 <p>For the unique entries, we will perform a basic check on the string.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">species_name_check</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_string.html">check_string</a></span><span class="op">(</span><span class="va">species_name_raw</span><span class="op">)</span>
-<span class="va">species_name_check</span></code></pre></div>
-<pre><code>##                                       verbatimSpecies            speciesStatus
-## 1   Asplenium truncorum F.B.Matos, Labiak &amp; Sylvestre           name_w_authors
-## 2                          Lindsaea lancea (L.) Bedd.           name_w_authors
-## 3                           Lindsaea leprieurii Hook.           name_w_authors
-## 4                           Lindsaea lancea f. lancea                    forma
-## 5                         Lindsaea lancea var. lancea                  variety
-## 6      Lindsaea lancea var. remota (Kunze) K.U.Kramer                  variety
-## 7  Lindsaea lancea var. leprieurii (Hook.) K.U.Kramer                  variety
-## 8     Lindsaea lancea var. elatior (Kunze) K.U.Kramer                  variety
-## 9                                 Asplenium truncorum              possibly_ok
-## 10                                    Lindsaea lancea              possibly_ok
-## 11                            Lindsaea lancea falcata not_Genus_epithet_format
-## 12                             Lindsaea lancea lancea not_Genus_epithet_format
-## 13                             Lindsaea lancea remota not_Genus_epithet_format
-## 14                            Lindsaea lancea elatior not_Genus_epithet_format
-## 15                         Lindsaea lancea leprieurii not_Genus_epithet_format
-## 16                     Lindsaea lancea x schomburgkii           hybrid_species
-## 17                       Lindsaea lancea var. elatior                  variety
-## 18                       Lindsaea lancea var. falcata                  variety
-## 19                        Lindsaea lancea var. remota                  variety
-## 20                     Lindsaea lancea quadrangularis not_Genus_epithet_format
-## 21                                   Lindsaea lanceae              possibly_ok
-## 22                         Lindsaea lancea longifolia not_Genus_epithet_format
-## 23                         Lindsaea lancea submontana not_Genus_epithet_format
-## 24                                Lindsaea cf. lancea                 conferre
-## 25                                   Lindsaeae lancea              possibly_ok
-## 26                         Lindsaea lancea semilunata not_Genus_epithet_format
-##                           species
-## 1             Asplenium truncorum
-## 2                 Lindsaea lancea
-## 3             Lindsaea leprieurii
-## 4                 Lindsaea lancea
-## 5                 Lindsaea lancea
-## 6                 Lindsaea lancea
-## 7                 Lindsaea lancea
-## 8                 Lindsaea lancea
-## 9             Asplenium truncorum
-## 10                Lindsaea lancea
-## 11        Lindsaea lancea falcata
-## 12         Lindsaea lancea lancea
-## 13         Lindsaea lancea remota
-## 14        Lindsaea lancea elatior
-## 15     Lindsaea lancea leprieurii
-## 16  Lindsaea lancea ×schomburgkii
-## 17                Lindsaea lancea
-## 18                Lindsaea lancea
-## 19                Lindsaea lancea
-## 20 Lindsaea lancea quadrangularis
-## 21               Lindsaea lanceae
-## 22     Lindsaea lancea longifolia
-## 23     Lindsaea lancea submontana
-## 24                Lindsaea lancea
-## 25               Lindsaeae lancea
-## 26     Lindsaea lancea semilunata</code></pre>
-<p>Here, we are interested only in the names assigned with <code>possibly_ok</code> and <code>name_w_authors</code>. Now we will filter the occurrence data within these categories.</p>
+<code class="sourceCode R"><span class="va">species_name_check</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_string.html">check_string</a></span><span class="op">(</span><span class="va">species_name_raw</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning in stri_detect_regex(string, pattern, negate = negate, opts_regex =
+## opts(pattern)): argument is not an atomic vector; coercing
+
+## Warning in stri_detect_regex(string, pattern, negate = negate, opts_regex =
+## opts(pattern)): argument is not an atomic vector; coercing</code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">species_name_check</span></code></pre></div>
+<pre><code>##                                      verbatimSpecies            speciesStatus
+## 1  Asplenium truncorum F.B.Matos, Labiak &amp; Sylvestre        name_w_wrong_case
+## 2                         Lindsaea lancea (L.) Bedd.        name_w_wrong_case
+## 3                          Lindsaea leprieurii Hook.        name_w_wrong_case
+## 4                        Lindsaea lancea var. lancea                  variety
+## 5                                Asplenium truncorum              possibly_ok
+## 6                                    Lindsaea lancea              possibly_ok
+## 7                            Lindsaea lancea elatior not_Genus_epithet_format
+## 8                            Lindsaea lancea falcata not_Genus_epithet_format
+## 9                             Lindsaea lancea lancea not_Genus_epithet_format
+## 10                        Lindsaea lancea leprieurii not_Genus_epithet_format
+## 11                            Lindsaea lancea remota not_Genus_epithet_format
+## 12                    Lindsaea lancea x schomburgkii           hybrid_species
+## 13                      Lindsaea lancea var. falcata                  variety
+## 14                      Lindsaea lancea var. elatior                  variety
+## 15                       Lindsaea lancea var. remota                  variety
+## 16                    Lindsaea lancea quadrangularis not_Genus_epithet_format
+## 17                                  Lindsaea lanceae              possibly_ok
+## 18                        Lindsaea lancea longifolia not_Genus_epithet_format
+## 19                        Lindsaea lancea submontana not_Genus_epithet_format
+## 20                                  Lindsaeae lancea              possibly_ok
+## 21                               Lindsaea cf. lancea                 conferre
+## 22                        Lindsaea lancea semilunata not_Genus_epithet_format
+##                                              species remove_author
+## 1  Asplenium truncorum f.b.matos, labiak &amp; sylvestre         FALSE
+## 2                         Lindsaea lancea (l.) bedd.         FALSE
+## 3                          Lindsaea leprieurii hook.         FALSE
+## 4                        Lindsaea lancea var. lancea          TRUE
+## 5                                Asplenium truncorum         FALSE
+## 6                                    Lindsaea lancea         FALSE
+## 7                            Lindsaea lancea elatior         FALSE
+## 8                            Lindsaea lancea falcata         FALSE
+## 9                             Lindsaea lancea lancea         FALSE
+## 10                        Lindsaea lancea leprieurii         FALSE
+## 11                            Lindsaea lancea remota         FALSE
+## 12                                   Lindsaea lancea          TRUE
+## 13                      Lindsaea lancea var. falcata          TRUE
+## 14                      Lindsaea lancea var. elatior          TRUE
+## 15                       Lindsaea lancea var. remota          TRUE
+## 16                    Lindsaea lancea quadrangularis         FALSE
+## 17                                  Lindsaea lanceae         FALSE
+## 18                        Lindsaea lancea longifolia         FALSE
+## 19                        Lindsaea lancea submontana         FALSE
+## 20                                  Lindsaeae lancea         FALSE
+## 21                                   Lindsaea lancea         FALSE
+## 22                        Lindsaea lancea semilunata         FALSE</code></pre>
+<p>Here, we are interested only in the names assigned with <code>possibly_ok</code> and <code>name_w_authors</code>. Now we will filter the occurrence data within these categories.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">verbatimSpecies_ok</span> <span class="op">&lt;-</span> <span class="va">species_name_check</span><span class="op">$</span><span class="va">verbatimSpecies</span><span class="op">[</span><span class="va">species_name_check</span><span class="op">$</span><span class="va">speciesStatus</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"possibly_ok"</span>, <span class="st">"name_w_authors"</span><span class="op">)</span><span class="op">]</span>
 <span class="va">df_ok</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">scientificName</span> <span class="op">%in%</span> <span class="va">verbatimSpecies_ok</span>, <span class="op">]</span></code></pre></div>
-<p>In this cleaning we went from a total of 3293 occurrences to 1505 occurrences.</p>
+<p>In this cleaning we went from a total of 3346 occurrences to 1505 occurrences.</p>
 <p>Finally, we can write the resultant occurrence data on disk.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">df_ok</span>, <span class="st">"results/occurrence_data.csv"</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
   </div>

@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Check in the scientific name string — check_string" />
-<meta property="og:description" content="Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc)." />
+<meta property="og:description" content="Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc).
+Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc)." />
 
 
 
@@ -136,15 +137,18 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check in the scientific name string</h1>
-    <small class="dont-index">Source: <a href='https://github.com/liibre/rocc/blob/master/R/check_string.R'><code>R/check_string.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/liibre/rocc/blob/master/R/check_string.R'><code>R/check_string.R</code></a>, <a href='https://github.com/liibre/rocc/blob/master/R/check_string_wip.R'><code>R/check_string_wip.R</code></a></small>
     <div class="hidden name"><code>check_string.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc).</p>
+<p>Identifies open nomenclature (aff., cf.) in species scientific name, classification under species level (var. and subsp.), and common mistakes in the a species scientific name. It creates a new column with the original string and the new suggested name. It also flags problematic names (character string with numbers, authors, wrong case, or other names besides genus and epithet etc).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_string</span><span class='op'>(</span>species <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>check_string</span><span class='op'>(</span>species <span class='op'>=</span> <span class='cn'>NULL</span>, drop_infra <span class='op'>=</span> <span class='cn'>FALSE</span>, flora <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>check_string</span><span class='op'>(</span>species <span class='op'>=</span> <span class='cn'>NULL</span>, drop_infra <span class='op'>=</span> <span class='cn'>FALSE</span>, flora <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,11 +157,20 @@
       <th>species</th>
       <td><p>species name in a raw format</p></td>
     </tr>
+    <tr>
+      <th>drop_infra</th>
+      <td><p>Logical. Either to remove any infraspecies classification. Defaults to FALSE</p></td>
+    </tr>
+    <tr>
+      <th>flora</th>
+      <td><p>Logical. Either to perform checks specific to plants. Defaults to TRUE</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Data frame with `verbatimSpecies` as in the original input, `speciesStatus` with the flags in original data and `species` with a suggestion for a more correct species name. See Details for a description of flags in the column `speciesStatus`.</p>
+    <p>Data frame with `verbatimSpecies` as in the original input, `speciesStatus` with the flags in original data, `species` with a suggestion for a more correct species name, and `remove_author` a boolean column indicating if the original input had author names. See Details for a description of flags in the column `speciesStatus`.</p>
+<p>Data frame with `verbatimSpecies` as in the original input, `speciesStatus` with the flags in original data, `species` with a suggestion for a more correct species name, and `remove_author` a boolean column indicating if the original input had author names. See Details for a description of flags in the column `speciesStatus`.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Possible flags returned in `species_status`:</p><dl>
@@ -168,30 +181,74 @@
 <dt><code>form</code></dt><dd><p>species scientific name with form</p></dd>
 <dt><code>conferre</code></dt><dd><p>open nomenclature cf. in species scientific name</p></dd>
 <dt><code>affinis</code></dt><dd><p>open nomenclature aff. in species scientific name</p></dd>
+<dt><code>group</code></dt><dd><p>open nomenclature gr. in species scientific name</p></dd>
 <dt><code>name_w_authors</code></dt><dd><p>species scientific name has authors</p></dd>
 <dt><code>not_name_has_digits</code></dt><dd><p>species scientific name has digits, not a valid name</p></dd>
 <dt><code>indet</code></dt><dd><p>species identified only at genus level</p></dd>
 <dt><code>family_as_genus</code></dt><dd><p>family as genus, not a valid name</p></dd>
 <dt><code>order_as_genus</code></dt><dd><p>order as genus, not a valid name</p></dd>
 <dt><code>species_nova</code></dt><dd><p>species name contains an indication of a new species, possibly not yet a valid name</p></dd>
-<dt><code>non_ascii</code></dt><dd><p>species name has non ASCII characters, not a valid name</p></dd>
-#'<dt><code>hybrid_species</code></dt><dd><p>hybrid species</p></dd>
+<dt><code>name_w_non_ascii</code></dt><dd><p>species name has non ASCII characters, not a valid name</p></dd>
+<dt><code>hybrid_species</code></dt><dd><p>hybrid species</p></dd>
+<dt><code>not_available</code></dt><dd><p>any species entry related to Not Available (NA) status</p></dd>
+
+</dl>
+
+<p>Possible flags returned in `species_status`:</p><dl>
+<dt><code>possibly_ok</code></dt><dd><p>scientific name following the expected pattern Genus epithet</p></dd>
+<dt><code>not_Genus_epithet_format</code></dt><dd><p>scientific name not following the expected pattern Genus epithet</p></dd>
+<dt><code>variety</code></dt><dd><p>species scientific name with variety</p></dd>
+<dt><code>subspecies</code></dt><dd><p>species scientific name with subspecies</p></dd>
+<dt><code>form</code></dt><dd><p>species scientific name with form</p></dd>
+<dt><code>conferre</code></dt><dd><p>open nomenclature cf. in species scientific name</p></dd>
+<dt><code>affinis</code></dt><dd><p>open nomenclature aff. in species scientific name</p></dd>
+<dt><code>group</code></dt><dd><p>open nomenclature gr. in species scientific name</p></dd>
+<dt><code>name_w_authors</code></dt><dd><p>species scientific name has authors</p></dd>
+<dt><code>not_name_has_digits</code></dt><dd><p>species scientific name has digits, not a valid name</p></dd>
+<dt><code>indet</code></dt><dd><p>species identified only at genus level</p></dd>
+<dt><code>species_nova</code></dt><dd><p>species name contains an indication of a new species, possibly not yet a valid name</p></dd>
+<dt><code>name_w_non_ascii</code></dt><dd><p>species name has non ASCII characters, not a valid name</p></dd>
+<dt><code>not_available</code></dt><dd><p>any species entry related to Not Available (NA) status</p></dd>
+Flags specific to plants (only if `flora = TRUE`):
+<dt><code>hybrid_species</code></dt><dd><p>hybrid species</p></dd>
+<dt><code>subfamily_as_genus</code></dt><dd><p>subfamily as genus, not a valid name</p></dd>
+<dt><code>family_as_genus</code></dt><dd><p>family as genus, not a valid name</p></dd>
+<dt><code>order_as_genus</code></dt><dd><p>order as genus, not a valid name</p></dd>
 
 </dl>
 
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Sara Mortara &amp; Andrea Sánchez-Tapia</p>
+<p>Sara Mortara &amp; Andrea Sánchez-Tapia</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>check_string</span><span class='op'>(</span><span class='st'>"Lindsaea lancea var. falcata"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                verbatimSpecies speciesStatus         species
-#&gt; 1 Lindsaea lancea var. falcata       variety Lindsaea lancea</div><div class='input'><span class='fu'>check_string</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Lindsaea lancea var. falcata"</span>, <span class='st'>"Asplenium Aff. truncorum"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                verbatimSpecies speciesStatus             species
-#&gt; 1 Lindsaea lancea var. falcata       variety     Lindsaea lancea
-#&gt; 2     Asplenium Aff. truncorum       affinis Asplenium truncorum</div><div class='input'><span class='fu'>check_string</span><span class='op'>(</span><span class='st'>"Asplenium sp."</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   verbatimSpecies speciesStatus       species
-#&gt; 1   Asplenium sp.         indet Asplenium sp.</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt;                verbatimSpecies speciesStatus                      species
+#&gt; 1 Lindsaea lancea var. falcata       variety Lindsaea lancea var. falcata
+#&gt;   remove_author
+#&gt; 1          TRUE</div><div class='input'><span class='fu'>check_string</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Lindsaea lancea var. falcata"</span>, <span class='st'>"Asplenium Aff. truncorum"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt;                verbatimSpecies speciesStatus                      species
+#&gt; 1 Lindsaea lancea var. falcata       variety Lindsaea lancea var. falcata
+#&gt; 2     Asplenium Aff. truncorum       affinis          Asplenium truncorum
+#&gt;   remove_author
+#&gt; 1          TRUE
+#&gt; 2         FALSE</div><div class='input'><span class='fu'>check_string</span><span class='op'>(</span><span class='st'>"Asplenium sp."</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt;   verbatimSpecies speciesStatus       species remove_author
+#&gt; 1   Asplenium sp.         indet Asplenium sp.         FALSE</div><div class='input'>
+<span class='fu'>check_string</span><span class='op'>(</span><span class='st'>"Lindsaea lancea var. falcata"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt;                verbatimSpecies speciesStatus                      species
+#&gt; 1 Lindsaea lancea var. falcata       variety Lindsaea lancea var. falcata
+#&gt;   remove_author
+#&gt; 1          TRUE</div><div class='input'><span class='fu'>check_string</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Lindsaea lancea var. falcata"</span>, <span class='st'>"Asplenium Aff. truncorum"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt;                verbatimSpecies speciesStatus                      species
+#&gt; 1 Lindsaea lancea var. falcata       variety Lindsaea lancea var. falcata
+#&gt; 2     Asplenium Aff. truncorum       affinis          Asplenium truncorum
+#&gt;   remove_author
+#&gt; 1          TRUE
+#&gt; 2         FALSE</div><div class='input'><span class='fu'>check_string</span><span class='op'>(</span><span class='st'>"Asplenium sp."</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt; <span class='warning'>Warning: argument is not an atomic vector; coercing</span></div><div class='output co'>#&gt;   verbatimSpecies speciesStatus       species remove_author
+#&gt; 1   Asplenium sp.         indet Asplenium sp.         FALSE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
