@@ -11,7 +11,8 @@
 #' @param life_form character, search species with the following life forms
 #' @param habitat character, search species in the habitat options according to the FB2020
 #' @param vegetation_type character, filter by vegetation type according to the FB2020
-#' @param force_update Logical. Update the flora IPT database in cache?
+#' @param ... `update_flora()` parameters: `update_force = TRUE` deletes the file on cache,
+#' `manual = TRUE` indicates the update will be manual, from a file hosted at `zip_path`
 #' @return a data frame with taxon IDs, scientific name and binomial name
 #' without authors
 #'
@@ -39,8 +40,8 @@ search_flora <- function(domain = NULL,
                          habitat = NULL,
                          vegetation_type = NULL,
                          endemism = NULL,
-                         force_update = FALSE) {
-  ipt_flora <- update_flora(force_update = force_update)
+                         ...) {
+  ipt_flora <- update_flora(...)
 
     if (!is.null(domain)) {
     domain <- tolower(textclean::replace_non_ascii(domain))

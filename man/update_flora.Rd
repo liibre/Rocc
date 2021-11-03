@@ -4,10 +4,15 @@
 \alias{update_flora}
 \title{Downloads, updates and formats the data from the ipt server of the List of Species of the Brazilian Flora}
 \usage{
-update_flora(force_update = FALSE)
+update_flora(force_update = FALSE, manual = FALSE, zip_path = "flora_ipt")
 }
 \arguments{
-\item{force_update}{Logical. Forces update in case there is already an ipt file in cache}
+\item{force_update}{Logical. Force update in case there is already an ipt file in cache}
+
+\item{manual}{Logical. Perform manual update of the IPT flora from a zip file,
+defaults to FALSE but might be useful when download reaches timeout or the API is down}
+
+\item{zip_path}{Character Perform manual update of the IPT flora from a zip file}
 }
 \description{
 Downloads, updates and formats the data from the ipt server of the List of Species of the Brazilian Flora

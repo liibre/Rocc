@@ -11,7 +11,7 @@ search_flora(
   habitat = NULL,
   vegetation_type = NULL,
   endemism = NULL,
-  force_update = FALSE
+  ...
 )
 }
 \arguments{
@@ -28,7 +28,8 @@ search_flora(
 \item{endemism}{logical, return species that are endemic or not from Brazil
 Defaults to NULL to return all species}
 
-\item{force_update}{Logical. Update the flora IPT database in cache?}
+\item{...}{`update_flora()` parameters: `update_force = TRUE` deletes the file on cache,
+`manual = TRUE` indicates the update will be manual, from a file hosted at `zip_path`}
 }
 \value{
 a data frame with taxon IDs, scientific name and binomial name
