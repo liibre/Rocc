@@ -42,7 +42,7 @@ check_flora <- function(species,
                   source =  "source", references = "references")
   # função para buscar na flora do brasil
   search_flora <- function(x) {
-    api <- "http://servicos.jbrj.gov.br/flora/taxon/"
+    api <- "http://servicos.jbrj.gov.br/v2/flora/taxon/"
     search_sp <- gsub(" ", "%20", x)
     res <- jsonlite::fromJSON(paste0(api, search_sp))
     sp <- paste(res$result$genus, res$result$specificepithet)
