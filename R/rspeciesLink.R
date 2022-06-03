@@ -215,6 +215,10 @@ rspeciesLink <- function(dir = "results/",
     # creating dir
     if (!dir.exists(dir)) {dir.create(dir)}
     fullname <- paste0(dir, filename, ".csv")
+    # if filename already exists
+    if (file.exists(fullname)) {
+      stop(paste0(filename, ".csv already saved on disk. Please, choose another filename"))
+        }
     message(paste0("Writing ", fullname, " on disk."))
     write.table(x = df,
                 file = fullname,
